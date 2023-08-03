@@ -1,11 +1,11 @@
 ﻿using TrackIt.Model;
 using TrackIt.Model.Requests;
+using TrackIt.Model.SearchObjects;
 
 namespace TrackIt.Services.Interfaces
 {
-	public interface IGeneralUserService
+	public interface IGeneralUserService : IService<GeneralUser, GeneralUserSearchObject>
 	{
-		List<GeneralUser> Get();
 		GeneralUser Insert(GeneralUserInsertRequest request);
 	}
 }

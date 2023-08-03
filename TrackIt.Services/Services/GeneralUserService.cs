@@ -2,26 +2,16 @@
 using System.Security.Cryptography;
 using System.Text;
 using TrackIt.Model.Requests;
+using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Database;
 using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Services.Services
 {
-	public class GeneralUserService : IGeneralUserService
+	public class GeneralUserService : BaseService<Model.GeneralUser, Database.GeneralUser, GeneralUserSearchObject>, IGeneralUserService
 	{
-		private TrackItContext _context;
-		public IMapper _mapper { get; set; }
-
-		public GeneralUserService(TrackItContext context, IMapper mapper)
+		public GeneralUserService(TrackItContext context, IMapper mapper) : base(context, mapper)
 		{
-			_context = context;
-			_mapper = mapper;
-		}
-
-		public List<Model.GeneralUser> Get()
-		{
-			var entityList = _context.GeneralUsers.ToList();
-			return _mapper.Map<List<Model.GeneralUser>>(entityList);
 		}
 
 		public Model.GeneralUser Insert(GeneralUserInsertRequest request)

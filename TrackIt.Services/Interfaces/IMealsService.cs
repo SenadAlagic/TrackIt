@@ -1,9 +1,8 @@
-﻿using TrackIt.Model;
+﻿using TrackIt.Model.SearchObjects;
 
 namespace TrackIt.Services.Interfaces
 {
-	public interface IMealsService
+	public interface IMealsService : IService<Model.Meal, MealSearchObject>
 	{
-		IList<Meal> Get();
 	}
 }

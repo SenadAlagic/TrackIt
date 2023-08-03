@@ -1,20 +1,25 @@
-﻿using TrackIt.Services.Database;
+﻿using AutoMapper;
+using TrackIt.Model.SearchObjects;
+using TrackIt.Services.Database;
 using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Services.Services
 {
-	public class MealsService : IMealsService
+	public class MealsService : BaseService<Model.Meal, Database.Meal, MealSearchObject>, IMealsService
 	{
-		TrackItContext _context;
-
-		public MealsService(TrackItContext context)
+		public MealsService(TrackItContext context, IMapper mapper) :
+			base(context, mapper)
 		{
-			_context = context;
 		}
 
-		public IList<Model.Meal> Get()
+		public override IQueryable<Meal> AddFilter(IQueryable<Meal> query, MealSearchObject? search = null)
 		{
-			throw new NotImplementedException();
+			if (!string.IsNullOrWhiteSpace(search?.Name))
+			{
+				query = query.Where(x => x.Name == search.Name);
+			}
+
+			return base.AddFilter(query, search);
 		}
 	}
 }

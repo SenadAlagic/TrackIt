@@ -1,33 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TrackIt.Model.Requests;
+using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
-	public class GeneralUserController : ControllerBase
+	public class GeneralUserController : BaseController<Model.GeneralUser, GeneralUserSearchObject>
 	{
-		private readonly IGeneralUserService _service;
-		private readonly ILogger<GeneralUserController> _logger;
-
-		public GeneralUserController(ILogger<GeneralUserController> logger, IGeneralUserService service)
+		public GeneralUserController(ILogger<BaseController<Model.GeneralUser, GeneralUserSearchObject>> logger, IGeneralUserService service) : base(logger, service)
 		{
-			_service = service;
-			_logger = logger;
-		}
 
-		[HttpGet()]
-		public IEnumerable<Model.GeneralUser> Get()
-		{
-			return _service.Get();
 		}
-
-		[HttpPost]
-		public Model.GeneralUser Insert(GeneralUserInsertRequest request)
-		{
-			return _service.Insert(request);
-		}
-
 	}
 }

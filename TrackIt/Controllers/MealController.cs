@@ -1,27 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using TrackIt.Model;
+using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Controllers
 {
-    [ApiController]
-	[Route("[controller]")]
-	public class MealController : ControllerBase
+	[ApiController]
+	public class MealController : BaseController<Model.Meal, MealSearchObject>
 	{
-		private readonly IMealsService _mealsService;
-		private readonly ILogger<MealController> _logger;
-
-		public MealController(ILogger<MealController> logger, IMealsService mealsService)
+		public MealController(ILogger<BaseController<Model.Meal, MealSearchObject>> logger, IMealsService service) : base(logger, service)
 		{
-			_mealsService = mealsService;
-			_logger = logger;
-		}
 
-		[HttpGet()]
-		public IEnumerable<Meal> Get()
-		{
-			return _mealsService.Get();
 		}
-
 	}
 }
