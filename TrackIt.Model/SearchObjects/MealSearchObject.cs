@@ -2,6 +2,7 @@
 {
 	public class MealSearchObject : BaseSearchObject
 	{
+		public string? MealId { get; set; }
 		public string? Name { get; set; }
 	}
 }

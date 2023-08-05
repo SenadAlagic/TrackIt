@@ -18,21 +18,20 @@ namespace TrackIt.Services.Services
 			_mapper = mapper;
 		}
 
-		public virtual IQueryable<TDb> AddFilter(IQueryable<TDb> query, TSearch? search = null)
-		{
-			return query;
-		}
-
 		public virtual async Task<PagedResult<T>> Get(TSearch? search = null)
 		{
 			var query = _context.Set<TDb>().AsQueryable();
 			var result = new PagedResult<T>();
 			result.Count = await query.CountAsync();
+
 			query = AddFilter(query, search);
+			query = AddInclude(query, search);
+
 			if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
 			{
 				query = query.Take(search.PageSize.Value).Skip(search.PageSize.Value * search.Page.Value);
 			}
+
 			var list = await query.ToListAsync();
 			result.Result = _mapper.Map<List<T>>(list);
 			return result;
@@ -42,6 +41,16 @@ namespace TrackIt.Services.Services
 		{
 			var entity = await _context.Set<TDb>().FindAsync(id);
 			return _mapper.Map<T>(entity);
+		}
+
+		public virtual IQueryable<TDb> AddInclude(IQueryable<TDb> query, TSearch? search = null)
+		{
+			return query;
+		}
+
+		public virtual IQueryable<TDb> AddFilter(IQueryable<TDb> query, TSearch? search = null)
+		{
+			return query;
 		}
 	}
 }
