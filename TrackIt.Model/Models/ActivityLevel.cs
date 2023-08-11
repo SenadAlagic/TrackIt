@@ -1,4 +1,4 @@
-﻿namespace TrackIt.Model
+﻿namespace TrackIt.Model.Models
 {
 	public class ActivityLevel
 	{

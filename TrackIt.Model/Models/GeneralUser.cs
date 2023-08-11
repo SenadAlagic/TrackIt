@@ -1,4 +1,4 @@
-﻿namespace TrackIt.Model
+﻿namespace TrackIt.Model.Models
 {
 	public class GeneralUser
 	{
@@ -21,5 +21,7 @@
 		public virtual ActivityLevel ActivityLevel { get; set; } = null!;
 
 		public virtual User User { get; set; } = null!;
+
+		public virtual ICollection<UsersGoal> UsersGoals { get; set; } = new List<UsersGoal>();
 	}
 }

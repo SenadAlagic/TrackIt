@@ -1,11 +1,11 @@
-﻿using TrackIt.Model;
+﻿using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
 
 namespace TrackIt.Services.Interfaces
 {
-	public interface IUserService
+    public interface IUserService
 	{
-		List<Model.User> Get();
+		List<User> Get();
 		User Update(int id, UserUpdateRequest request);
 	}
 }

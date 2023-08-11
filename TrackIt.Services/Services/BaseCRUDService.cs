@@ -10,7 +10,7 @@ namespace TrackIt.Services.Services
 		{
 		}
 
-		public virtual async Task BeforeInsert(TDb db, TInsert insert)
+		public virtual async Task BeforeInsert(TDb entity, TInsert insert)
 		{
 
 		}

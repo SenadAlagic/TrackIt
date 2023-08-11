@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using TrackIt.Model;
+using TrackIt.Model.Helper;
 using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Database;
 using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Services.Services
 {
-	public class BaseService<T, TDb, TSearch> : IService<T, TSearch> where T : class where TDb : class where TSearch : BaseSearchObject
+    public class BaseService<T, TDb, TSearch> : IService<T, TSearch> where T : class where TDb : class where TSearch : BaseSearchObject
 	{
 		protected TrackItContext _context;
 		protected IMapper _mapper { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace TrackIt.Model
+﻿namespace TrackIt.Model.Helper
 {
 	public class PagedResult<T>
 	{

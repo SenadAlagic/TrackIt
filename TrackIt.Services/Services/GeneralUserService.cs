@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 using TrackIt.Model.Requests;
@@ -8,28 +9,50 @@ using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Services.Services
 {
-	public class GeneralUserService : BaseService<Model.GeneralUser, Database.GeneralUser, GeneralUserSearchObject>, IGeneralUserService
+	public class GeneralUserService : BaseCRUDService<Model.Models.GeneralUser, Database.GeneralUser, GeneralUserSearchObject, GeneralUserInsertRequest, GeneralUserUpdateRequest>, IGeneralUserService
 	{
 		public GeneralUserService(TrackItContext context, IMapper mapper) : base(context, mapper)
 		{
 		}
 
-		public Model.GeneralUser Insert(GeneralUserInsertRequest request)
+		public override async Task BeforeInsert(GeneralUser entity, GeneralUserInsertRequest insert)
 		{
-			var user = new User();
-			_mapper.Map(request, user);
-			user.Salt = GenerateSalt();
-			user.Password = GenerateHash(user.Salt, request.Password);
-			_context.Users.Add(user);
+			entity.User.Salt = GenerateSalt();
+			entity.User.Password = GenerateHash(entity.User.Salt, insert.Password);
+		}
 
-			var generalUser = new GeneralUser();
-			_mapper.Map(request, generalUser);
-			generalUser.User = user;
-			_context.GeneralUsers.Add(generalUser);
+		public override IQueryable<GeneralUser> AddInclude(IQueryable<GeneralUser> query, GeneralUserSearchObject? search = null)
+		{
+			if (search?.IsUserIncluded == true)
+			{
+				query = query.Include("User");
+			}
+			if (search?.IsActivityLevelIncluded == true)
+			{
+				query = query.Include("ActivityLevel");
+			}
+			if (search?.IsGoalIncluded == true)
+			{
+				query = query.Include("UsersGoals.Goal");
+			}
+			return base.AddInclude(query, search);
+		}
 
-			_context.SaveChanges();
-
-			return _mapper.Map<Model.GeneralUser>(generalUser);
+		public override IQueryable<GeneralUser> AddFilter(IQueryable<GeneralUser> query, GeneralUserSearchObject? search = null)
+		{
+			if (search.Weight > 0)
+			{
+				query = query.Where(x => x.Weight == search.Weight);
+			}
+			if (search.TargetWeight > 0)
+			{
+				query = query.Where(x => x.TargetWeight == search.TargetWeight);
+			}
+			if (search.Height > 0)
+			{
+				query = query.Where(x => x.Height == search.Height);
+			}
+			return base.AddFilter(query, search);
 		}
 
 		public static string GenerateSalt()

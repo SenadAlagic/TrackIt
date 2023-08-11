@@ -5,7 +5,7 @@ using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Services.Services
 {
-	public class UserService : IUserService
+    public class UserService : IUserService
 	{
 		private readonly TrackItContext _context;
 		public IMapper _mapper { get; set; }
@@ -16,18 +16,18 @@ namespace TrackIt.Services.Services
 			_mapper = mapper;
 		}
 
-		public List<Model.User> Get()
+		public List<Model.Models.User> Get()
 		{
 			var entityList = _context.Users.ToList();
-			return _mapper.Map<List<Model.User>>(entityList);
+			return _mapper.Map<List<Model.Models.User>>(entityList);
 		}
 
-		public Model.User Update(int Id, UserUpdateRequest request)
+		public Model.Models.User Update(int Id, UserUpdateRequest request)
 		{
 			var entity = _context.Users.Find(Id);
 			_mapper.Map(request, entity);
 			_context.SaveChanges();
-			return _mapper.Map<Model.User>(entity);
+			return _mapper.Map<Model.Models.User>(entity);
 		}
 	}
 }

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TrackIt.Model;
+using TrackIt.Model.Helper;
 using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Controllers
 {
-	[Route("[controller]")]
+    [Route("[controller]")]
 	public class BaseController<T, TSearch> : ControllerBase where T : class where TSearch : class
 	{
 		protected readonly IService<T, TSearch> _service;
