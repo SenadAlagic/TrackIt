@@ -21,7 +21,7 @@ namespace TrackIt
 			}
 			var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
 			var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-			var credentials = Encoding.UTF8.GetString(credentialBytes);
+			var credentials = Encoding.UTF8.GetString(credentialBytes).Split(":");
 
 			var username = credentials[0];
 			var password = credentials[1];
@@ -32,8 +32,19 @@ namespace TrackIt
 			}
 			else
 			{
-				var identity = new ClaimsIdentity();
-				var principal = new ClaimsPrincipal();
+				var claims = new List<Claim>()
+				{
+					//new Claim(ClaimTypes.Name, user.Ime),
+					new Claim(ClaimTypes.NameIdentifier, username)
+				};
+
+				//foreach (var role in user.KorisniciUloges)
+				//{
+				//	claims.Add(new Claim(ClaimTypes.Role, role.Uloga.Naziv));
+				//}
+
+				var identity = new ClaimsIdentity(claims, Scheme.Name);
+				var principal = new ClaimsPrincipal(identity);
 
 				var ticket = new AuthenticationTicket(principal, Scheme.Name);
 				return AuthenticateResult.Success(ticket);

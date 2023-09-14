@@ -17,6 +17,8 @@ namespace TrackIt.Services.Services
 
 		public override async Task BeforeInsert(GeneralUser entity, GeneralUserInsertRequest insert)
 		{
+			User user = _mapper.Map<User>(insert);
+			entity.User = user;
 			entity.User.Salt = GenerateSalt();
 			entity.User.Password = GenerateHash(entity.User.Salt, insert.Password);
 		}

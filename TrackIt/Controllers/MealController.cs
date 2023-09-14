@@ -6,7 +6,7 @@ using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Controllers
 {
-    [ApiController]
+	[ApiController]
 	public class MealController : BaseCRUDController<Meal, MealSearchObject, MealInsertRequest, MealUpdateRequest>
 	{
 		public MealController(ILogger<BaseController<Meal, MealSearchObject>> logger, IMealsService service) : base(logger, service)

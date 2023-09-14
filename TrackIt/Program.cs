@@ -12,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddTransient<IMealsService, MealsService>();
+builder.Services.AddTransient<IGoalService, GoalsService>();
+builder.Services.AddTransient<ITagService, TagService>();
+builder.Services.AddTransient<IIngredientService, IngredientService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IGeneralUserService, GeneralUserService>();
 
@@ -26,7 +29,7 @@ builder.Services.AddSwaggerGen(c =>
 	c.AddSecurityDefinition("basicAuth", new OpenApiSecurityScheme()
 	{
 		Type = SecuritySchemeType.Http,
-		Scheme = "Basic"
+		Scheme = "basic"
 	});
 	c.AddSecurityRequirement(new OpenApiSecurityRequirement()
 	{
@@ -60,5 +63,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+	var dataContext = scope.ServiceProvider.GetRequiredService<TrackItContext>();
+	//dataContext.Database.EnsureCreated();
+	//dataContext.Database.Migrate();
+}
 
 app.Run();

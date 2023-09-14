@@ -45,8 +45,8 @@ public partial class TrackItContext : DbContext
 
 	public virtual DbSet<WeightOverTime> WeightOverTimes { get; set; }
 
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		=> optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS; Initial Catalog=TrackIt; TrustServerCertificate=True; Trusted_Connection=True");
+	//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	//	=> optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS; Initial Catalog=TrackIt; TrustServerCertificate=True; Trusted_Connection=True");
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

@@ -18,8 +18,12 @@ namespace TrackIt.Services
 			CreateMap<Model.Requests.GeneralUserInsertRequest, Database.GeneralUser>();
 
 			CreateMap<Database.Goal, Goal>();
+			CreateMap<Model.Requests.GoalInsertRequest, Database.Goal>();
+			CreateMap<Model.Requests.GoalUpdateRequest, Database.Goal>();
 
 			CreateMap<Database.Ingredient, Ingredient>();
+			CreateMap<Model.Requests.IngredientInsertRequest, Database.Ingredient>();
+			CreateMap<Model.Requests.IngredientUpdateRequest, Database.Ingredient>();
 
 			CreateMap<Database.Meal, Meal>();
 			CreateMap<Model.Requests.MealInsertRequest, Database.Meal>();
@@ -30,6 +34,8 @@ namespace TrackIt.Services
 			CreateMap<Database.Preference, Preference>();
 
 			CreateMap<Database.Tag, Tag>();
+			CreateMap<Model.Requests.TagInsertRequest, Database.Tag>();
+			CreateMap<Model.Requests.TagUpdateRequest, Database.Tag>();
 
 			CreateMap<Database.TagsMeal, TagsMeal>();
 

@@ -4,5 +4,6 @@
 	{
 		public string? MealId { get; set; }
 		public string? Name { get; set; }
+		public int[]? IngredientIds { get; set; }
 	}
 }
