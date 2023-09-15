@@ -57,6 +57,25 @@ namespace TrackIt.Services.Services
 			return base.AddFilter(query, search);
 		}
 
+		public override async Task<Model.Models.GeneralUser> Update(int id, GeneralUserUpdateRequest update)
+		{
+			var set = _context.Set<GeneralUser>();
+			var entity = await set.Include(g => g.User).FirstOrDefaultAsync(g => g.GeneralUserId == id);
+			_mapper.Map(update, entity?.User);
+			_mapper.Map(update, entity);
+			await _context.SaveChangesAsync();
+			return _mapper.Map<Model.Models.GeneralUser>(entity);
+		}
+
+		public async Task<Model.Models.GeneralUser> UpdateBaseUser(int id, UserUpdateRequest update)
+		{
+			var set = _context.Set<GeneralUser>();
+			var entity = await set.Include(g => g.User).FirstOrDefaultAsync(g => g.GeneralUserId == id);
+			_mapper.Map(update, entity?.User);
+			await _context.SaveChangesAsync();
+			return _mapper.Map<Model.Models.GeneralUser>(entity);
+		}
+
 		public static string GenerateSalt()
 		{
 			RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();

@@ -5,7 +5,7 @@ using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Services.Services
 {
-    public class UserService : IUserService
+	public class UserService : IUserService
 	{
 		private readonly TrackItContext _context;
 		public IMapper _mapper { get; set; }

@@ -9,8 +9,16 @@ namespace TrackIt.Controllers
 	[ApiController]
 	public class GeneralUserController : BaseCRUDController<GeneralUser, GeneralUserSearchObject, GeneralUserInsertRequest, GeneralUserUpdateRequest>
 	{
+		IGeneralUserService _service;
 		public GeneralUserController(ILogger<BaseController<GeneralUser, GeneralUserSearchObject>> logger, IGeneralUserService service) : base(logger, service)
 		{
+			_service = service;
+		}
+
+		[HttpPut("/updateUser/{id}")]
+		public virtual async Task<GeneralUser> UpdateBaseUser(int id, [FromBody] UserUpdateRequest update)
+		{
+			return await _service.UpdateBaseUser(id, update);
 		}
 	}
 }

@@ -6,5 +6,6 @@ namespace TrackIt.Services.Interfaces
 {
 	public interface IGeneralUserService : ICRUDService<GeneralUser, GeneralUserSearchObject, GeneralUserInsertRequest, GeneralUserUpdateRequest>
 	{
+		Task<GeneralUser> UpdateBaseUser(int id, UserUpdateRequest update);
 	}
 }
