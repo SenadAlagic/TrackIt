@@ -2,8 +2,15 @@
 {
 	public class MealSearchObject : BaseSearchObject
 	{
-		public string? MealId { get; set; }
+		public int? MealId { get; set; }
+
 		public string? Name { get; set; }
+
 		public int[]? IngredientIds { get; set; }
+
+		public bool IsIngredientsIncluded { get; set; }
+
+		public bool IsTagsIncluded { get; set; }
+
 	}
 }

@@ -7,7 +7,7 @@ using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Services.Services
 {
-    public class BaseService<T, TDb, TSearch> : IService<T, TSearch> where T : class where TDb : class where TSearch : BaseSearchObject
+	public class BaseService<T, TDb, TSearch> : IService<T, TSearch> where T : class where TDb : class where TSearch : BaseSearchObject
 	{
 		protected TrackItContext _context;
 		protected IMapper _mapper { get; set; }
@@ -22,7 +22,6 @@ namespace TrackIt.Services.Services
 		{
 			var query = _context.Set<TDb>().AsQueryable();
 			var result = new PagedResult<T>();
-			result.Count = await query.CountAsync();
 
 			query = AddFilter(query, search);
 			query = AddInclude(query, search);
@@ -33,6 +32,7 @@ namespace TrackIt.Services.Services
 			}
 
 			var list = await query.ToListAsync();
+			result.Count = await query.CountAsync();
 			result.Result = _mapper.Map<List<T>>(list);
 			return result;
 		}
