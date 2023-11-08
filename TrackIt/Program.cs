@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddTransient<IActivityLevelService, ActivityLevelService>();
 builder.Services.AddTransient<IMealsService, MealsService>();
 builder.Services.AddTransient<IGoalService, GoalsService>();
 builder.Services.AddTransient<ITagService, TagService>();
