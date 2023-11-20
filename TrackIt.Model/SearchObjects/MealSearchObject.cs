@@ -2,8 +2,6 @@
 {
 	public class MealSearchObject : BaseSearchObject
 	{
-		public int? MealId { get; set; }
-
 		public string? Name { get; set; }
 
 		public int[]? IngredientIds { get; set; }

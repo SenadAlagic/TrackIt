@@ -10,6 +10,6 @@
 
 		public string? Color { get; set; }
 
-		public virtual ICollection<TagsMeal> TagsMeals { get; set; } = new List<TagsMeal>();
+		//public virtual ICollection<TagsMeal> TagsMeals { get; set; } = new List<TagsMeal>();
 	}
 }

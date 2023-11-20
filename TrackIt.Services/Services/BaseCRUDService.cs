@@ -33,5 +33,18 @@ namespace TrackIt.Services.Services
 			await _context.SaveChangesAsync();
 			return _mapper.Map<T>(entity);
 		}
+
+		public virtual async Task<T> Delete(int id)
+		{
+			var set = _context.Set<TDb>();
+			var entity = await set.FindAsync(id);
+			if (entity == null)
+			{
+				return _mapper.Map<T>(null);
+			}
+			_context.Remove(entity);
+			await _context.SaveChangesAsync();
+			return _mapper.Map<T>(entity);
+		}
 	}
 }
