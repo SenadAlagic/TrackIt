@@ -16,11 +16,11 @@ namespace TrackIt.Services.Services
 		{
 			if (search?.Name.IsNullOrEmpty() == false)
 			{
-				query = query.Where(tag => tag.Name.ToLower().Contains(search.Name));
+				query = query.Where(tag => tag.Name.ToLower().Contains(search.Name.ToLower()));
 			}
 			if (search?.Description.IsNullOrEmpty() == false)
 			{
-				query = query.Where(tag => tag.Description.ToLower().Contains(search.Description));
+				query = query.Where(tag => tag.Description.ToLower().Contains(search.Description.ToLower()));
 			}
 			return base.AddFilter(query, search);
 		}
