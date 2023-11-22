@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text;
 using TrackIt.Model.Requests;
@@ -42,17 +43,25 @@ namespace TrackIt.Services.Services
 
 		public override IQueryable<GeneralUser> AddFilter(IQueryable<GeneralUser> query, GeneralUserSearchObject? search = null)
 		{
-			if (search.Weight > 0)
+			if (search?.Weight > 0)
 			{
 				query = query.Where(x => x.Weight == search.Weight);
 			}
-			if (search.TargetWeight > 0)
+			if (search?.TargetWeight > 0)
 			{
 				query = query.Where(x => x.TargetWeight == search.TargetWeight);
 			}
-			if (search.Height > 0)
+			if (search?.Height > 0)
 			{
 				query = query.Where(x => x.Height == search.Height);
+			}
+			if (search?.FirstName.IsNullOrEmpty() == false)
+			{
+				query = query.Where(user => user.User.FirstName.ToLower().Contains(search.FirstName.ToLower()));
+			}
+			if (search?.LastName.IsNullOrEmpty() == false)
+			{
+				query = query.Where(user => user.User.LastName.ToLower().Contains(search.LastName.ToLower()));
 			}
 			return base.AddFilter(query, search);
 		}

@@ -25,10 +25,6 @@ namespace TrackIt.Services.Services
 			{
 				query = query.Include("TagsMeals.Tag");
 			}
-			if (search?.Name.IsNullOrEmpty() == false)
-			{
-				query = query.Where(meal => meal.Name.ToLower().Contains(search.Name.ToLower()));
-			}
 			return base.AddInclude(query, search);
 		}
 
@@ -46,6 +42,10 @@ namespace TrackIt.Services.Services
 
 				query = context.Meals
 					.Where(meal => mealsMatchingCondition.Contains(meal.MealId));
+			}
+			if (search?.Name.IsNullOrEmpty() == false)
+			{
+				query = query.Where(meal => meal.Name.ToLower().Contains(search.Name.ToLower()));
 			}
 			return base.AddFilter(query, search);
 		}
