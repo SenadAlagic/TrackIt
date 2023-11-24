@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
-using System.Text;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Database;
+using TrackIt.Services.Helper;
 using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Services.Services
@@ -20,8 +19,8 @@ namespace TrackIt.Services.Services
 		{
 			User user = _mapper.Map<User>(insert);
 			entity.User = user;
-			entity.User.Salt = GenerateSalt();
-			entity.User.Password = GenerateHash(entity.User.Salt, insert.Password);
+			entity.User.Salt = PasswordHelpers.GenerateSalt();
+			entity.User.Password = PasswordHelpers.GenerateHash(entity.User.Salt, insert.Password);
 		}
 
 		public override IQueryable<GeneralUser> AddInclude(IQueryable<GeneralUser> query, GeneralUserSearchObject? search = null)
@@ -83,29 +82,6 @@ namespace TrackIt.Services.Services
 			_mapper.Map(update, entity?.User);
 			await _context.SaveChangesAsync();
 			return _mapper.Map<Model.Models.GeneralUser>(entity);
-		}
-
-		public static string GenerateSalt()
-		{
-			RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
-			var byteArray = new byte[16];
-			provider.GetBytes(byteArray);
-
-			return Convert.ToBase64String(byteArray);
-		}
-
-		public static string GenerateHash(string salt, string password)
-		{
-			byte[] src = Convert.FromBase64String(salt);
-			byte[] bytes = Encoding.Unicode.GetBytes(password);
-			byte[] dst = new byte[src.Length + bytes.Length];
-
-			Buffer.BlockCopy(src, 0, dst, 0, src.Length);
-			Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
-
-			HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
-			byte[] inArray = algorithm.ComputeHash(dst);
-			return Convert.ToBase64String(inArray);
 		}
 	}
 }

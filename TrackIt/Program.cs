@@ -18,6 +18,7 @@ builder.Services.AddTransient<ITagService, TagService>();
 builder.Services.AddTransient<IIngredientService, IngredientService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IGeneralUserService, GeneralUserService>();
+builder.Services.AddTransient<IAdminService, AdminService>();
 
 builder.Services.AddControllers(x =>
 {
