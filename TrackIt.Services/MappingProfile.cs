@@ -18,11 +18,20 @@ namespace TrackIt.Services
 			CreateMap<Database.Admin, Admin>();
 			CreateMap<Model.Requests.AdminInsertRequest, Database.User>();
 			CreateMap<Model.Requests.AdminInsertRequest, Database.Admin>();
-			CreateMap<Model.Requests.AdminUpdateRequest, Database.User>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
-			CreateMap<Model.Requests.AdminUpdateRequest, Database.Admin>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
+			CreateMap<Model.Requests.AdminUpdateRequest, Database.User>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+			CreateMap<Model.Requests.AdminUpdateRequest, Database.Admin>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
 
 			CreateMap<Database.DailyIntake, DailyIntake>();
+			CreateMap<Model.Requests.DailyIntakeInsertRequest, Database.DailyIntake>();
+			CreateMap<Model.Requests.DailyIntakeUpdateRequest, Database.DailyIntake>();
+			CreateMap<Model.Requests.DailyIntakeUpdateRequest, Model.Requests.DailyIntakeInsertRequest>()
+			.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+			.ForMember(dest => dest.Calories, opt => opt.MapFrom(src => src.Meal.Calories))
+			.ForMember(dest => dest.Carbs, opt => opt.MapFrom(src => src.Meal.Carbs))
+			.ForMember(dest => dest.Protein, opt => opt.MapFrom(src => src.Meal.Protein))
+			.ForMember(dest => dest.Fat, opt => opt.MapFrom(src => src.Meal.Fat));
+			//.ForMember(dest => dest.Fiber, opt => opt.MapFrom(src => src.Meal.Fiber)); TODO add fiber
 
 			CreateMap<Database.GeneralUser, GeneralUser>();
 			CreateMap<Model.Requests.GeneralUserInsertRequest, Database.User>();
