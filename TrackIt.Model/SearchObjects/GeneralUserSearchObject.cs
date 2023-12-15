@@ -17,5 +17,7 @@
 		public bool IsActivityLevelIncluded { get; set; }
 
 		public bool IsGoalIncluded { get; set; }
+
+		public bool IsPreferenceIncluded { get; set; }
 	}
 }

@@ -23,5 +23,10 @@
 		public virtual User User { get; set; } = null!;
 
 		public virtual ICollection<UsersGoal> UsersGoals { get; set; } = new List<UsersGoal>();
+
+		public virtual ICollection<UsersPreference> UsersPreferences { get; set; } = new List<UsersPreference>();
+
+		//public virtual ICollection<UsersMeal> UsersMeals { get; set; } = new List<UsersMeal>();
+
 	}
 }

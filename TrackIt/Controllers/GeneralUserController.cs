@@ -20,5 +20,17 @@ namespace TrackIt.Controllers
 		{
 			return await _service.UpdateBaseUser(id, update);
 		}
+
+		[HttpPut("/updateActivityLevel/{id}")]
+		public virtual async Task<GeneralUser> AddActivityLevel(int id, [FromQuery] int activityLevelId)
+		{
+			return await _service.AddActivityLevel(id, activityLevelId);
+		}
+
+		[HttpPut("/updatePreferences/{id}")]
+		public virtual async Task<GeneralUser> AddPreferences(int id, [FromQuery] int[] preferenceIds)
+		{
+			return await _service.AddPreferences(id, preferenceIds);
+		}
 	}
 }

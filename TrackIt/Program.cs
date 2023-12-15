@@ -20,6 +20,8 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IGeneralUserService, GeneralUserService>();
 builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<IDailyIntakeService, DailyIntakeService>();
+builder.Services.AddTransient<IUsersPreferenceService, UsersPreferencesService>();
+builder.Services.AddTransient<IPreferenceService, PreferenceService>();
 
 builder.Services.AddControllers(x =>
 {
