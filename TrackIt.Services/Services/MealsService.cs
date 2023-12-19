@@ -10,11 +10,14 @@ namespace TrackIt.Services.Services
 {
 	public class MealsService : BaseCRUDService<Model.Models.Meal, Database.Meal, MealSearchObject, MealInsertRequest, MealUpdateRequest>, IMealsService
 	{
+		private IMealsIngredientsService _mealsIngredientsService;
 		private readonly TrackItContext context;
-		public MealsService(TrackItContext context, IMapper mapper) : base(context, mapper)
+		public MealsService(TrackItContext context, IMapper mapper, IMealsIngredientsService mealsIngredientsService) : base(context, mapper)
 		{
 			this.context = context;
+			_mealsIngredientsService = mealsIngredientsService;
 		}
+
 		public override IQueryable<Meal> AddInclude(IQueryable<Meal> query, MealSearchObject? search = null)
 		{
 			if (search?.IsIngredientsIncluded == true)
@@ -48,6 +51,37 @@ namespace TrackIt.Services.Services
 				query = query.Where(meal => meal.Name.ToLower().Contains(search.Name.ToLower()));
 			}
 			return base.AddFilter(query, search);
+		}
+
+		public async Task<Model.Models.Meal> AddIngredients(int id, int[] preferenceIds)
+		{
+			var set = _context.Set<Meal>();
+			var ingredientsSet = _context.Set<Ingredient>();
+
+			foreach (var ingredient in ingredientsSet)
+			{
+				var insert = new MealsIngredientsInsertRequest() { MealId = id, IngredientId = ingredient.IngredientId };
+				await _mealsIngredientsService.Insert(insert);
+			}
+
+			var entity = await set.Include(m => m.MealsIngredients).ThenInclude(mi => mi.Ingredient).FirstOrDefaultAsync(m => m.MealId == id);
+
+			await _context.SaveChangesAsync();
+			return _mapper.Map<Model.Models.Meal>(entity);
+		}
+
+		public async Task<Model.Models.Meal> RemoveIngredients(int id, int[] ingredientIds)
+		{
+			var set = _context.Set<Meal>();
+			foreach (var ingredient in ingredientIds)
+			{
+				await _mealsIngredientsService.Remove(ingredient);
+			}
+
+			var entity = await set.Include(m => m.MealsIngredients).ThenInclude(mi => mi.Ingredient).FirstOrDefaultAsync(m => m.MealId == id);
+
+			await _context.SaveChangesAsync();
+			return _mapper.Map<Model.Models.Meal>(entity);
 		}
 	}
 }

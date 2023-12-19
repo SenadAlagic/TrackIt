@@ -27,10 +27,16 @@ namespace TrackIt.Controllers
 			return await _service.AddActivityLevel(id, activityLevelId);
 		}
 
-		[HttpPut("/updatePreferences/{id}")]
+		[HttpPut("/addPreferences/{id}")]
 		public virtual async Task<GeneralUser> AddPreferences(int id, [FromQuery] int[] preferenceIds)
 		{
 			return await _service.AddPreferences(id, preferenceIds);
+		}
+
+		[HttpPut("/removePreferences/{id}")]
+		public virtual async Task<GeneralUser> RemovePreferences(int id, [FromQuery] int[] preferenceIds)
+		{
+			return await _service.RemovePreferences(id, preferenceIds);
 		}
 	}
 }

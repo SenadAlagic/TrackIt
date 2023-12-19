@@ -11,12 +11,25 @@ namespace TrackIt.Services.Services
 		public UsersPreferencesService(TrackItContext context, IMapper mapper) : base(context, mapper)
 		{
 		}
+
 		public override async Task<Model.Models.UsersPreference> Insert(UsersPreferencesInsertRequest insert)
 		{
 			var set = _context.Set<UsersPreference>();
 			var entity = _mapper.Map<UsersPreference>(new UsersPreference() { UserId = insert.UserId, PreferenceId = insert.PreferenceId });
 			set.Add(entity);
 			await _context.SaveChangesAsync();
+			return _mapper.Map<Model.Models.UsersPreference>(entity);
+		}
+
+		public async Task<Model.Models.UsersPreference> Remove(int preferenceId)
+		{
+			var set = _context.Set<UsersPreference>();
+			var entity = await set.FindAsync(preferenceId);
+			if (entity != null)
+			{
+				set.Remove(entity);
+				await _context.SaveChangesAsync();
+			}
 			return _mapper.Map<Model.Models.UsersPreference>(entity);
 		}
 	}

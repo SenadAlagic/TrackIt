@@ -6,5 +6,6 @@ namespace TrackIt.Services.Interfaces
 {
 	public interface IUsersPreferenceService : ICRUDService<UsersPreference, UsersPreferencesSearchObject, UsersPreferencesInsertRequest, UsersPreferencesUpdateRequest>
 	{
+		Task<UsersPreference> Remove(int preferenceId);
 	}
 }

@@ -120,5 +120,19 @@ namespace TrackIt.Services.Services
 			await _context.SaveChangesAsync();
 			return _mapper.Map<Model.Models.GeneralUser>(entity);
 		}
+
+		public async Task<Model.Models.GeneralUser> RemovePreferences(int id, int[] preferenceIds)
+		{
+			var set = _context.Set<GeneralUser>();
+			foreach (var preference in preferenceIds)
+			{
+				await _usersPreferenceService.Remove(preference);
+			}
+
+			var entity = await set.Include(g => g.UsersPreferences).ThenInclude(up => up.Preference).FirstOrDefaultAsync(g => g.GeneralUserId == id);
+
+			await _context.SaveChangesAsync();
+			return _mapper.Map<Model.Models.GeneralUser>(entity);
+		}
 	}
 }

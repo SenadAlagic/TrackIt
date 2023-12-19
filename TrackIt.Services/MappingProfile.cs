@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TrackIt.Model.Models;
+using TrackIt.Model.Requests;
 
 namespace TrackIt.Services
 {
@@ -52,6 +53,8 @@ namespace TrackIt.Services
 			CreateMap<Model.Requests.MealUpdateRequest, Database.Meal>();//.ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
 
 			CreateMap<Database.MealsIngredient, MealsIngredient>();
+			CreateMap<MealsIngredientsInsertRequest, Database.MealsIngredient>();
+			CreateMap<MealsIngredientsUpdateRequest, Database.MealsIngredient>();
 
 			CreateMap<Database.Preference, Preference>();
 
