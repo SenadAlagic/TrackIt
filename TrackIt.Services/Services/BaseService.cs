@@ -28,7 +28,7 @@ namespace TrackIt.Services.Services
 
 			if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
 			{
-				query = query.Take(search.PageSize.Value).Skip(search.PageSize.Value * search.Page.Value);
+				query = query.Skip(search.PageSize.Value * search.Page.Value).Take(search.PageSize.Value);
 			}
 
 			var list = await query.ToListAsync();
