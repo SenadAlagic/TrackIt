@@ -70,6 +70,8 @@ namespace TrackIt.Services
 			CreateMap<Database.UsersGoal, UsersGoal>();
 
 			CreateMap<Database.UsersMeal, UsersMeal>();
+			CreateMap<Model.Requests.UsersMealsInsertRequest, Database.UsersMeal>();
+			CreateMap<Model.Requests.UsersMealsUpdateRequest, Database.UsersMeal>();
 
 			CreateMap<Database.UsersPreference, UsersPreference>();
 

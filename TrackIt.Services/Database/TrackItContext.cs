@@ -37,8 +37,6 @@ public partial class TrackItContext : DbContext
 
 	public virtual DbSet<User> Users { get; set; }
 
-	public virtual DbSet<UsersGoal> UsersGoals { get; set; }
-
 	public virtual DbSet<UsersMeal> UsersMeals { get; set; }
 
 	public virtual DbSet<UsersPreference> UsersPreferences { get; set; }
@@ -95,12 +93,18 @@ public partial class TrackItContext : DbContext
 			entity.Property(e => e.Gender)
 				.HasMaxLength(10)
 				.IsFixedLength();
+			entity.Property(e => e.GoalId).HasColumnName("GoalID");
 			entity.Property(e => e.UserId).HasColumnName("UserID");
 
 			entity.HasOne(d => d.ActivityLevel).WithMany(p => p.GeneralUsers)
 				.HasForeignKey(d => d.ActivityLevelId)
 				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_GeneralUsers_ActivityLevel");
+
+			entity.HasOne(d => d.Goal).WithMany(p => p.GeneralUsers)
+				.HasForeignKey(d => d.GoalId)
+				.OnDelete(DeleteBehavior.ClientSetNull)
+				.HasConstraintName("FK_GeneralUsers_Goals");
 
 			entity.HasOne(d => d.User).WithMany(p => p.GeneralUsers)
 				.HasForeignKey(d => d.UserId)
@@ -218,33 +222,14 @@ public partial class TrackItContext : DbContext
 				.HasMaxLength(15)
 				.IsFixedLength();
 			entity.Property(e => e.Password)
-				.HasMaxLength(30)
+				.HasMaxLength(50)
 				.IsFixedLength();
 			entity.Property(e => e.Salt)
-				.HasMaxLength(16)
+				.HasMaxLength(50)
 				.IsFixedLength();
 			entity.Property(e => e.Username)
 				.HasMaxLength(15)
 				.IsFixedLength();
-		});
-
-		modelBuilder.Entity<UsersGoal>(entity =>
-		{
-			entity.HasKey(e => e.UsersGoalsId);
-
-			entity.Property(e => e.UsersGoalsId).HasColumnName("UsersGoalsID");
-			entity.Property(e => e.EndDate).HasColumnType("date");
-			entity.Property(e => e.GoalId).HasColumnName("GoalID");
-			entity.Property(e => e.StartDate).HasColumnType("date");
-			entity.Property(e => e.UserId).HasColumnName("UserID");
-
-			entity.HasOne(d => d.Goal).WithMany(p => p.UsersGoals)
-				.HasForeignKey(d => d.GoalId)
-				.HasConstraintName("FK_UsersGoals_Goals");
-
-			entity.HasOne(d => d.User).WithMany(p => p.UsersGoals)
-				.HasForeignKey(d => d.UserId)
-				.HasConstraintName("FK_UsersGoals_GeneralUsers");
 		});
 
 		modelBuilder.Entity<UsersMeal>(entity =>

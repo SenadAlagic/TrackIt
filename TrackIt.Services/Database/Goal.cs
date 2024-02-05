@@ -15,5 +15,5 @@ public partial class Goal
 
     public int? TargetCalories { get; set; }
 
-    public virtual ICollection<UsersGoal> UsersGoals { get; set; } = new List<UsersGoal>();
+    public virtual ICollection<GeneralUser> GeneralUsers { get; set; } = new List<GeneralUser>();
 }

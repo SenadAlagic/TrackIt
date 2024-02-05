@@ -21,13 +21,15 @@ public partial class GeneralUser
 
     public int ActivityLevelId { get; set; }
 
+    public int GoalId { get; set; }
+
     public virtual ActivityLevel ActivityLevel { get; set; } = null!;
 
     public virtual ICollection<DailyIntake> DailyIntakes { get; set; } = new List<DailyIntake>();
 
-    public virtual User User { get; set; } = null!;
+    public virtual Goal Goal { get; set; } = null!;
 
-    public virtual ICollection<UsersGoal> UsersGoals { get; set; } = new List<UsersGoal>();
+    public virtual User User { get; set; } = null!;
 
     public virtual ICollection<UsersMeal> UsersMeals { get; set; } = new List<UsersMeal>();
 

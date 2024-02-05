@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Database;
@@ -10,6 +11,19 @@ namespace TrackIt.Services.Services
 	{
 		public UsersPreferencesService(TrackItContext context, IMapper mapper) : base(context, mapper)
 		{
+		}
+
+		public override IQueryable<UsersPreference> AddFilter(IQueryable<UsersPreference> query, UsersPreferencesSearchObject? search = null)
+		{
+			if (search?.PreferenceId > 0)
+			{
+				query = query.Where(up => up.PreferenceId == search.PreferenceId);
+			}
+			if (search?.UserId > 0)
+			{
+				query = query.Where(up => up.UserId == search.UserId);
+			}
+			return base.AddFilter(query, search);
 		}
 
 		public override async Task<Model.Models.UsersPreference> Insert(UsersPreferencesInsertRequest insert)
@@ -24,7 +38,7 @@ namespace TrackIt.Services.Services
 		public async Task<Model.Models.UsersPreference> Remove(int preferenceId)
 		{
 			var set = _context.Set<UsersPreference>();
-			var entity = await set.FindAsync(preferenceId);
+			var entity = await set.Where(up => up.PreferenceId == preferenceId).FirstOrDefaultAsync();
 			if (entity != null)
 			{
 				set.Remove(entity);
