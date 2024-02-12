@@ -24,6 +24,8 @@ builder.Services.AddTransient<IDailyIntakeService, DailyIntakeService>();
 builder.Services.AddTransient<IUsersPreferenceService, UsersPreferencesService>();
 builder.Services.AddTransient<IPreferenceService, PreferenceService>();
 builder.Services.AddTransient<IMealsIngredientsService, MealsIngredientsService>();
+builder.Services.AddTransient<IWeightOverTimeService, WeightOverTimeService>();
+
 
 builder.Services.AddControllers(x =>
 {

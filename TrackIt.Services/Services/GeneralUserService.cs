@@ -12,12 +12,12 @@ namespace TrackIt.Services.Services
 	public class GeneralUserService : BaseCRUDService<Model.Models.GeneralUser, Database.GeneralUser, GeneralUserSearchObject, GeneralUserInsertRequest, GeneralUserUpdateRequest>, IGeneralUserService
 	{
 		private IUsersPreferenceService _usersPreferenceService;
-		private IUsersMealsService _usersMealsService;
+		private IWeightOverTimeService _weightOverTimeService;
 
-		public GeneralUserService(TrackItContext context, IMapper mapper, IUsersPreferenceService usersPreferenceService, IUsersMealsService usersMealsService) : base(context, mapper)
+		public GeneralUserService(TrackItContext context, IMapper mapper, IUsersPreferenceService usersPreferenceService, IWeightOverTimeService weightOverTimeService) : base(context, mapper)
 		{
 			_usersPreferenceService = usersPreferenceService;
-			_usersMealsService = usersMealsService;
+			_weightOverTimeService = weightOverTimeService;
 		}
 
 		public override async Task BeforeInsert(GeneralUser entity, GeneralUserInsertRequest insert)
@@ -80,6 +80,11 @@ namespace TrackIt.Services.Services
 			var entity = await set.Include(g => g.User).FirstOrDefaultAsync(g => g.GeneralUserId == id);
 			_mapper.Map(update, entity?.User);
 			_mapper.Map(update, entity);
+			if (update.CurrentWeight > 0)
+			{
+				var newWeight = new WeightOverTimeInsertRequest() { DateLogged = DateTime.Now, UserId = id, Weight = update.CurrentWeight, Comment = string.IsNullOrEmpty(update.WeightComment) ? "No comment " : update.WeightComment };
+				await _weightOverTimeService.Insert(newWeight);
+			}
 			await _context.SaveChangesAsync();
 			return _mapper.Map<Model.Models.GeneralUser>(entity);
 		}

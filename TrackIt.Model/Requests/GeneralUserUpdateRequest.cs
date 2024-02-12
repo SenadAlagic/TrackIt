@@ -11,7 +11,11 @@ namespace TrackIt.Model.Requests
 
 		public int? TargetWeight { get; set; }
 
+
+		// both of these are for weight logging
 		public int? CurrentWeight { get; set; }
+
+		public string? WeightComment { get; set; }
 
 	}
 }

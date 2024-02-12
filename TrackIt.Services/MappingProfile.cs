@@ -76,6 +76,8 @@ namespace TrackIt.Services
 			CreateMap<Database.UsersPreference, UsersPreference>();
 
 			CreateMap<Database.WeightOverTime, WeightOverTime>();
+			CreateMap<Model.Requests.WeightOverTimeInsertRequest, Database.WeightOverTime>();
+			CreateMap<Model.Requests.WeightOverTimeUpdateRequest, Database.WeightOverTime>();
 		}
 	}
 }
