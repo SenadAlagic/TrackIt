@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
@@ -43,6 +44,12 @@ namespace TrackIt.Controllers
 		public virtual async Task<GeneralUser> RemovePreferences(int id, [FromQuery] int[] preferenceIds)
 		{
 			return await _service.RemovePreferences(id, preferenceIds);
+		}
+
+		[AllowAnonymous]
+		public override Task<GeneralUser> Insert([FromBody] GeneralUserInsertRequest insert)
+		{
+			return base.Insert(insert);
 		}
 	}
 }

@@ -38,5 +38,7 @@ namespace TrackIt.Model.Requests
 
 		public int ActivityLevelId { get; set; }
 
+		public int GoalId { get; set; }
+
 	}
 }
