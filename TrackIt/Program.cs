@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using TrackIt;
+using System.Text;
 using TrackIt.Filters;
 using TrackIt.Services.Database;
 using TrackIt.Services.Interfaces;
@@ -27,6 +28,18 @@ builder.Services.AddTransient<IMealsIngredientsService, MealsIngredientsService>
 builder.Services.AddTransient<IWeightOverTimeService, WeightOverTimeService>();
 
 
+builder.Services.AddAuthentication(
+	JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+	{
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuerSigningKey = true,
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+			ValidateIssuer = false,
+			ValidateAudience = false
+		};
+	});
+
 builder.Services.AddControllers(x =>
 {
 	x.Filters.Add<ErrorFilter>();
@@ -35,27 +48,36 @@ builder.Services.AddControllers(x =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-	c.AddSecurityDefinition("basicAuth", new OpenApiSecurityScheme()
+	c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
 	{
-		Type = SecuritySchemeType.Http,
-		Scheme = "basic"
+		In = ParameterLocation.Header,
+		Name = "Authorization",
+		Type = SecuritySchemeType.ApiKey,
+		Scheme = "Bearer"
 	});
 	c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-	{
+	  {
 		{
-			new OpenApiSecurityScheme
-			{
-				Reference=new OpenApiReference{Type=ReferenceType.SecurityScheme, Id="basicAuth" }
+		  new OpenApiSecurityScheme
+		  {
+			Reference = new OpenApiReference
+			  {
+				Type = ReferenceType.SecurityScheme,
+				Id = "Bearer"
+			  },
+			  Scheme = "oauth2",
+			  Name = "Bearer",
+			  In = ParameterLocation.Header,
+
 			},
-			new string[]{}
-		}
-	});
+			new List<string>()
+		  }
+		});
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TrackItContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(typeof(IUserService));
-builder.Services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 var app = builder.Build();
 

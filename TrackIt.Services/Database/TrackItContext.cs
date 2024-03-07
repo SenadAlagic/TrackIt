@@ -44,7 +44,7 @@ public partial class TrackItContext : DbContext
 	public virtual DbSet<WeightOverTime> WeightOverTimes { get; set; }
 
 	//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	//	=> optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS; Initial Catalog=TrackIt; TrustServerCertificate=True; Trusted_Connection=True");
+	//    => optionsBuilder.UseSqlServer("Name=ConnectionStrings:DefaultConnection");
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -53,9 +53,7 @@ public partial class TrackItContext : DbContext
 			entity.ToTable("ActivityLevel");
 
 			entity.Property(e => e.ActivityLevelId).HasColumnName("ActivityLevelID");
-			entity.Property(e => e.Name)
-				.HasMaxLength(20)
-				.IsFixedLength();
+			entity.Property(e => e.Name).HasMaxLength(50);
 		});
 
 		modelBuilder.Entity<Admin>(entity =>
@@ -90,9 +88,7 @@ public partial class TrackItContext : DbContext
 			entity.Property(e => e.GeneralUserId).HasColumnName("GeneralUserID");
 			entity.Property(e => e.ActivityLevelId).HasColumnName("ActivityLevelID");
 			entity.Property(e => e.DateOfBirth).HasColumnType("date");
-			entity.Property(e => e.Gender)
-				.HasMaxLength(10)
-				.IsFixedLength();
+			entity.Property(e => e.Gender).HasMaxLength(50);
 			entity.Property(e => e.GoalId).HasColumnName("GoalID");
 			entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -115,20 +111,14 @@ public partial class TrackItContext : DbContext
 		modelBuilder.Entity<Goal>(entity =>
 		{
 			entity.Property(e => e.GoalId).HasColumnName("GoalID");
-			entity.Property(e => e.Description)
-				.HasMaxLength(100)
-				.IsFixedLength();
-			entity.Property(e => e.Name)
-				.HasMaxLength(20)
-				.IsFixedLength();
+			entity.Property(e => e.Description).HasMaxLength(100);
+			entity.Property(e => e.Name).HasMaxLength(50);
 		});
 
 		modelBuilder.Entity<Ingredient>(entity =>
 		{
 			entity.Property(e => e.IngredientId).HasColumnName("IngredientID");
-			entity.Property(e => e.Name)
-				.HasMaxLength(30)
-				.IsFixedLength();
+			entity.Property(e => e.Name).HasMaxLength(50);
 		});
 
 		modelBuilder.Entity<Meal>(entity =>
@@ -136,15 +126,9 @@ public partial class TrackItContext : DbContext
 			entity.HasKey(e => e.MealId).HasName("PK_Meal");
 
 			entity.Property(e => e.MealId).HasColumnName("MealID");
-			entity.Property(e => e.Description)
-				.HasMaxLength(200)
-				.IsFixedLength();
-			entity.Property(e => e.Image)
-				.HasMaxLength(15)
-				.IsFixedLength();
-			entity.Property(e => e.Name)
-				.HasMaxLength(50)
-				.IsFixedLength();
+			entity.Property(e => e.Description).HasMaxLength(200);
+			entity.Property(e => e.Image).HasMaxLength(50);
+			entity.Property(e => e.Name).HasMaxLength(50);
 		});
 
 		modelBuilder.Entity<MealsIngredient>(entity =>
@@ -169,9 +153,7 @@ public partial class TrackItContext : DbContext
 		modelBuilder.Entity<Preference>(entity =>
 		{
 			entity.Property(e => e.PreferenceId).HasColumnName("PreferenceID");
-			entity.Property(e => e.Name)
-				.HasMaxLength(15)
-				.IsFixedLength();
+			entity.Property(e => e.Name).HasMaxLength(50);
 		});
 
 		modelBuilder.Entity<Tag>(entity =>
@@ -179,15 +161,9 @@ public partial class TrackItContext : DbContext
 			entity.HasKey(e => e.TagId).HasName("PK_Table_1");
 
 			entity.Property(e => e.TagId).HasColumnName("TagID");
-			entity.Property(e => e.Color)
-				.HasMaxLength(10)
-				.IsFixedLength();
-			entity.Property(e => e.Description)
-				.HasMaxLength(60)
-				.IsFixedLength();
-			entity.Property(e => e.Name)
-				.HasMaxLength(15)
-				.IsFixedLength();
+			entity.Property(e => e.Color).HasMaxLength(50);
+			entity.Property(e => e.Description).HasMaxLength(60);
+			entity.Property(e => e.Name).HasMaxLength(50);
 		});
 
 		modelBuilder.Entity<TagsMeal>(entity =>
@@ -212,24 +188,12 @@ public partial class TrackItContext : DbContext
 		modelBuilder.Entity<User>(entity =>
 		{
 			entity.Property(e => e.UserId).HasColumnName("UserID");
-			entity.Property(e => e.Email)
-				.HasMaxLength(30)
-				.IsFixedLength();
-			entity.Property(e => e.FirstName)
-				.HasMaxLength(15)
-				.IsFixedLength();
-			entity.Property(e => e.LastName)
-				.HasMaxLength(15)
-				.IsFixedLength();
-			entity.Property(e => e.Password)
-				.HasMaxLength(50)
-				.IsFixedLength();
-			entity.Property(e => e.Salt)
-				.HasMaxLength(50)
-				.IsFixedLength();
-			entity.Property(e => e.Username)
-				.HasMaxLength(15)
-				.IsFixedLength();
+			entity.Property(e => e.Email).HasMaxLength(50);
+			entity.Property(e => e.FirstName).HasMaxLength(50);
+			entity.Property(e => e.LastName).HasMaxLength(50);
+			entity.Property(e => e.Password).HasMaxLength(50);
+			entity.Property(e => e.Salt).HasMaxLength(50);
+			entity.Property(e => e.Username).HasMaxLength(50);
 		});
 
 		modelBuilder.Entity<UsersMeal>(entity =>
@@ -276,9 +240,7 @@ public partial class TrackItContext : DbContext
 			entity.ToTable("WeightOverTime");
 
 			entity.Property(e => e.LogId).HasColumnName("LogID");
-			entity.Property(e => e.Comment)
-				.HasMaxLength(30)
-				.IsFixedLength();
+			entity.Property(e => e.Comment).HasMaxLength(50);
 			entity.Property(e => e.DateLogged).HasColumnType("date");
 			entity.Property(e => e.UserId).HasColumnName("UserID");
 

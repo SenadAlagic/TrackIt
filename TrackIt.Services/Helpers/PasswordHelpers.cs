@@ -27,5 +27,11 @@ namespace TrackIt.Services.Helper
 			byte[] inArray = algorithm.ComputeHash(dst);
 			return Convert.ToBase64String(inArray);
 		}
+
+		public static bool VerifyPassword(string enteredPassword, string storedPasswordHash, string storedSalt)
+		{
+			string enteredPasswordHash = GenerateHash(storedSalt, enteredPassword);
+			return enteredPasswordHash == storedPasswordHash;
+		}
 	}
 }

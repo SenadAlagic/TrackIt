@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TrackIt.Services.Interfaces;
 
 namespace TrackIt.Controllers
@@ -15,18 +16,21 @@ namespace TrackIt.Controllers
 			_service = service;
 		}
 
+		[Authorize(Roles = "admin")]
 		[HttpPost]
 		public virtual async Task<T> Insert([FromBody] TInsert insert)
 		{
 			return await _service.Insert(insert);
 		}
 
+		[Authorize(Roles = "admin")]
 		[HttpPut("{id}")]
 		public virtual async Task<T> Update(int id, [FromBody] TUpdate update)
 		{
 			return await _service.Update(id, update);
 		}
 
+		[Authorize(Roles = "admin")]
 		[HttpDelete("{id}")]
 		public virtual async Task<T> Delete(int id)
 		{

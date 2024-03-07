@@ -34,14 +34,8 @@ namespace TrackIt
 			{
 				var claims = new List<Claim>()
 				{
-					//new Claim(ClaimTypes.Name, user.Ime),
-					new Claim(ClaimTypes.NameIdentifier, username)
+					new Claim(ClaimTypes.Role, "Admin")
 				};
-
-				//foreach (var role in user.KorisniciUloges)
-				//{
-				//	claims.Add(new Claim(ClaimTypes.Role, role.Uloga.Naziv));
-				//}
 
 				var identity = new ClaimsIdentity(claims, Scheme.Name);
 				var principal = new ClaimsPrincipal(identity);
