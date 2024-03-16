@@ -1,12 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:trackit_admin/providers/auth_provider.dart';
 import 'package:trackit_admin/screens/home_screen.dart';
 import 'package:trackit_admin/screens/master_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:trackit_admin/utils/authorization.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  late AuthProvider _authProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _authProvider = context.read<AuthProvider>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +56,14 @@ class LoginScreen extends StatelessWidget {
                 height: 8,
               ),
               ElevatedButton(
-                  onPressed: () {
-                    var email = _emailController.text;
-                    var password = _passwordController.text;
-                    print("$email $password");
-
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const HomeScreen()));
+                  onPressed: () async {
+                    Authorization.email = _emailController.text;
+                    Authorization.password = _passwordController.text;
+                    var loginResponse = await _authProvider.login();
+                    if (loginResponse.result == 0) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HomeScreen()));
+                    }
                   },
                   child: const Text("Login"))
             ],

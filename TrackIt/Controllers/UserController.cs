@@ -19,9 +19,9 @@ namespace TrackIt.Controllers
 
 		[HttpPost("login")]
 		[AllowAnonymous]
-		public async Task<AuthResponse> Login(string email, string password)
+		public async Task<AuthResponse> Login([FromBody] LoginRequest login)
 		{
-			return await _service.AuthenticateUser(email, password);
+			return await _service.AuthenticateUser(login.email, login.password);
 		}
 	}
 }
