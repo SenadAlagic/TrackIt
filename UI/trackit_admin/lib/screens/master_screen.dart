@@ -16,6 +16,15 @@ class _MasterScreenState extends State<MasterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? ""),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 12.0),
+            child: Icon(
+              Icons.account_circle_outlined,
+              size: 32,
+            ),
+          )
+        ],
       ),
       body: widget.child,
     );

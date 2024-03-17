@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:trackit_admin/models/Auth/login_response.dart';
@@ -10,6 +11,7 @@ import '../utils/authorization.dart';
 class AuthProvider with ChangeNotifier {
   static String? _baseUrl;
   final String _endpoint = "User/login";
+  final _storage = const FlutterSecureStorage();
 
   AuthProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
@@ -24,12 +26,15 @@ class AuthProvider with ChangeNotifier {
       "email": Authorization.email,
       "password": Authorization.password
     };
-
+    var headers = await createHeaders();
     var response =
-        await http.post(uri, headers: createHeaders(), body: jsonEncode(body));
+        await http.post(uri, headers: headers, body: jsonEncode(body));
 
     if (isValidResponse(response)) {
       var data = LoginResponse.fromJson(jsonDecode(response.body));
+      if (data.result == 0) {
+        _storage.write(key: "jwt", value: data.token);
+      }
       return data;
     } else {
       throw Exception("Unknown error");
@@ -46,16 +51,15 @@ class AuthProvider with ChangeNotifier {
           "${response.statusCode} Something bad happened, please try again later.");
     }
   }
-}
 
-Map<String, String> createHeaders() {
-  // String email = Authorization.email ?? "";
-  // String password = Authorization.password ?? "";
+  Future<Map<String, String>> createHeaders() async {
+    String token = await _storage.read(key: "jwt") ?? "";
+    String bearerAuth = "Bearer $token";
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": bearerAuth
+    };
 
-  var headers = {
-    "Content-Type": "application/json",
-    // "Authorization": basicAuth
-  };
-
-  return headers;
+    return headers;
+  }
 }

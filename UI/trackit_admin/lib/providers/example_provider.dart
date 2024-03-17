@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-class ProductProvider with ChangeNotifier {
+class ExampleProvider with ChangeNotifier {
   static String? _baseUrl;
   final String _endpoint = "User/login";
 
-  ProductProvider() {
+  ExampleProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "https://localhost:7296/");
   }
