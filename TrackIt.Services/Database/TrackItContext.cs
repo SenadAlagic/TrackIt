@@ -127,7 +127,6 @@ public partial class TrackItContext : DbContext
 
 			entity.Property(e => e.MealId).HasColumnName("MealID");
 			entity.Property(e => e.Description).HasMaxLength(200);
-			entity.Property(e => e.Image).HasMaxLength(50);
 			entity.Property(e => e.Name).HasMaxLength(50);
 		});
 

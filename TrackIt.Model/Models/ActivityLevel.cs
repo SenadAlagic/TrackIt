@@ -7,5 +7,7 @@
 		public string Name { get; set; } = null!;
 
 		public double Multiplier { get; set; }
+
+		public byte[]? Image { get; set; }
 	}
 }

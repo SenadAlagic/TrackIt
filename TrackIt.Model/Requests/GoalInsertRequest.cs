@@ -9,5 +9,7 @@
 		public double? TargetProtein { get; set; }
 
 		public int? TargetCalories { get; set; }
+
+		public byte[] Image { get; set; }
 	}
 }

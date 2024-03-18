@@ -19,7 +19,7 @@ public partial class Meal
 
     public string? Description { get; set; }
 
-    public string? Image { get; set; }
+    public byte[]? Image { get; set; }
 
     public virtual ICollection<MealsIngredient> MealsIngredients { get; set; } = new List<MealsIngredient>();
 

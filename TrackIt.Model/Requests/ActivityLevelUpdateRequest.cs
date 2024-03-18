@@ -8,5 +8,7 @@ namespace TrackIt.Model.Requests
 		public string? Name { get; set; }
 
 		public double? Multiplier { get; set; }
+
+		public byte[]? Image { get; set; }
 	}
 }

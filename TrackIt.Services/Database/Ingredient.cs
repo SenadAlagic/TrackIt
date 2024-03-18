@@ -17,5 +17,7 @@ public partial class Ingredient
 
     public double? Calories { get; set; }
 
+    public byte[]? Image { get; set; }
+
     public virtual ICollection<MealsIngredient> MealsIngredients { get; set; } = new List<MealsIngredient>();
 }

@@ -11,5 +11,7 @@
 		public double? Carbs { get; set; }
 
 		public double? Calories { get; set; }
+
+		public byte[]? Image { get; set; }
 	}
 }

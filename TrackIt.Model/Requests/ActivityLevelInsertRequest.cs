@@ -10,5 +10,8 @@ namespace TrackIt.Model.Requests
 
 		[Required]
 		public double Multiplier { get; set; }
+
+		[Required]
+		public byte[] Image { get; set; }
 	}
 }

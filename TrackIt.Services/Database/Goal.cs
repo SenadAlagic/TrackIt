@@ -15,5 +15,7 @@ public partial class Goal
 
     public int? TargetCalories { get; set; }
 
+    public byte[]? Image { get; set; }
+
     public virtual ICollection<GeneralUser> GeneralUsers { get; set; } = new List<GeneralUser>();
 }
