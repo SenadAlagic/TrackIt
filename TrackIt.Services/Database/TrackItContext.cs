@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TrackIt.Services.Database.Seed;
 
 namespace TrackIt.Services.Database;
 
@@ -43,8 +44,8 @@ public partial class TrackItContext : DbContext
 
 	public virtual DbSet<WeightOverTime> WeightOverTimes { get; set; }
 
-	//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	//    => optionsBuilder.UseSqlServer("Name=ConnectionStrings:DefaultConnection");
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		=> optionsBuilder.UseSqlServer("Name=ConnectionStrings:DefaultConnection");
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -58,12 +59,13 @@ public partial class TrackItContext : DbContext
 
 		modelBuilder.Entity<Admin>(entity =>
 		{
+			entity.ToTable(tb => tb.HasTrigger("DeleteAdminCascade"));
+
 			entity.Property(e => e.AdminId).HasColumnName("AdminID");
 			entity.Property(e => e.UserId).HasColumnName("UserID");
 
 			entity.HasOne(d => d.User).WithMany(p => p.Admins)
 				.HasForeignKey(d => d.UserId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_Admins_Users");
 		});
 
@@ -77,13 +79,14 @@ public partial class TrackItContext : DbContext
 
 			entity.HasOne(d => d.User).WithMany(p => p.DailyIntakes)
 				.HasForeignKey(d => d.UserId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_DailyIntake_Users");
 		});
 
 		modelBuilder.Entity<GeneralUser>(entity =>
 		{
 			entity.HasKey(e => e.GeneralUserId).HasName("PK_GeneralUser");
+
+			entity.ToTable(tb => tb.HasTrigger("DeleteGeneralUserCascade"));
 
 			entity.Property(e => e.GeneralUserId).HasColumnName("GeneralUserID");
 			entity.Property(e => e.ActivityLevelId).HasColumnName("ActivityLevelID");
@@ -94,17 +97,16 @@ public partial class TrackItContext : DbContext
 
 			entity.HasOne(d => d.ActivityLevel).WithMany(p => p.GeneralUsers)
 				.HasForeignKey(d => d.ActivityLevelId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
+				.OnDelete(DeleteBehavior.SetNull)
 				.HasConstraintName("FK_GeneralUsers_ActivityLevel");
 
 			entity.HasOne(d => d.Goal).WithMany(p => p.GeneralUsers)
 				.HasForeignKey(d => d.GoalId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
+				.OnDelete(DeleteBehavior.SetNull)
 				.HasConstraintName("FK_GeneralUsers_Goals");
 
 			entity.HasOne(d => d.User).WithMany(p => p.GeneralUsers)
 				.HasForeignKey(d => d.UserId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_GeneralUsers_Users");
 		});
 
@@ -140,12 +142,10 @@ public partial class TrackItContext : DbContext
 
 			entity.HasOne(d => d.Ingredient).WithMany(p => p.MealsIngredients)
 				.HasForeignKey(d => d.IngredientId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_MealsIngredients_Ingredients");
 
 			entity.HasOne(d => d.Meal).WithMany(p => p.MealsIngredients)
 				.HasForeignKey(d => d.MealId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_MealsIngredients_Meal");
 		});
 
@@ -175,12 +175,10 @@ public partial class TrackItContext : DbContext
 
 			entity.HasOne(d => d.Meal).WithMany(p => p.TagsMeals)
 				.HasForeignKey(d => d.MealId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_TagsMeals_Meal");
 
 			entity.HasOne(d => d.Tag).WithMany(p => p.TagsMeals)
 				.HasForeignKey(d => d.TagId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_TagsMeals_Tags");
 		});
 
@@ -206,12 +204,10 @@ public partial class TrackItContext : DbContext
 
 			entity.HasOne(d => d.Meal).WithMany(p => p.UsersMeals)
 				.HasForeignKey(d => d.MealId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_UsersMeals_Meal");
 
 			entity.HasOne(d => d.User).WithMany(p => p.UsersMeals)
 				.HasForeignKey(d => d.UserId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_UsersMeals_Users");
 		});
 
@@ -225,10 +221,12 @@ public partial class TrackItContext : DbContext
 
 			entity.HasOne(d => d.Preference).WithMany(p => p.UsersPreferences)
 				.HasForeignKey(d => d.PreferenceId)
+				.OnDelete(DeleteBehavior.Cascade)
 				.HasConstraintName("FK_UsersPreferences_Preferences");
 
 			entity.HasOne(d => d.User).WithMany(p => p.UsersPreferences)
 				.HasForeignKey(d => d.UserId)
+				.OnDelete(DeleteBehavior.Cascade)
 				.HasConstraintName("FK_UsersPreferences_GeneralUsers");
 		});
 
@@ -245,9 +243,22 @@ public partial class TrackItContext : DbContext
 
 			entity.HasOne(d => d.User).WithMany(p => p.WeightOverTimes)
 				.HasForeignKey(d => d.UserId)
-				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("FK_WeightOverTime_Users");
 		});
+
+		modelBuilder.Entity<ActivityLevel>().SeedData();
+		modelBuilder.Entity<Goal>().SeedData();
+		modelBuilder.Entity<Ingredient>().SeedData();
+		modelBuilder.Entity<Meal>().SeedData();
+		modelBuilder.Entity<Preference>().SeedData();
+		modelBuilder.Entity<Tag>().SeedData();
+		modelBuilder.Entity<MealsIngredient>().SeedData();
+		modelBuilder.Entity<TagsMeal>().SeedData();
+
+		modelBuilder.Entity<User>().SeedData();
+		modelBuilder.Entity<Admin>().SeedData();
+		modelBuilder.Entity<GeneralUser>().SeedData();
+
 
 		OnModelCreatingPartial(modelBuilder);
 	}

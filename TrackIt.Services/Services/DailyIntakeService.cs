@@ -37,7 +37,10 @@ namespace TrackIt.Services.Services
 		}
 		public override IQueryable<DailyIntake> AddFilter(IQueryable<DailyIntake> query, DailyIntakeSearchObject? search = null)
 		{
-			query = query.Where(di => di.UserId == search.UserId && di.Day == DateTime.Today);
+			if (search?.UserId != 0)
+			{
+				query = query.Where(di => di.UserId == search.UserId && di.Day == DateTime.Today);
+			}
 			return base.AddFilter(query, search);
 		}
 	}

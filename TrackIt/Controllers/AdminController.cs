@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
@@ -11,6 +12,12 @@ namespace TrackIt.Controllers
 	{
 		public AdminController(ILogger<BaseController<Admin, AdminSearchObject>> logger, IAdminService service) : base(logger, service)
 		{
+		}
+
+		[AllowAnonymous]
+		public override Task<Admin> Insert([FromBody] AdminInsertRequest insert)
+		{
+			return base.Insert(insert);
 		}
 	}
 }
