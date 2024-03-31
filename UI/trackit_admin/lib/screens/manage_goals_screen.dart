@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/models/Goal/goal.dart';
-import 'package:trackit_admin/models/search_result.dart';
-import 'package:trackit_admin/providers/goal_provider.dart';
-import 'package:trackit_admin/screens/master_screen.dart';
+
+import '../models/Goal/goal.dart';
+import '../models/search_result.dart';
+import '../providers/goal_provider.dart';
+import 'master_screen.dart';
 
 class ManageGoalsScreen extends StatefulWidget {
   const ManageGoalsScreen({super.key});

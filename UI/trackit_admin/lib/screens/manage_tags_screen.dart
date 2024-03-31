@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trackit_admin/screens/master_screen.dart';
+
+import 'master_screen.dart';
 
 class ManageTagsScreen extends StatelessWidget {
   const ManageTagsScreen({super.key});

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:trackit_admin/models/Auth/login_response.dart';
 
+import '../models/Auth/login_response.dart';
 import '../utils/authorization.dart';
 
 class AuthProvider with ChangeNotifier {

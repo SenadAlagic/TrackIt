@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:trackit_admin/utils/string_helpers.dart';
 
 import '../models/search_result.dart';
+import '../utils/string_helpers.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
   static String? _baseUrl;

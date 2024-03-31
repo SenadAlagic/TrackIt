@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:trackit_admin/screens/manage_goals_screen.dart';
-import 'package:trackit_admin/screens/manage_ingredients_screen.dart';
-import 'package:trackit_admin/screens/manage_meals_screen.dart';
-import 'package:trackit_admin/screens/manage_tags_screen.dart';
-import 'package:trackit_admin/screens/master_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'manage_goals_screen.dart';
+import 'manage_ingredients_screen.dart';
+import 'manage_meals_screen.dart';
+import 'manage_tags_screen.dart';
+import 'master_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
