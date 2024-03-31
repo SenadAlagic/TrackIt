@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackit_admin/providers/activity_level_provider.dart';
 import 'package:trackit_admin/providers/auth_provider.dart';
-import 'package:trackit_admin/providers/example_provider.dart';
 import 'package:trackit_admin/providers/goal_provider.dart';
 import '../screens/login_screen.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => ExampleProvider()),
       ChangeNotifierProvider(create: (_) => GoalProvider()),
       ChangeNotifierProvider(create: (_) => ActivityLevelProvider()),
       ChangeNotifierProvider(create: (_) => AuthProvider()),
-    ], // ExampleProvider is a fake class from the professors demo, insert own classes
+    ],
     child: const HomePage(),
   ));
 }

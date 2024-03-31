@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackit_admin/models/Goal/goal.dart';
@@ -44,11 +46,29 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
     if (goals?.result.isNotEmpty ?? false) {
       return Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: goals!.result.map((goal) => _drawGoalCard(goal)).toList(),
-          ));
+          child: Column(children: [
+            SingleChildScrollView(
+                child: IntrinsicHeight(
+                    child: Column(
+              children:
+                  goals!.result.map((goal) => _drawGoalCard(goal)).toList(),
+            ))),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () => {},
+                  child: const Card(
+                    child: Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Text("Add a new goal")),
+                  ),
+                )
+              ],
+            )
+          ]));
     } else {
-      return const Placeholder();
+      return const CircularProgressIndicator();
     }
   }
 
@@ -58,9 +78,16 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
         const SizedBox(
           height: 80,
         ),
-        const Padding(
-            padding: EdgeInsets.only(left: 16, right: 16.0),
-            child: Icon(Icons.access_alarm)),
+        Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16.0),
+            child: goal.image?.isNotEmpty ?? true
+                ? Image.memory(
+                    base64Decode(goal.image!),
+                    height: 40,
+                    width: 40,
+                  )
+                : Image.asset("assets/images/NoImageFound.png",
+                    height: 40, width: 40)),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

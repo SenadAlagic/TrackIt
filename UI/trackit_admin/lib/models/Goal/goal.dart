@@ -8,6 +8,7 @@ class Goal {
   String? description;
   double? targetProtein;
   double? targetCalories;
+  String? image;
 
   Goal(this.goalId, this.name, this.description, this.targetProtein,
       this.targetCalories);
