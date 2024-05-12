@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TrackIt.Model.Helper;
 using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
@@ -16,9 +17,9 @@ namespace TrackIt.Controllers
 		}
 
 		[HttpPut("/addIngredients/{mealId}")]
-		public virtual async Task<Meal> AddIngredients(int mealId, [FromQuery] int[] ingredientIds)
+		public virtual async Task<Meal> AddIngredients(int mealId, [FromBody] IngredientData[] ingredientData)
 		{
-			return await _service.AddIngredients(mealId, ingredientIds);
+			return await _service.AddIngredients(mealId, ingredientData);
 		}
 
 		[HttpPut("/removeIngredients/{mealId}")]

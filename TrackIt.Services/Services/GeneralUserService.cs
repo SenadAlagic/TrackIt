@@ -129,7 +129,6 @@ namespace TrackIt.Services.Services
 		public async Task<Model.Models.GeneralUser> AddPreferences(int id, int[] preferenceIds)
 		{
 			var set = _context.Set<GeneralUser>();
-			//var preferencesSet = _context.Set<Preference>();
 
 			foreach (int preference in preferenceIds)
 			{

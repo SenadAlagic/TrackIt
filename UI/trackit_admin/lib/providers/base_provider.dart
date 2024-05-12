@@ -19,6 +19,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
         defaultValue: "https://localhost:7296/");
   }
 
+  String? getBaseUrl() => _baseUrl;
+
   Future<SearchResult<T>> get({dynamic filter}) async {
     var url = "$_baseUrl$_endpoint";
 
@@ -78,6 +80,20 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
+  Future<T> delete(int id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = await createHeaders();
+
+    var response = await http.delete(uri, headers: headers);
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      return fromJson(data);
+    } else {
+      throw Exception("Unknown error in a DELETE request");
+    }
+  }
+
   T fromJson(data) {
     throw Exception("Method not implemented");
   }
@@ -88,7 +104,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else if (response.statusCode == 401) {
       throw Exception("Unauthorized");
     } else {
-      throw Exception("Something bad happened please try again");
+      var body = jsonDecode(response.body);
+      throw Exception(body['title']);
     }
   }
 

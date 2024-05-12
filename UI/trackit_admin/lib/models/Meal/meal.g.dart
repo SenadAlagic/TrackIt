@@ -15,6 +15,9 @@ Meal _$MealFromJson(Map<String, dynamic> json) => Meal(
       json['name'] as String?,
       json['description'] as String?,
       json['image'] as String?,
+      (json['mealsIngredients'] as List<dynamic>?)
+          ?.map((e) => MealIngredient.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$MealToJson(Meal instance) => <String, dynamic>{
@@ -26,4 +29,5 @@ Map<String, dynamic> _$MealToJson(Meal instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'image': instance.image,
+      'mealsIngredients': instance.mealsIngredients,
     };

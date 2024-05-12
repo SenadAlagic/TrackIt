@@ -1,11 +1,42 @@
-import '../models/Goal/goal.dart';
+import 'dart:convert';
+
+import '../models/Meal/meal.dart';
+import 'package:http/http.dart' as http;
 import 'base_provider.dart';
 
-class GoalProvider extends BaseProvider<Goal> {
-  GoalProvider() : super("Goal");
+class MealProvider extends BaseProvider<Meal> {
+  MealProvider() : super("Meal");
 
   @override
-  Goal fromJson(data) {
-    return Goal.fromJson(data);
+  Meal fromJson(data) {
+    return Meal.fromJson(data);
+  }
+
+  Future<void> addIngredients(mealId, ingredientsArray) async {
+    var baseUrl = getBaseUrl();
+    var url = "${baseUrl}addIngredients/$mealId";
+
+    var uri = Uri.parse(url);
+    var headers = await createHeaders();
+    var response = await http.put(uri,
+        headers: headers, body: jsonEncode(ingredientsArray));
+
+    if (!isValidResponse(response)) {
+      throw Exception("Unknown error in a PUT request");
+    }
+  }
+
+  Future<void> removeIngredients(mealId, ingredientsArray) async {
+    var baseUrl = getBaseUrl();
+    var url = "${baseUrl}removeIngredients/$mealId";
+
+    var uri = Uri.parse(url);
+    var headers = await createHeaders();
+    var response =
+        await http.put(uri, headers: headers, body: ingredientsArray);
+
+    if (!isValidResponse(response)) {
+      throw Exception("Unknown error in a PUT request");
+    }
   }
 }

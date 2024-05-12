@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit_admin/screens/goal_details_screen.dart';
 
 import '../models/Goal/goal.dart';
 import '../models/search_result.dart';
@@ -28,9 +29,10 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
   }
 
   Future initScreen() async {
-    goals = await _goalProvider.get();
+    var result = await _goalProvider.get();
 
     setState(() {
+      goals = result;
       isLoading = false;
     });
   }
@@ -58,7 +60,10 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                  onTap: () => {},
+                  onTap: () => {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const GoalDetailsScreen()))
+                  },
                   child: const Card(
                     child: Padding(
                         padding: EdgeInsets.all(4),
@@ -87,7 +92,7 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
                     height: 40,
                     width: 40,
                   )
-                : Image.asset("assets/images/NoImageFound.png",
+                : Image.asset("assets/images/NoImageFound.jpg",
                     height: 40, width: 40)),
         Expanded(
             child: Column(
@@ -100,8 +105,15 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
             Text(goal.description ?? "")
           ],
         )),
-        InkWell(onTap: () => {}, child: const Icon(Icons.create_outlined)),
-        InkWell(onTap: () => {}, child: const Icon(Icons.delete_outline)),
+        InkWell(
+            onTap: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => GoalDetailsScreen(goal: goal)))
+                },
+            child: const Icon(Icons.create_outlined)),
+        InkWell(
+            onTap: () => {_goalProvider.delete(goal.goalId!)},
+            child: const Icon(Icons.delete_outline)),
         const SizedBox(
           width: 16,
         )

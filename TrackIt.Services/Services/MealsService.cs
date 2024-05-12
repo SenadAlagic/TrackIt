@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using TrackIt.Model.Helper;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Database;
@@ -53,14 +54,16 @@ namespace TrackIt.Services.Services
 			return base.AddFilter(query, search);
 		}
 
-		public async Task<Model.Models.Meal> AddIngredients(int id, int[] preferenceIds)
+		public async Task<Model.Models.Meal> AddIngredients(int id, IngredientData[] ingredientData)
 		{
 			var set = _context.Set<Meal>();
 			var ingredientsSet = _context.Set<Ingredient>();
 
-			foreach (var ingredient in ingredientsSet)
+			foreach (var item in ingredientData)
 			{
-				var insert = new MealsIngredientsInsertRequest() { MealId = id, IngredientId = ingredient.IngredientId };
+				var ingredient = ingredientsSet.Where(i => i.IngredientId == item.IngredientId).FirstOrDefault();
+				if (ingredient == null) continue;
+				var insert = new MealsIngredientsInsertRequest() { MealId = id, IngredientId = ingredient.IngredientId, IngredientQuantity = item.Quantity };
 				await _mealsIngredientsService.Insert(insert);
 			}
 
@@ -70,12 +73,12 @@ namespace TrackIt.Services.Services
 			return _mapper.Map<Model.Models.Meal>(entity);
 		}
 
-		public async Task<Model.Models.Meal> RemoveIngredients(int id, int[] ingredientIds)
+		public async Task<Model.Models.Meal> RemoveIngredients(int id, int[] ingredients)
 		{
 			var set = _context.Set<Meal>();
-			foreach (var ingredient in ingredientIds)
+			foreach (var ingredient in ingredients)
 			{
-				await _mealsIngredientsService.Remove(ingredient);
+				await _mealsIngredientsService.Remove(new IngredientData() { IngredientId = ingredient, MealId = id });
 			}
 
 			var entity = await set.Include(m => m.MealsIngredients).ThenInclude(mi => mi.Ingredient).FirstOrDefaultAsync(m => m.MealId == id);
