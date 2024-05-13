@@ -6,24 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/providers/goal_provider.dart';
-import 'package:trackit_admin/utils/alert_helpers.dart';
+import 'package:trackit_admin/providers/ingredient_provider.dart';
 
-import '../models/Goal/goal.dart';
+import '../models/Ingredient/ingredient.dart';
+import '../utils/alert_helpers.dart';
 import 'master_screen.dart';
 
-class GoalDetailsScreen extends StatefulWidget {
-  final Goal? goal;
-  const GoalDetailsScreen({super.key, this.goal});
+class IngredientDetailsScreen extends StatefulWidget {
+  final Ingredient? ingredient;
+  const IngredientDetailsScreen({super.key, this.ingredient});
 
   @override
-  State<GoalDetailsScreen> createState() => _GoalDetailsScreenState();
+  State<IngredientDetailsScreen> createState() =>
+      _IngredientDetailsScreenState();
 }
 
-class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
+class _IngredientDetailsScreenState extends State<IngredientDetailsScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
-  late GoalProvider _goalProvider;
+  late IngredientProvider _ingredientProvider;
 
   File? _image;
   String _base64Image = "";
@@ -32,20 +33,21 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   void initState() {
     super.initState();
     _initialValue = {
-      'name': widget.goal?.name,
-      'description': widget.goal?.description,
-      'image': widget.goal?.image,
-      'targetProtein': widget.goal?.targetProtein.toString(),
-      'targetCalories': widget.goal?.targetCalories.toString()
+      "name": widget.ingredient?.name.toString(),
+      "image": widget.ingredient?.image.toString(),
+      "protein": widget.ingredient?.protein.toString(),
+      "fat": widget.ingredient?.fat.toString(),
+      "carbs": widget.ingredient?.carbs.toString(),
+      "calories": widget.ingredient?.calories.toString(),
     };
-    _base64Image = widget.goal?.image ?? "";
-    _goalProvider = context.read<GoalProvider>();
+    _base64Image = widget.ingredient?.image ?? "";
+    _ingredientProvider = context.read<IngredientProvider>();
   }
 
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-      title: "Goal details",
+      title: "Ingredient details",
       child: _buildScreen(),
     );
   }
@@ -55,30 +57,30 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         key: _formKey,
         initialValue: _initialValue,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          widget.goal != null
-              ? _drawGoalCard(widget.goal!)
+          widget.ingredient != null
+              ? _drawIngredientCard(widget.ingredient!)
               : const SizedBox(height: 10),
           Center(
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              _drawStringContainer("Goal name", "name"),
-              _drawNumericContainer("Target protein", "targetProtein"),
-              _drawNumericContainer("Target calories", "targetCalories"),
-              const SizedBox(height: 10),
-              _drawLargeContainer("Goal description")
+              _drawStringContainer("Ingredient name", "name"),
+              _drawNumericContainer("Protein", "protein"),
+              _drawNumericContainer("Calories", "calories"),
+              _drawNumericContainer("Fat", "fat"),
+              _drawNumericContainer("Carbs", "carbs"),
             ]),
             const SizedBox(width: 10),
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [_drawImagePreview("Goal image")])
+                children: [_drawImagePreview("Ingredient image")])
           ])),
           const SizedBox(height: 30),
           _drawSubmitButton()
         ]));
   }
 
-  Widget _drawGoalCard(Goal goal) {
+  Widget _drawIngredientCard(Ingredient ingredient) {
     return Card(
       child: Row(children: [
         const SizedBox(
@@ -86,9 +88,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         ),
         Padding(
             padding: const EdgeInsets.only(left: 16, right: 16.0),
-            child: goal.image?.isNotEmpty ?? true
+            child: ingredient.image?.isNotEmpty ?? true
                 ? Image.memory(
-                    base64Decode(goal.image!),
+                    base64Decode(ingredient.image!),
                     height: 40,
                     width: 40,
                   )
@@ -99,20 +101,21 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              goal.name ?? "",
+              ingredient.name ?? "",
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            Text(goal.description ?? "")
+            Text(getNutritionalInformation(ingredient))
           ],
         )),
         InkWell(
             onTap: () => {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => GoalDetailsScreen(goal: goal)))
+                      builder: (context) =>
+                          IngredientDetailsScreen(ingredient: ingredient)))
                 },
             child: const Icon(Icons.create_outlined)),
         InkWell(
-            onTap: () => {_goalProvider.delete(goal.goalId!)},
+            onTap: () => {_ingredientProvider.delete(ingredient.ingredientId!)},
             child: const Icon(Icons.delete_outline)),
         const SizedBox(
           width: 16,
@@ -120,6 +123,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       ]),
     );
   }
+
+  String getNutritionalInformation(Ingredient ingredient) =>
+      "Fat (per 100g) ${ingredient.fat}, Protein (per 100g) ${ingredient.protein}, Calories (per 100g) ${ingredient.calories}, Carbs (per 100g) ${ingredient.carbs}";
 
   Widget _drawStringContainer(String hint, String propertyName) {
     return Container(
@@ -158,31 +164,6 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
               ]),
               keyboardType: TextInputType.number,
               name: propertyName,
-              decoration: InputDecoration(
-                hintText: "$hint*",
-              ),
-            )
-          ])),
-    );
-  }
-
-  Widget _drawLargeContainer(String hint) {
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.centerLeft,
-      constraints: const BoxConstraints(maxHeight: 272, maxWidth: 300),
-      child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(children: [
-            FormBuilderTextField(
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Field is required."),
-                FormBuilderValidators.maxLength(30,
-                    errorText: "Field must contain less than 30 characters")
-              ]),
-              name: 'description',
-              keyboardType: TextInputType.multiline,
-              maxLines: 10,
               decoration: InputDecoration(
                 hintText: "$hint*",
               ),
@@ -234,11 +215,12 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         request['image'] = _base64Image == "" ? null : _base64Image;
 
         try {
-          if (widget.goal == null) {
-            await _goalProvider.insert(request);
+          if (widget.ingredient == null) {
+            await _ingredientProvider.insert(request);
             Navigator.of(context).pop();
           } else {
-            await _goalProvider.update(widget.goal!.goalId!, request);
+            await _ingredientProvider.update(
+                widget.ingredient!.ingredientId!, request);
             Navigator.of(context).pop();
           }
         } on Exception catch (e) {
@@ -248,7 +230,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         }
       },
       child: const Padding(
-          padding: EdgeInsets.all(4), child: Text("Add a new goal")),
+          padding: EdgeInsets.all(4), child: Text("Add a new ingredient")),
     );
   }
 
