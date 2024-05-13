@@ -37,4 +37,11 @@ class StringHelpers {
 
   static Image imageFromBase64String(String base64Image) =>
       Image.memory(base64Decode(base64Image));
+
+  static colorFromHex(String hexColor) {
+    final buffer = StringBuffer();
+    if (hexColor.length <= 7) buffer.write('ff');
+    buffer.write(hexColor.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
 }
