@@ -54,37 +54,45 @@ namespace TrackIt.Services.Services
 			return base.AddFilter(query, search);
 		}
 
-		public async Task<Model.Models.Meal> AddIngredients(int id, IngredientData[] ingredientData)
+		public async Task<Model.Models.Meal> SetIngredients(int mealId, IngredientData[] ingredientData)
 		{
 			var set = _context.Set<Meal>();
+			var mealsIngredientsSet = _context.Set<MealsIngredient>();
 			var ingredientsSet = _context.Set<Ingredient>();
 
-			foreach (var item in ingredientData)
+			var existingConnections = mealsIngredientsSet.Where(mi => mi.MealId == mealId).ToList();
+			foreach (var connection in existingConnections)
 			{
-				var ingredient = ingredientsSet.Where(i => i.IngredientId == item.IngredientId).FirstOrDefault();
-				if (ingredient == null) continue;
-				var insert = new MealsIngredientsInsertRequest() { MealId = id, IngredientId = ingredient.IngredientId, IngredientQuantity = item.Quantity };
-				await _mealsIngredientsService.Insert(insert);
+				mealsIngredientsSet.Remove(connection);
 			}
 
-			var entity = await set.Include(m => m.MealsIngredients).ThenInclude(mi => mi.Ingredient).FirstOrDefaultAsync(m => m.MealId == id);
+			var entity = await set.Include(m => m.MealsIngredients).ThenInclude(mi => mi.Ingredient).FirstOrDefaultAsync(m => m.MealId == mealId);
+			if (entity != null)
+			{
+				entity.Fat = 0;
+				entity.Calories = 0;
+				entity.Carbs = 0;
+				entity.Protein = 0;
+			}
+
+			foreach (var data in ingredientData)
+			{
+				var ingredient = ingredientsSet.Where(i => i.IngredientId == data.IngredientId).FirstOrDefault();
+				if (ingredient == null) continue;
+				var insert = new MealsIngredientsInsertRequest() { MealId = mealId, IngredientId = ingredient.IngredientId, IngredientQuantity = data.Quantity };
+				await _mealsIngredientsService.Insert(insert);
+
+				//var newConnection = new MealsIngredient() { IngredientId = data.IngredientId, MealId = mealId, IngredientQuantity = data.Quantity };
+				//mealsIngredientsSet.Add(newConnection);
+			}
 
 			await _context.SaveChangesAsync();
 			return _mapper.Map<Model.Models.Meal>(entity);
 		}
 
-		public async Task<Model.Models.Meal> RemoveIngredients(int id, int[] ingredients)
+		public async Task<int> GetNumberOfItems()
 		{
-			var set = _context.Set<Meal>();
-			foreach (var ingredient in ingredients)
-			{
-				await _mealsIngredientsService.Remove(new IngredientData() { IngredientId = ingredient, MealId = id });
-			}
-
-			var entity = await set.Include(m => m.MealsIngredients).ThenInclude(mi => mi.Ingredient).FirstOrDefaultAsync(m => m.MealId == id);
-
-			await _context.SaveChangesAsync();
-			return _mapper.Map<Model.Models.Meal>(entity);
+			return await _context.Meals.CountAsync();
 		}
 	}
 }

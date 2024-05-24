@@ -247,8 +247,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
           }
         }
       },
-      child: const Padding(
-          padding: EdgeInsets.all(4), child: Text("Add a new goal")),
+      child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Text(widget.goal != null ? "Edit goal" : "Add a new goal")),
     );
   }
 

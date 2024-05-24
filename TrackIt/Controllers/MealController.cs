@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TrackIt.Interfaces;
 using TrackIt.Model.Helper;
 using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
@@ -8,7 +9,7 @@ using TrackIt.Services.Interfaces;
 namespace TrackIt.Controllers
 {
 	[ApiController]
-	public class MealController : BaseCRUDController<Meal, MealSearchObject, MealInsertRequest, MealUpdateRequest>
+	public class MealController : BaseCRUDController<Meal, MealSearchObject, MealInsertRequest, MealUpdateRequest>, IReportable
 	{
 		IMealsService _service;
 		public MealController(ILogger<BaseController<Meal, MealSearchObject>> logger, IMealsService service) : base(logger, service)
@@ -16,16 +17,16 @@ namespace TrackIt.Controllers
 			_service = service;
 		}
 
-		[HttpPut("/addIngredients/{mealId}")]
-		public virtual async Task<Meal> AddIngredients(int mealId, [FromBody] IngredientData[] ingredientData)
+		[HttpPut("/setIngredients/{mealId}")]
+		public virtual async Task<Meal> SetIngredients(int mealId, [FromBody] IngredientData[] ingredientData)
 		{
-			return await _service.AddIngredients(mealId, ingredientData);
+			return await _service.SetIngredients(mealId, ingredientData);
 		}
 
-		[HttpPut("/removeIngredients/{mealId}")]
-		public virtual async Task<Meal> RemoveIngredients(int mealId, [FromQuery] int[] ingredientIds)
+		[HttpGet("getForReport")]
+		public async Task<int> GetNumberOfItems()
 		{
-			return await _service.RemoveIngredients(mealId, ingredientIds);
+			return await _service.GetNumberOfItems();
 		}
 	}
 }

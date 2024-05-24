@@ -116,87 +116,127 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
   }
 
   Widget _drawTable() {
-    return Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        constraints:
-            const BoxConstraints(maxHeight: 400, minWidth: 450, maxWidth: 450),
-        child: SingleChildScrollView(
-          child: DataTable(columns: [
-            DataColumn(
-                label: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 100),
-                    child: const Text('Quantity'))),
-            DataColumn(
-                label: ConstrainedBox(
-                    constraints: const BoxConstraints(minWidth: 200),
-                    child: const Text('Name'))),
-            DataColumn(
-                label: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 50),
-                    child: const Text('')))
-          ], rows: [
-            ...selectedIngredients
-                .map((MealIngredient mealIngredient) => DataRow(cells: [
-                      DataCell(FormBuilderTextField(
-                        name: "quantity#${mealIngredient.ingredientId}",
-                        initialValue:
-                            mealIngredient.ingredientQuantity.toString(),
-                      )),
-                      DataCell(Text(mealIngredient.ingredient?.name ?? "")),
-                      DataCell(
-                        InkWell(
-                            onTap: () {
-                              _mealProvider.removeIngredients(
-                                  mealIngredient.mealId,
-                                  [mealIngredient.ingredientId]);
-                              setState(() {
-                                selectedIngredients.removeWhere((ingredient) =>
-                                    ingredient.ingredient?.name ==
-                                    mealIngredient.ingredient?.name);
-                              });
-                            },
-                            child: const Icon(Icons.delete_outline)),
-                      ),
-                    ])),
-            DataRow(cells: [
-              const DataCell(TextField(
-                decoration: InputDecoration(hintText: "Quantity"),
-              )),
-              DataCell(Autocomplete<String>(
-                optionsBuilder: (textEditingValue) =>
-                    _optionsBuilder(textEditingValue),
-                displayStringForOption: (String suggestion) => suggestion,
-                optionsViewBuilder:
-                    (BuildContext context, onSelected, options) =>
-                        _drawSuggestionBox(context, onSelected, options),
-                onSelected: (String selection) {
-                  var selectedIngredient = cachedIngredients.firstWhere(
-                    (ingredient) =>
-                        ingredient.name?.toLowerCase() ==
-                        selection.toLowerCase(),
-                  );
+    return FormBuilderField(
+        name: "mealIngredients",
+        validator: (value) {
+          if (selectedIngredients.isEmpty) {
+            return "Ingredient list cannot be empty";
+          }
+          for (var element in selectedIngredients) {
+            if (element.ingredientQuantity! <= 0) {
+              return "Quantity must be larger than 0";
+            }
+            return null;
+          }
+          return null;
+        },
+        builder: (field) {
+          return SizedBox(
+              width: 450,
+              child: InputDecorator(
+                  decoration: InputDecoration(
+                      border: InputBorder.none, errorText: field.errorText),
+                  child: Container(
+                      decoration: const BoxDecoration(color: Colors.white),
+                      constraints: const BoxConstraints(
+                          maxHeight: 400, minWidth: 450, maxWidth: 450),
+                      child: SingleChildScrollView(
+                        child: DataTable(columns: [
+                          DataColumn(
+                              label: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 100),
+                                  child: const Text('Quantity'))),
+                          DataColumn(
+                              label: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(minWidth: 200),
+                                  child: const Text('Name'))),
+                          DataColumn(
+                              label: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 50),
+                                  child: const Text('')))
+                        ], rows: [
+                          ...selectedIngredients.map((MealIngredient
+                                  mealIngredient) =>
+                              DataRow(cells: [
+                                DataCell(TextFormField(
+                                  initialValue: mealIngredient
+                                      .ingredientQuantity
+                                      .toString(),
+                                  onChanged: (value) {
+                                    var index = selectedIngredients.indexWhere(
+                                        (element) =>
+                                            element.ingredientId ==
+                                            mealIngredient.ingredientId);
+                                    if (index != -1) {
+                                      selectedIngredients[index]
+                                              .ingredientQuantity =
+                                          int.tryParse(value) ?? 0;
+                                    }
+                                  },
+                                )),
+                                DataCell(Text(
+                                    mealIngredient.ingredient?.name ?? "")),
+                                DataCell(
+                                  InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedIngredients.removeWhere(
+                                              (ingredient) =>
+                                                  ingredient.ingredient?.name ==
+                                                  mealIngredient
+                                                      .ingredient?.name);
+                                        });
+                                      },
+                                      child: const Icon(Icons.delete_outline)),
+                                ),
+                              ])),
+                          DataRow(cells: [
+                            const DataCell(TextField(
+                              decoration: InputDecoration(hintText: "Quantity"),
+                            )),
+                            DataCell(Autocomplete<String>(
+                              optionsBuilder: (textEditingValue) =>
+                                  _optionsBuilder(textEditingValue),
+                              displayStringForOption: (String suggestion) =>
+                                  suggestion,
+                              optionsViewBuilder:
+                                  (BuildContext context, onSelected, options) =>
+                                      _drawSuggestionBox(
+                                          context, onSelected, options),
+                              onSelected: (String selection) {
+                                var selectedIngredient =
+                                    cachedIngredients.firstWhere(
+                                  (ingredient) =>
+                                      ingredient.name?.toLowerCase() ==
+                                      selection.toLowerCase(),
+                                );
 
-                  var existingElement = selectedIngredients.where(
-                      (ingredient) => selectedIngredients.any((ingredient) =>
-                          ingredient.ingredient?.name ==
-                          selectedIngredient.name));
+                                var existingElement = selectedIngredients.where(
+                                    (ingredient) => selectedIngredients.any(
+                                        (ingredient) =>
+                                            ingredient.ingredient?.name ==
+                                            selectedIngredient.name));
 
-                  if (existingElement.isEmpty) {
-                    setState(() {
-                      selectedIngredients.add(MealIngredient(
-                          0,
-                          0,
-                          selectedIngredient.ingredientId,
-                          0,
-                          selectedIngredient));
-                    });
-                  }
-                },
-              )),
-              const DataCell(Text("")),
-            ])
-          ]),
-        ));
+                                if (existingElement.isEmpty) {
+                                  setState(() {
+                                    selectedIngredients.add(MealIngredient(
+                                        0,
+                                        0,
+                                        selectedIngredient.ingredientId,
+                                        0,
+                                        selectedIngredient));
+                                  });
+                                }
+                              },
+                            )),
+                            const DataCell(Text("")),
+                          ])
+                        ]),
+                      ))));
+        });
   }
 
   FutureOr<Iterable<String>> _optionsBuilder(
@@ -361,27 +401,22 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
         };
 
         try {
+          dynamic response;
           if (widget.meal == null) {
-            var response = await _mealProvider.insert(mealRequest);
-
-            var quantityObject = [];
-            formInfo.forEach((key, value) {
-              if (key.toString().startsWith("quantity")) {
-                var ingredientId =
-                    key.toString().substring(key.toString().length - 1);
-                quantityObject.add({
-                  "ingredientId": ingredientId,
-                  "quantity": value,
-                  "mealId": response.mealId.toString()
-                });
-              }
-            });
-            await _mealProvider.addIngredients(response.mealId, quantityObject);
-            Navigator.of(context).pop();
+            response = await _mealProvider.insert(mealRequest);
           } else {
-            await _mealProvider.update(widget.meal!.mealId!, mealRequest);
-            Navigator.of(context).pop();
+            response =
+                await _mealProvider.update(widget.meal!.mealId!, mealRequest);
           }
+          var ingredientsArray = selectedIngredients
+              .map((element) => {
+                    "ingredientId": element.ingredientId,
+                    "quantity": element.ingredientQuantity
+                  })
+              .toList();
+          await _mealProvider.setIngredients(
+              response.mealId, jsonEncode(ingredientsArray));
+          Navigator.of(context).pop();
         } on Exception catch (e) {
           if (context.mounted) {
             AlertHelpers.showAlert(context, "Error", e.toString());

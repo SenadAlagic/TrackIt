@@ -7,7 +7,8 @@ namespace TrackIt.Services.Interfaces
 {
 	public interface IMealsService : ICRUDService<Meal, MealSearchObject, MealInsertRequest, MealUpdateRequest>
 	{
-		Task<Meal> AddIngredients(int id, IngredientData[] ingredients);
-		Task<Meal> RemoveIngredients(int id, int[] ingredientIds);
+		Task<Meal> SetIngredients(int id, IngredientData[] ingredientIds);
+		Task<int> GetNumberOfItems();
+
 	}
 }

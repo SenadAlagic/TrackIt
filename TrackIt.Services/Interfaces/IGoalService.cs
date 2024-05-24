@@ -6,5 +6,6 @@ namespace TrackIt.Services.Interfaces
 {
 	public interface IGoalService : ICRUDService<Goal, GoalSearchObject, GoalInsertRequest, GoalUpdateRequest>
 	{
+		Task<int> GetNumberOfItems();
 	}
 }

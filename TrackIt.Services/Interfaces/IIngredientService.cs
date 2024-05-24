@@ -6,5 +6,6 @@ namespace TrackIt.Services.Interfaces
 {
 	public interface IIngredientService : ICRUDService<Ingredient, IngredientSearchObject, IngredientInsertRequest, IngredientUpdateRequest>
 	{
+		Task<int> GetNumberOfItems();
 	}
 }

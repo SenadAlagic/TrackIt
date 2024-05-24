@@ -229,8 +229,11 @@ class _IngredientDetailsScreenState extends State<IngredientDetailsScreen> {
           }
         }
       },
-      child: const Padding(
-          padding: EdgeInsets.all(4), child: Text("Add a new ingredient")),
+      child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Text(widget.ingredient != null
+              ? "Edit ingredient"
+              : "Add a new ingredient")),
     );
   }
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
@@ -9,9 +10,13 @@ namespace TrackIt.Services.Services
 {
 	public class IngredientService : BaseCRUDService<Model.Models.Ingredient, Database.Ingredient, IngredientSearchObject, IngredientInsertRequest, IngredientUpdateRequest>, IIngredientService
 	{
+		TrackItContext _context;
+
 		public IngredientService(TrackItContext context, IMapper mapper) : base(context, mapper)
 		{
+			_context = context;
 		}
+
 		public override IQueryable<Ingredient> AddFilter(IQueryable<Ingredient> query, IngredientSearchObject? search = null)
 		{
 			if (search?.Name.IsNullOrEmpty() == false)
@@ -53,6 +58,11 @@ namespace TrackIt.Services.Services
 				query = query.Where(ingredient => ingredient.Fat > search.MinFat);
 			}
 			return base.AddFilter(query, search);
+		}
+
+		public async Task<int> GetNumberOfItems()
+		{
+			return await _context.Ingredients.CountAsync();
 		}
 	}
 }

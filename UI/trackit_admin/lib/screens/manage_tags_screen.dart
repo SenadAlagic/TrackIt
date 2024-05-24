@@ -115,6 +115,9 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
               if (!_formKey.currentState!.isValid) return;
               var request = Map.from(_formKey.currentState!.value);
 
+              request['color'] =
+                  "#${request['color'].toString().substring(4).toUpperCase()}";
+
               try {
                 if (tag != null) {
                   await _tagProvider.update(tag.tagId!, request);
