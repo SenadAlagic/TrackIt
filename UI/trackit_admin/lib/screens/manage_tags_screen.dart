@@ -183,37 +183,32 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
           child: Column(children: [
             _drawStringContainer("Tag name", "name"),
             _drawStringContainer("Tag description", "description"),
-            _drawStringContainer("Tag color", "color", enabled: false),
-            _drawColorOptions()
+            _drawDropdownMenu(),
           ]),
         ));
   }
 
-  Widget _drawColorOptions() {
-    return SizedBox(
-      height: 100,
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        _drawColorTile(0xFF2196F3),
-        _drawColorTile(0xFFF44336),
-        _drawColorTile(0xFFFFF176),
-        _drawColorTile(0xFF66BB6A),
-        _drawColorTile(0xFFF48FB1),
-      ]),
+  Widget _drawDropdownMenu() {
+    return DropdownButtonFormField<int>(
+      items: [
+        DropdownMenuItem(value: 0xFF2196F3, child: _drawColorTile(0xFF2196F3)),
+        DropdownMenuItem(value: 0xFFF44336, child: _drawColorTile(0xFFF44336)),
+        DropdownMenuItem(value: 0xFFFFF176, child: _drawColorTile(0xFFFFF176)),
+        DropdownMenuItem(value: 0xFF66BB6A, child: _drawColorTile(0xFF66BB6A)),
+        DropdownMenuItem(value: 0xFFF48FB1, child: _drawColorTile(0xFFF48FB1))
+      ],
+      onChanged: (value) => {_initialValue['color'] = value},
+      validator: FormBuilderValidators.compose(
+          [FormBuilderValidators.required(errorText: "Field is required")]),
     );
   }
 
   Widget _drawColorTile(int colorValue) {
-    return InkWell(
-      onTap: () {
-        _formKey.currentState?.fields['color']!
-            .didChange("0x${colorValue.toRadixString(16)}");
-      },
-      child: Container(
-        margin: const EdgeInsets.all(5.0),
-        height: 40,
-        width: 40,
-        color: Color(colorValue),
-      ),
+    return Container(
+      margin: const EdgeInsets.all(5.0),
+      height: 40,
+      width: 40,
+      color: Color(colorValue),
     );
   }
 }
