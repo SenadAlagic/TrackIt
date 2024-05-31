@@ -21,6 +21,7 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
 
+  int? _selectedColor = 0xFF66CC99;
   late TagProvider _tagProvider;
   SearchResult<Tag>? tags;
   bool isLoading = true;
@@ -91,6 +92,9 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
                     "description": tag.description,
                     "color": tag.color
                   };
+                  _selectedColor =
+                      StringHelpers.intFromColor(_initialValue['color']);
+
                   showDialog(
                       context: context,
                       builder: (BuildContext context) =>
@@ -98,7 +102,13 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
                 },
                 child: const Icon(Icons.create_outlined)),
             InkWell(
-                onTap: () => {_tagProvider.delete(tag.tagId!)},
+                onTap: () {
+                  _tagProvider.delete(tag.tagId!);
+                  setState(() {
+                    tags!.result.remove(tag);
+                    tags!.count -= 1;
+                  });
+                },
                 child: const Icon(Icons.delete_outlined))
           ])),
     );
@@ -116,7 +126,7 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
               var request = Map.from(_formKey.currentState!.value);
 
               request['color'] =
-                  "#${request['color'].toString().substring(4).toUpperCase()}";
+                  "#${_selectedColor?.toRadixString(16).substring(2).toUpperCase()}";
 
               try {
                 if (tag != null) {
@@ -190,14 +200,25 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
 
   Widget _drawDropdownMenu() {
     return DropdownButtonFormField<int>(
+      value: _selectedColor,
       items: [
-        DropdownMenuItem(value: 0xFF2196F3, child: _drawColorTile(0xFF2196F3)),
-        DropdownMenuItem(value: 0xFFF44336, child: _drawColorTile(0xFFF44336)),
-        DropdownMenuItem(value: 0xFFFFF176, child: _drawColorTile(0xFFFFF176)),
-        DropdownMenuItem(value: 0xFF66BB6A, child: _drawColorTile(0xFF66BB6A)),
-        DropdownMenuItem(value: 0xFFF48FB1, child: _drawColorTile(0xFFF48FB1))
+        // DropdownMenuItem(value: 0xFF2196F3, child: _drawColorTile(0xFF2196F3)),
+        // DropdownMenuItem(value: 0xFFF44336, child: _drawColorTile(0xFFF44336)),
+        // DropdownMenuItem(value: 0xFFFFF176, child: _drawColorTile(0xFFFFF176)),
+        // DropdownMenuItem(value: 0xFF66BB6A, child: _drawColorTile(0xFF66BB6A)),
+        // DropdownMenuItem(value: 0xFFF48FB1, child: _drawColorTile(0xFFF48FB1)),
+        DropdownMenuItem(value: 0xFF66CC99, child: _drawColorTile(0xFF66CC99)),
+        DropdownMenuItem(value: 0xFF99CCFF, child: _drawColorTile(0xFF99CCFF)),
+        DropdownMenuItem(value: 0xFFFFD700, child: _drawColorTile(0xFFFFD700)),
+        DropdownMenuItem(value: 0xFFFF99CC, child: _drawColorTile(0xFFFF99CC)),
+        DropdownMenuItem(value: 0xFFF9F900, child: _drawColorTile(0xFFF9F900)),
+        DropdownMenuItem(value: 0xFFFF5733, child: _drawColorTile(0xFFFF5733))
       ],
-      onChanged: (value) => {_initialValue['color'] = value},
+      onChanged: (value) {
+        setState(() {
+          _selectedColor = value;
+        });
+      },
       validator: FormBuilderValidators.compose(
           [FormBuilderValidators.required(errorText: "Field is required")]),
     );

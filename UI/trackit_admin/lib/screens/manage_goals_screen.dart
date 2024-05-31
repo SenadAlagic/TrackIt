@@ -112,7 +112,13 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
                 },
             child: const Icon(Icons.create_outlined)),
         InkWell(
-            onTap: () => {_goalProvider.delete(goal.goalId!)},
+            onTap: () {
+              _goalProvider.delete(goal.goalId!);
+              setState(() {
+                goals!.result.remove(goal);
+                goals!.count -= 1;
+              });
+            },
             child: const Icon(Icons.delete_outline)),
         const SizedBox(
           width: 16,

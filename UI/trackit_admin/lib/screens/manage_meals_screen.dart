@@ -118,7 +118,13 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
                 },
             child: const Icon(Icons.create_outlined)),
         InkWell(
-            onTap: () => {_mealProvider.delete(meal.mealId!)},
+            onTap: () {
+              _mealProvider.delete(meal.mealId!);
+              setState(() {
+                meals!.result.remove(meal);
+                meals!.count -= 1;
+              });
+            },
             child: const Icon(Icons.delete_outline)),
         const SizedBox(
           width: 16,

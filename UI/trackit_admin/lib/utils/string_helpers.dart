@@ -44,4 +44,12 @@ class StringHelpers {
     buffer.write(hexColor.replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
   }
+
+  //   #2196F3
+  //0xFF2196F3
+  static int intFromColor(String hexColor) {
+    if (hexColor == "") return 0;
+    String variant = "0xFF${hexColor.substring(1)}";
+    return int.tryParse(variant) ?? 0;
+  }
 }

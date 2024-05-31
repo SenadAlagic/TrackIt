@@ -115,7 +115,13 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
                 },
             child: const Icon(Icons.create_outlined)),
         InkWell(
-            onTap: () => {_ingredientProvider.delete(ingredient.ingredientId!)},
+            onTap: () {
+              _ingredientProvider.delete(ingredient.ingredientId!);
+              setState(() {
+                ingredients!.result.remove(ingredient);
+                ingredients!.count -= 1;
+              });
+            },
             child: const Icon(Icons.delete_outline)),
         const SizedBox(
           width: 16,
