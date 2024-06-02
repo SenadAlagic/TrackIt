@@ -1,4 +1,6 @@
+import 'Meta/meta.dart';
+
 class SearchResult<T> {
   List<T> result = [];
-  int count = 0;
+  late Meta meta;
 }

@@ -134,7 +134,7 @@ namespace TrackIt.Services.Services
 			{
 				if (preference == 0) continue;
 				var combination = await _usersPreferenceService.Get(new UsersPreferencesSearchObject() { PreferenceId = preference, UserId = id });
-				if (combination.Count == 0)
+				if (combination.Result.Count == 0)
 				{
 					var insert = new UsersPreferencesInsertRequest() { PreferenceId = preference, UserId = id };
 					await _usersPreferenceService.Insert(insert);

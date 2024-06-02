@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackit_admin/screens/goal_details_screen.dart';
+import 'package:trackit_admin/widgets/PaginationWidget/pagination_widget.dart';
 
 import '../models/Goal/goal.dart';
 import '../models/search_result.dart';
@@ -29,10 +30,17 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
   }
 
   Future initScreen() async {
-    var result = await _goalProvider.get();
+    var result = await _goalProvider.get(filter: {'Page': 0, 'PageSize': 5});
 
     setState(() {
       goals = result;
+      isLoading = false;
+    });
+  }
+
+  void onResultFetched(SearchResult<dynamic> result) {
+    setState(() {
+      goals = result as SearchResult<Goal>;
       isLoading = false;
     });
   }
@@ -71,7 +79,8 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
                   ),
                 )
               ],
-            )
+            ),
+            PaginationWidget(goals!, _goalProvider, onResultFetched, 5)
           ]));
     } else {
       return const CircularProgressIndicator();
@@ -116,7 +125,7 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
               _goalProvider.delete(goal.goalId!);
               setState(() {
                 goals!.result.remove(goal);
-                goals!.count -= 1;
+                goals!.meta.count -= 1;
               });
             },
             child: const Icon(Icons.delete_outline)),

@@ -21,10 +21,11 @@ namespace TrackIt.Services.Services
 		public virtual async Task<PagedResult<T>> Get(TSearch? search = null)
 		{
 			var query = _context.Set<TDb>().AsQueryable();
-			var result = new PagedResult<T>();
 
 			query = AddFilter(query, search);
 			query = AddInclude(query, search);
+
+			var totalCount = await query.CountAsync();
 
 			if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
 			{
@@ -32,9 +33,9 @@ namespace TrackIt.Services.Services
 			}
 
 			var list = await query.ToListAsync();
-			result.Count = await query.CountAsync();
-			result.Result = _mapper.Map<List<T>>(list);
-			return result;
+			var items = _mapper.Map<List<T>>(list);
+
+			return PagedResult<T>.Create(items, search.Page.Value, search.PageSize.Value, totalCount);
 		}
 
 		public virtual async Task<T> GetById(int id)

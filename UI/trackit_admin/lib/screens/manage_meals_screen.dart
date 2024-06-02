@@ -7,6 +7,7 @@ import 'package:trackit_admin/screens/meal_details_screen.dart';
 
 import '../models/Meal/meal.dart';
 import '../models/search_result.dart';
+import '../widgets/PaginationWidget/pagination_widget.dart';
 import 'master_screen.dart';
 
 class ManageMealsScreen extends StatefulWidget {
@@ -29,10 +30,17 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
   }
 
   Future initScreen() async {
-    var result =
-        await _mealProvider.get(filter: {'IsIngredientsIncluded': true});
+    var result = await _mealProvider
+        .get(filter: {'IsIngredientsIncluded': true, "Page": 0, "PageSize": 5});
     setState(() {
       meals = result;
+      isLoading = false;
+    });
+  }
+
+  void onResultFetched(SearchResult<dynamic> result) {
+    setState(() {
+      meals = result as SearchResult<Meal>;
       isLoading = false;
     });
   }
@@ -71,6 +79,13 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
                   ),
                 )
               ],
+            ),
+            PaginationWidget(
+              meals!,
+              _mealProvider,
+              onResultFetched,
+              5,
+              filter: const {"IsIngredientsIncluded": true},
             )
           ]));
     } else {
@@ -122,7 +137,7 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
               _mealProvider.delete(meal.mealId!);
               setState(() {
                 meals!.result.remove(meal);
-                meals!.count -= 1;
+                meals!.meta.count -= 1;
               });
             },
             child: const Icon(Icons.delete_outline)),

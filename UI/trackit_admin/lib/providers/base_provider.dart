@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
+import '../models/Meta/meta.dart';
 import '../models/search_result.dart';
 import '../utils/string_helpers.dart';
 
@@ -36,7 +37,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
       var result = SearchResult<T>();
-      result.count = data['count'];
+      result.meta = Meta.fromJson(data['meta']);
 
       for (var item in data['result']) {
         result.result.add(fromJson(item));

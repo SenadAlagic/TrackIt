@@ -7,6 +7,7 @@ import 'package:trackit_admin/providers/ingredient_provider.dart';
 import 'package:trackit_admin/screens/ingredient_details_screen.dart';
 
 import '../models/Ingredient/ingredient.dart';
+import '../widgets/PaginationWidget/pagination_widget.dart';
 import 'master_screen.dart';
 
 class ManageIngredientsScreen extends StatefulWidget {
@@ -30,10 +31,18 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
   }
 
   Future initScreen() async {
-    var result = await _ingredientProvider.get();
+    var result =
+        await _ingredientProvider.get(filter: {"Page": 0, "PageSize": 5});
 
     setState(() {
       ingredients = result;
+      isLoading = false;
+    });
+  }
+
+  void onResultFetched(SearchResult<dynamic> result) {
+    setState(() {
+      ingredients = result as SearchResult<Ingredient>;
       isLoading = false;
     });
   }
@@ -73,7 +82,9 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
                   ),
                 )
               ],
-            )
+            ),
+            PaginationWidget(
+                ingredients!, _ingredientProvider, onResultFetched, 5)
           ]));
     } else {
       return const CircularProgressIndicator();
@@ -119,7 +130,7 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
               _ingredientProvider.delete(ingredient.ingredientId!);
               setState(() {
                 ingredients!.result.remove(ingredient);
-                ingredients!.count -= 1;
+                ingredients!.meta.count -= 1;
               });
             },
             child: const Icon(Icons.delete_outline)),

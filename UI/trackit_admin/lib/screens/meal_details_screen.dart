@@ -249,7 +249,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
       } else {
         setState(() {
           ingredients?.result = [];
-          ingredients?.count = 0;
+          ingredients?.meta.count = 0;
         });
       }
     });
@@ -292,7 +292,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
     if (searchResultCached.isNotEmpty) {
       setState(() {
         ingredients?.result = searchResultCached.take(3).toList();
-        ingredients?.count = ingredients?.result.length ?? 3;
+        ingredients?.meta.count = ingredients?.result.length ?? 3;
       });
       return;
     }

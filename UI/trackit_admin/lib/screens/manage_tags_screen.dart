@@ -106,7 +106,7 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
                   _tagProvider.delete(tag.tagId!);
                   setState(() {
                     tags!.result.remove(tag);
-                    tags!.count -= 1;
+                    tags!.meta.count -= 1;
                   });
                 },
                 child: const Icon(Icons.delete_outlined))
