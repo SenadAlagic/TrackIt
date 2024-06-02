@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trackit_admin/screens/login_screen.dart';
+
+import '../providers/auth_provider.dart';
 
 // ignore: must_be_immutable
 class MasterScreen extends StatefulWidget {
@@ -11,19 +15,23 @@ class MasterScreen extends StatefulWidget {
 }
 
 class _MasterScreenState extends State<MasterScreen> {
+  late AuthProvider _authProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _authProvider = context.read<AuthProvider>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title ?? ""),
-          actions: const [
+          actions: [
             Padding(
-              padding: EdgeInsets.only(right: 12.0),
-              child: Icon(
-                Icons.account_circle_outlined,
-                size: 32,
-              ),
-            )
+                padding: const EdgeInsets.only(right: 12.0),
+                child: _drawProfileIcon())
           ],
         ),
         body: SingleChildScrollView(
@@ -31,5 +39,26 @@ class _MasterScreenState extends State<MasterScreen> {
           const SizedBox(height: 50),
           widget.child ?? const Placeholder()
         ])));
+  }
+
+  Widget _drawProfileIcon() {
+    return PopupMenuButton(
+        icon: const Icon(
+          Icons.account_circle_outlined,
+          size: 32,
+        ),
+        itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                onTap: () {
+                  _authProvider.logout();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
+                    ModalRoute.withName('LoginScreen'),
+                  );
+                },
+                child: const Text('Logout'),
+              )
+            ]);
   }
 }

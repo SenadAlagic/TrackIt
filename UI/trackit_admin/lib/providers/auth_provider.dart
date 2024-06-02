@@ -41,6 +41,10 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  void logout() {
+    _storage.delete(key: "jwt");
+  }
+
   bool isValidResponse(Response response) {
     if (response.statusCode < 299) {
       return true;
