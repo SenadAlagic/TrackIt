@@ -10,12 +10,16 @@ import '../utils/authorization.dart';
 
 class AuthProvider with ChangeNotifier {
   static String? _baseUrl;
-  final String _endpoint = "User/admin_login";
+  final String _endpoint = "User/login";
   final _storage = const FlutterSecureStorage();
 
   AuthProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7296/");
+        defaultValue: "https://10.0.2.2:7114/");
+
+    if (_baseUrl!.endsWith("/") == false) {
+      _baseUrl = "${_baseUrl!}/";
+    }
   }
 
   Future<LoginResponse> login() async {

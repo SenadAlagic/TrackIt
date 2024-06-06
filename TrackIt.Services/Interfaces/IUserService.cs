@@ -9,6 +9,6 @@ namespace TrackIt.Services.Interfaces
 	{
 		List<User> Get();
 		User Update(int id, UserUpdateRequest request);
-		Task<AuthResponse> AuthenticateUser(string email, string password);
+		Task<AuthResponse> AuthenticateUser(string email, string password, string role);
 	}
 }

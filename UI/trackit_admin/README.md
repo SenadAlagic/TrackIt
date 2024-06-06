@@ -15,6 +15,11 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+## Login credentials
+
+E-mail: adminovic@admin.com
+Password: admin123
+
 ## Running the JSON_Serializable class generation
 
 For running the JSON_Serializable class generation tool use:

@@ -17,11 +17,18 @@ namespace TrackIt.Controllers
 			_service = service;
 		}
 
-		[HttpPost("login")]
+		[HttpPost("admin_login")]
 		[AllowAnonymous]
-		public async Task<AuthResponse> Login([FromBody] LoginRequest login)
+		public async Task<AuthResponse> AdminLogin([FromBody] LoginRequest login)
 		{
-			return await _service.AuthenticateUser(login.email, login.password);
+			return await _service.AuthenticateUser(login.email, login.password, "admin");
+		}
+
+		[HttpPost("user_login")]
+		[AllowAnonymous]
+		public async Task<AuthResponse> UserLogin([FromBody] LoginRequest login)
+		{
+			return await _service.AuthenticateUser(login.email, login.password, "generalUser");
 		}
 	}
 }

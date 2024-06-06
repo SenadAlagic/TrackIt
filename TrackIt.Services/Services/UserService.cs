@@ -39,7 +39,7 @@ namespace TrackIt.Services.Services
 			return _mapper.Map<Model.Models.User>(entity);
 		}
 
-		public async Task<AuthResponse> AuthenticateUser(string email, string password)
+		public async Task<AuthResponse> AuthenticateUser(string email, string password, string role)
 		{
 			var user = _context.Users.FirstOrDefault(u => u.Email == email);
 
@@ -53,18 +53,25 @@ namespace TrackIt.Services.Services
 				return new AuthResponse { Result = AuthResult.InvalidPassword };
 			}
 
-			var token = CreateToken(user);
-
+			var token = CreateToken(user, role);
+			if (token == null)
+			{
+				return new AuthResponse { Result = AuthResult.UserNotFound };
+			}
 			return new AuthResponse { Result = AuthResult.Success, UserId = user.UserId, Token = token };
 		}
 
-		private string CreateToken(User user)
+		private string CreateToken(User user, string desiredRole)
 		{
 			var adminList = _context.Admins.FirstOrDefault(a => a.UserId == user.UserId);
 			var role = "generalUser";
-			if (adminList != null)
+			if (adminList != null && desiredRole == "admin")
 			{
 				role = "admin";
+			}
+			else if ((adminList != null && desiredRole == "generalUser") || (adminList == null && desiredRole == "admin"))
+			{
+				return null;
 			}
 
 			List<Claim> claims = new List<Claim>

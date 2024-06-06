@@ -58,15 +58,31 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               ElevatedButton(
                   onPressed: () async {
-                    // Authorization.email = _emailController.text;
-                    // Authorization.password = _passwordController.text;ž
-                    Authorization.email = "adminovic@admin.com";
-                    Authorization.password = "admin123";
+                    Authorization.email = _emailController.text;
+                    Authorization.password = _passwordController.text;
+                    // Authorization.email = "adminovic@admin.com";
+                    // Authorization.password = "admin123";
 
                     var loginResponse = await _authProvider.login();
                     if (loginResponse.result == 0) {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const HomeScreen()));
+                    } else {
+                      if (context.mounted) {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text("Invalid login"),
+                                  content:
+                                      const Text("Invalid login credentials."),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () =>
+                                            {Navigator.pop(context)},
+                                        child: const Text("OK"))
+                                  ],
+                                ));
+                      }
                     }
                   },
                   child: const Text("Login"))
