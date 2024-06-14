@@ -58,10 +58,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               ElevatedButton(
                   onPressed: () async {
-                    Authorization.email = _emailController.text;
-                    Authorization.password = _passwordController.text;
-                    // Authorization.email = "adminovic@admin.com";
-                    // Authorization.password = "admin123";
+                    // Authorization.email = _emailController.text;
+                    // Authorization.password = _passwordController.text;
+                    Authorization.email = "adminovic@admin.com";
+                    Authorization.password = "admin123";
 
                     var loginResponse = await _authProvider.login();
                     if (loginResponse.result == 0) {

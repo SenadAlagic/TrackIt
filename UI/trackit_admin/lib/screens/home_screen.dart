@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trackit_admin/screens/manage_activity_levels_screen.dart';
+import 'package:trackit_admin/screens/reports_screen.dart';
 
 import 'manage_goals_screen.dart';
 import 'manage_ingredients_screen.dart';
@@ -38,7 +40,10 @@ class HomeScreen extends StatelessWidget {
           const ManageMealsScreen(), context),
       const SizedBox(width: 10),
       _buildContainer('assets/svg/tagsIcon.svg', "Manage tags",
-          const ManageTagsScreen(), context)
+          const ManageTagsScreen(), context),
+      const SizedBox(width: 10),
+      _buildContainer("assets/svg/reportsIcon.svg", "View reports",
+          const ReportsScreen(), context)
     ]);
   }
 
@@ -48,7 +53,10 @@ class HomeScreen extends StatelessWidget {
           const ManageGoalsScreen(), context),
       const SizedBox(width: 10),
       _buildContainer('assets/svg/ingredientsIcon.svg', "Manage ingredients",
-          const ManageIngredientsScreen(), context)
+          const ManageIngredientsScreen(), context),
+      const SizedBox(width: 10),
+      _buildContainer('assets/svg/activityLevelsIcon.svg', "Activity levels",
+          const ManageActivityLevelsScreen(), context)
     ]);
   }
 

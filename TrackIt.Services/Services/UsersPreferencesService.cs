@@ -29,7 +29,7 @@ namespace TrackIt.Services.Services
 		public override async Task<Model.Models.UsersPreference> Insert(UsersPreferencesInsertRequest insert)
 		{
 			var set = _context.Set<UsersPreference>();
-			var entity = _mapper.Map<UsersPreference>(new UsersPreference() { UserId = insert.UserId, PreferenceId = insert.PreferenceId });
+			var entity = _mapper.Map<UsersPreference>(insert);
 			set.Add(entity);
 			await _context.SaveChangesAsync();
 			return _mapper.Map<Model.Models.UsersPreference>(entity);

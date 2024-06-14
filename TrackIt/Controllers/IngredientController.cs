@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrackIt.Interfaces;
+using TrackIt.Model.Helper;
 using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
@@ -14,6 +16,12 @@ namespace TrackIt.Controllers
 		public IngredientController(ILogger<BaseController<Ingredient, IngredientSearchObject>> logger, IIngredientService service) : base(logger, service)
 		{
 			_service = service;
+		}
+
+		[AllowAnonymous]
+		public override Task<PagedResult<Ingredient>> Get([FromQuery] IngredientSearchObject search)
+		{
+			return base.Get(search);
 		}
 
 		[HttpGet("getForReport")]

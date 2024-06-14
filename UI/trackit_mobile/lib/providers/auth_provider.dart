@@ -1,25 +1,33 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 
 import '../models/Auth/login_response.dart';
 import '../utils/authorization.dart';
 
 class AuthProvider with ChangeNotifier {
+  bool _isLoggedIn = false;
   static String? _baseUrl;
-  final String _endpoint = "User/login";
+  final String _endpoint = "User/user_login";
   final _storage = const FlutterSecureStorage();
+
+  HttpClient client = HttpClient();
+  IOClient? http;
 
   AuthProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://10.0.2.2:7114/");
+        defaultValue: "https://10.0.2.2:7296/");
 
     if (_baseUrl!.endsWith("/") == false) {
       _baseUrl = "${_baseUrl!}/";
     }
+
+    client.badCertificateCallback = (cert, host, port) => true;
+    http = IOClient(client);
   }
 
   Future<LoginResponse> login() async {
@@ -32,13 +40,14 @@ class AuthProvider with ChangeNotifier {
     };
     var headers = await createHeaders();
     var response =
-        await http.post(uri, headers: headers, body: jsonEncode(body));
+        await http!.post(uri, headers: headers, body: jsonEncode(body));
 
     if (isValidResponse(response)) {
       var data = LoginResponse.fromJson(jsonDecode(response.body));
       if (data.result == 0) {
         _storage.write(key: "jwt", value: data.token);
       }
+      _isLoggedIn = true;
       return data;
     } else {
       throw Exception("Unknown error");
@@ -47,7 +56,10 @@ class AuthProvider with ChangeNotifier {
 
   void logout() {
     _storage.delete(key: "jwt");
+    _isLoggedIn = false;
   }
+
+  bool get isLoggedIn => _isLoggedIn;
 
   bool isValidResponse(Response response) {
     if (response.statusCode < 299) {
@@ -65,8 +77,11 @@ class AuthProvider with ChangeNotifier {
     String bearerAuth = "Bearer $token";
     var headers = {
       "Content-Type": "application/json",
-      "Authorization": bearerAuth
     };
+
+    if (token != "") {
+      headers["Authorization"] = bearerAuth;
+    }
 
     return headers;
   }

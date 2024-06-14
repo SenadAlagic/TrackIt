@@ -74,6 +74,8 @@ namespace TrackIt.Services
 			CreateMap<Model.Requests.UsersMealsUpdateRequest, Database.UsersMeal>();
 
 			CreateMap<Database.UsersPreference, UsersPreference>();
+			CreateMap<Model.Requests.UsersPreferencesInsertRequest, Database.UsersPreference>();
+			CreateMap<Model.Requests.UsersPreferencesUpdateRequest, Database.UsersPreference>();
 
 			CreateMap<Database.WeightOverTime, WeightOverTime>();
 			CreateMap<Model.Requests.WeightOverTimeInsertRequest, Database.WeightOverTime>();

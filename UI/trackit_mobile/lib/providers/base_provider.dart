@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 
 import '../models/Meta/meta.dart';
 import '../models/search_result.dart';
@@ -14,14 +15,21 @@ abstract class BaseProvider<T> with ChangeNotifier {
   String _endpoint = "";
   final _storage = const FlutterSecureStorage();
 
+  HttpClient client = HttpClient();
+  IOClient? http;
+
   BaseProvider(String endpoint) {
     _endpoint = endpoint;
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7296/");
+        defaultValue: "https://10.0.2.2:7296/");
 
     if (_baseUrl!.endsWith("/") == false) {
       _baseUrl = "$_baseUrl/";
     }
+
+    _endpoint = endpoint;
+    client.badCertificateCallback = (cert, host, port) => true;
+    http = IOClient(client);
   }
 
   String? getBaseUrl() => _baseUrl;
@@ -36,7 +44,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var uri = Uri.parse(url);
     var headers = await createHeaders();
-    var response = await http.get(uri, headers: headers);
+    var response = await http!.get(uri, headers: headers);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -59,7 +67,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = await createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.post(uri, headers: headers, body: jsonRequest);
+    var response = await http!.post(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -75,7 +83,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = await createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.put(uri, headers: headers, body: jsonRequest);
+    var response = await http!.put(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -90,7 +98,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = await createHeaders();
 
-    var response = await http.delete(uri, headers: headers);
+    var response = await http!.delete(uri, headers: headers);
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
@@ -119,9 +127,11 @@ abstract class BaseProvider<T> with ChangeNotifier {
     String bearerAuth = "Bearer $token";
     var headers = {
       "Content-Type": "application/json",
-      "Authorization": bearerAuth
     };
 
+    if (token != "") {
+      headers["Authorization"] = bearerAuth;
+    }
     return headers;
   }
 }

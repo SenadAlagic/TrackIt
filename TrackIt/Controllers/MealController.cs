@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrackIt.Interfaces;
 using TrackIt.Model.Helper;
@@ -15,6 +16,12 @@ namespace TrackIt.Controllers
 		public MealController(ILogger<BaseController<Meal, MealSearchObject>> logger, IMealsService service) : base(logger, service)
 		{
 			_service = service;
+		}
+
+		[AllowAnonymous]
+		public override Task<PagedResult<Meal>> Get([FromQuery] MealSearchObject search)
+		{
+			return base.Get(search);
 		}
 
 		[HttpPut("/setIngredients/{mealId}")]

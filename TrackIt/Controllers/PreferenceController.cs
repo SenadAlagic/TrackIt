@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrackIt.Model.Helper;
 using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
@@ -11,6 +13,12 @@ namespace TrackIt.Controllers
 	{
 		public PreferenceController(ILogger<BaseController<Preference, PreferenceSearchObject>> logger, IPreferenceService service) : base(logger, service)
 		{
+		}
+
+		[AllowAnonymous]
+		public override Task<PagedResult<Preference>> Get([FromQuery] PreferenceSearchObject search)
+		{
+			return base.Get(search);
 		}
 	}
 }

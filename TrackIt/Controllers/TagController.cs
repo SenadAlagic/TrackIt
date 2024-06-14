@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrackIt.Interfaces;
+using TrackIt.Model.Helper;
 using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
@@ -14,6 +16,12 @@ namespace TrackIt.Controllers
 		public TagController(ILogger<BaseController<Tag, TagSearchObject>> logger, ITagService service) : base(logger, service)
 		{
 			_service = service;
+		}
+
+		[AllowAnonymous]
+		public override Task<PagedResult<Tag>> Get([FromQuery] TagSearchObject search)
+		{
+			return base.Get(search);
 		}
 
 		[HttpGet("getForReport")]
