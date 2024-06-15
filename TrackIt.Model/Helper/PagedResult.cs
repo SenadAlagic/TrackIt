@@ -5,6 +5,11 @@
 		public List<T> Result { get; set; } = new List<T>();
 		public Meta Meta { get; set; }
 
+		public PagedResult()
+		{
+
+		}
+
 		private PagedResult(List<T> items, int count, int pageNumber, int pageSize)
 		{
 			this.Meta = new Meta(count, pageNumber, pageSize);

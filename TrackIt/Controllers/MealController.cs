@@ -18,6 +18,18 @@ namespace TrackIt.Controllers
 			_service = service;
 		}
 
+		[Authorize(Roles = "admin")]
+		public override Task<Meal> Insert([FromBody] MealInsertRequest insert)
+		{
+			return base.Insert(insert);
+		}
+
+		[Authorize(Roles = "admin")]
+		public override Task<Meal> Update(int id, [FromBody] MealUpdateRequest update)
+		{
+			return base.Update(id, update);
+		}
+
 		[AllowAnonymous]
 		public override Task<PagedResult<Meal>> Get([FromQuery] MealSearchObject search)
 		{

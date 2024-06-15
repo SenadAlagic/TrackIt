@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using TrackIt.Model.Helper;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Database;
@@ -23,6 +24,7 @@ namespace TrackIt.Services.Services
 			{
 				query = query.Where(um => um.UserId == search.UserId);
 			}
+			query = query.Where(um => um.DateConsumed.Value.Date == search.Date.Date);
 			return base.AddFilter(query, search);
 		}
 
@@ -37,6 +39,17 @@ namespace TrackIt.Services.Services
 				query = query.Include("User");
 			}
 			return base.AddInclude(query, search);
+		}
+
+		public async Task<PagedResult<Model.Models.Meal>> GetTodaysMeals(int userId)
+		{
+			var todaysMeals = await _context.UsersMeals.Where(um => um.UserId == userId && um.DateConsumed.Value.Date == DateTime.Today).Select(um => um.Meal).ToListAsync();
+
+			var pagedResult = new PagedResult<Model.Models.Meal>();
+			var tmp = _mapper.Map<List<Model.Models.Meal>>(todaysMeals);
+			pagedResult.Result = tmp;
+
+			return pagedResult;
 		}
 	}
 }

@@ -6,6 +6,7 @@ class LoginResponse {
   int? result;
   String? token;
   int? userId;
+  int? roleId;
 
   LoginResponse(this.result, this.token, this.userId);
 

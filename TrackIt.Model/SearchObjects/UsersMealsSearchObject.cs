@@ -6,5 +6,6 @@
 		public int UserId { get; set; }
 		public bool isUserIncluded { get; set; }
 		public bool isMealIncluded { get; set; }
+		public DateTime Date { get; set; }
 	}
 }

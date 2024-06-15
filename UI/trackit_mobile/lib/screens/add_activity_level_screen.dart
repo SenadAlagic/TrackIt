@@ -4,6 +4,7 @@ import 'package:trackit_mobile/models/ActivityLevel/activity_level.dart';
 import 'package:trackit_mobile/models/search_result.dart';
 import 'package:trackit_mobile/providers/activity_level_provider.dart';
 import 'package:trackit_mobile/screens/add_preferences_screen.dart';
+import 'package:trackit_mobile/utils/form_helpers.dart';
 
 import '../models/UserData/user_data.dart';
 import '../utils/image_helpers.dart';
@@ -67,7 +68,7 @@ class _AddActivityLevelScreenState extends State<AddActivityLevelScreen> {
             ))),
           ]));
     } else {
-      return const CircularProgressIndicator();
+      return FormHelpers.drawProgressIndicator();
     }
   }
 

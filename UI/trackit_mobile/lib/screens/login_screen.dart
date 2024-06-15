@@ -97,6 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Authorization.password = "senad123";
               var loginResponse = await _authProvider.login();
               if (loginResponse.result == 0) {
+                Authorization.generalUserId = loginResponse.roleId;
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const HomeScreen()),
                     ModalRoute.withName("HomeScreen"));

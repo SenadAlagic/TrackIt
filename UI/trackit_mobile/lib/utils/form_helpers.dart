@@ -61,4 +61,14 @@ class FormHelpers {
           ])),
     );
   }
+
+  static Widget drawProgressIndicator() {
+    return const Center(
+        child: Padding(
+      padding: EdgeInsets.all(16),
+      child: CircularProgressIndicator(
+        color: Colors.black,
+      ),
+    ));
+  }
 }

@@ -11,11 +11,12 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
       (json['result'] as num?)?.toInt(),
       json['token'] as String?,
       (json['userId'] as num?)?.toInt(),
-    );
+    )..roleId = (json['roleId'] as num?)?.toInt();
 
 Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
     <String, dynamic>{
       'result': instance.result,
       'token': instance.token,
       'userId': instance.userId,
+      'roleId': instance.roleId,
     };

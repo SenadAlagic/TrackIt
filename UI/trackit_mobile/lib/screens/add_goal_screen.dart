@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackit_mobile/models/UserData/user_data.dart';
 import 'package:trackit_mobile/screens/add_activity_level_screen.dart';
+import 'package:trackit_mobile/utils/form_helpers.dart';
 import 'package:trackit_mobile/utils/image_helpers.dart';
 
 import '../models/Goal/goal.dart';
@@ -68,7 +69,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
             ))),
           ]));
     } else {
-      return const CircularProgressIndicator();
+      return FormHelpers.drawProgressIndicator();
     }
   }
 

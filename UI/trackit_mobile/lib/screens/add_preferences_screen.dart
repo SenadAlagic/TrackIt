@@ -5,6 +5,7 @@ import 'package:trackit_mobile/models/User/user.dart';
 import 'package:trackit_mobile/models/UserData/user_data.dart';
 import 'package:trackit_mobile/providers/general_user_provider.dart';
 import 'package:trackit_mobile/screens/home_screen.dart';
+import 'package:trackit_mobile/utils/form_helpers.dart';
 
 import '../models/Preference/preference.dart';
 import '../models/search_result.dart';
@@ -82,7 +83,7 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
             ))),
           ]));
     } else {
-      return const CircularProgressIndicator();
+      return FormHelpers.drawProgressIndicator();
     }
   }
 

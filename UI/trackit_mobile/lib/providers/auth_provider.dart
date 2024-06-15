@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 
 import '../models/Auth/login_response.dart';
+import '../screens/login_screen.dart';
 import '../utils/authorization.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -54,9 +55,12 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  void logout() {
+  void logout(BuildContext context) {
     _storage.delete(key: "jwt");
     _isLoggedIn = false;
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        ModalRoute.withName('LoginScreen'));
   }
 
   bool get isLoggedIn => _isLoggedIn;

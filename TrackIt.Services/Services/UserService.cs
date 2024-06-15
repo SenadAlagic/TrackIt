@@ -58,7 +58,15 @@ namespace TrackIt.Services.Services
 			{
 				return new AuthResponse { Result = AuthResult.UserNotFound };
 			}
-			return new AuthResponse { Result = AuthResult.Success, UserId = user.UserId, Token = token };
+
+			int roleId = 0;
+			if (role == "generalUser")
+			{
+				var generalUser = _context.GeneralUsers.Where(gu => gu.UserId == user.UserId).FirstOrDefault();
+				roleId = generalUser.GeneralUserId;
+			}
+
+			return new AuthResponse { Result = AuthResult.Success, UserId = user.UserId, Token = token, RoleId = roleId };
 		}
 
 		private string CreateToken(User user, string desiredRole)
