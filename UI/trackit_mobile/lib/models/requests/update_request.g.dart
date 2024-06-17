@@ -1,23 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'update_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-User _$UserFromJson(Map<String, dynamic> json) => User(
-      (json['userId'] as num?)?.toInt(),
+UserUpdateRequest _$UserUpdateRequestFromJson(Map<String, dynamic> json) =>
+    UserUpdateRequest(
       json['firstName'] as String?,
       json['lastName'] as String?,
       json['email'] as String?,
-      json['username'] as String?,
+      json['password'] as String?,
+      json['passwordConfirm'] as String?,
     );
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'userId': instance.userId,
+Map<String, dynamic> _$UserUpdateRequestToJson(UserUpdateRequest instance) =>
+    <String, dynamic>{
       'firstName': instance.firstName,
       'lastName': instance.lastName,
       'email': instance.email,
-      'username': instance.username,
+      'password': instance.password,
+      'passwordConfirm': instance.passwordConfirm,
     };

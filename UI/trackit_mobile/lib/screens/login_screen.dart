@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit_mobile/providers/general_user_provider.dart';
 import 'package:trackit_mobile/screens/register_screen.dart';
+import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../providers/auth_provider.dart';
 import '../utils/authorization.dart';
@@ -18,11 +20,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   late AuthProvider _authProvider;
+  late GeneralUserProvider _generalUserProvider;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _authProvider = context.read<AuthProvider>();
+    _generalUserProvider = context.read<GeneralUserProvider>();
   }
 
   @override
@@ -98,6 +102,9 @@ class _LoginScreenState extends State<LoginScreen> {
               var loginResponse = await _authProvider.login();
               if (loginResponse.result == 0) {
                 Authorization.generalUserId = loginResponse.roleId;
+                var user = await _generalUserProvider
+                    .getFullInfo(loginResponse.roleId!);
+                UserInfo.user = user;
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const HomeScreen()),
                     ModalRoute.withName("HomeScreen"));

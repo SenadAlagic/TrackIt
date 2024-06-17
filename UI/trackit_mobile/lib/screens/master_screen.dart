@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit_mobile/screens/home_screen.dart';
+import 'package:trackit_mobile/screens/settings_screen.dart';
 
 import '../providers/auth_provider.dart';
 
@@ -35,6 +37,15 @@ class _MasterScreenState extends State<MasterScreen> {
         drawer: Drawer(
           child: ListView(children: [
             ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text("Home screen"),
+              onTap: () => {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    ModalRoute.withName("HomeScreen"))
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.logout_rounded),
               title: const Text("Logout"),
               onTap: () => {_authProvider.logout(context)},
@@ -51,6 +62,16 @@ class _MasterScreenState extends State<MasterScreen> {
           size: 32,
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: ((context) => const SettingsScreen())));
+                },
+                child: const ListTile(
+                  title: Text("Settings"),
+                  leading: Icon(Icons.settings),
+                ),
+              ),
               PopupMenuItem(
                 onTap: () {
                   _authProvider.logout(context);

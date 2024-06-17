@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackit_mobile/models/UserData/user_data.dart';
+import 'package:trackit_mobile/providers/general_user_provider.dart';
 import 'package:trackit_mobile/screens/add_activity_level_screen.dart';
 import 'package:trackit_mobile/utils/form_helpers.dart';
 import 'package:trackit_mobile/utils/image_helpers.dart';
+import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../models/Goal/goal.dart';
 import '../models/search_result.dart';
 import '../providers/goal_provider.dart';
 
 class AddGoalScreen extends StatefulWidget {
-  const AddGoalScreen({super.key});
+  final bool? isEdit;
+  const AddGoalScreen({super.key, this.isEdit});
 
   @override
   State<AddGoalScreen> createState() => _AddGoalScreenState();
@@ -18,6 +21,7 @@ class AddGoalScreen extends StatefulWidget {
 
 class _AddGoalScreenState extends State<AddGoalScreen> {
   late GoalProvider _goalProvider;
+  late GeneralUserProvider _generalUserProvider;
   SearchResult<Goal>? goals;
   bool isLoading = true;
 
@@ -25,6 +29,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   void initState() {
     super.initState();
     _goalProvider = context.read<GoalProvider>();
+    _generalUserProvider = context.read<GeneralUserProvider>();
     initScreen();
   }
 
@@ -79,13 +84,19 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         child: ElevatedButton(
           style: const ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.white)),
-          onPressed: () {
-            var userData =
-                ModalRoute.of(context)?.settings.arguments as UserData;
-            userData.goalId = goal.goalId;
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: ((context) => const AddActivityLevelScreen()),
-                settings: RouteSettings(arguments: userData)));
+          onPressed: () async {
+            if (widget.isEdit ?? false) {
+              await _generalUserProvider.selectGoal(
+                  UserInfo.user!.generalUserId!, goal.goalId!);
+              Navigator.of(context).pop();
+            } else {
+              var userData =
+                  ModalRoute.of(context)?.settings.arguments as UserData;
+              userData.goalId = goal.goalId;
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: ((context) => const AddActivityLevelScreen()),
+                  settings: RouteSettings(arguments: userData)));
+            }
           },
           child: Row(children: [
             const SizedBox(

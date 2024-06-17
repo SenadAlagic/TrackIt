@@ -74,6 +74,12 @@ namespace TrackIt.Services.Services
 			return base.AddFilter(query, search);
 		}
 
+		public async Task<Model.Models.GeneralUser> GetFullUserData(int generalUserId)
+		{
+			var fullUserInfo = await _context.GeneralUsers.Include(gu => gu.ActivityLevel).Include(gu => gu.User).Include(gu => gu.UsersPreferences).FirstOrDefaultAsync(x => x.GeneralUserId == generalUserId);
+			return _mapper.Map<Model.Models.GeneralUser>(fullUserInfo);
+		}
+
 		public override async Task<Model.Models.GeneralUser> Update(int id, GeneralUserUpdateRequest update)
 		{
 			var set = _context.Set<GeneralUser>();
@@ -94,6 +100,9 @@ namespace TrackIt.Services.Services
 			var set = _context.Set<GeneralUser>();
 			var entity = await set.Include(g => g.User).FirstOrDefaultAsync(g => g.GeneralUserId == id);
 			_mapper.Map(update, entity?.User);
+			entity.User.Salt = PasswordHelpers.GenerateSalt();
+			entity.User.Password = PasswordHelpers.GenerateHash(entity.User.Salt, update.Password);
+
 			await _context.SaveChangesAsync();
 			return _mapper.Map<Model.Models.GeneralUser>(entity);
 		}
@@ -126,37 +135,22 @@ namespace TrackIt.Services.Services
 			return _mapper.Map<Model.Models.GeneralUser>(entity);
 		}
 
-		public async Task<Model.Models.GeneralUser> AddPreferences(int id, int[] preferenceIds)
+		public async Task<Model.Models.GeneralUser> SelectPreferences(int id, int[] preferenceIds)
 		{
 			var set = _context.Set<GeneralUser>();
-
+			var preferenceSet = _context.Set<UsersPreference>();
+			var usersExistingPreferences = await preferenceSet.Where(up => up.UserId == id).ToListAsync();
+			foreach (var combination in usersExistingPreferences)
+			{
+				await _usersPreferenceService.Delete(combination.UserPreferenceId);
+			}
 			foreach (int preference in preferenceIds)
 			{
 				if (preference == 0) continue;
-				var combination = await _usersPreferenceService.Get(new UsersPreferencesSearchObject() { PreferenceId = preference, UserId = id });
-				if (combination.Result.Count == 0)
-				{
-					var insert = new UsersPreferencesInsertRequest() { PreferenceId = preference, UserId = id };
-					await _usersPreferenceService.Insert(insert);
-				}
+				var insert = new UsersPreferencesInsertRequest() { PreferenceId = preference, UserId = id };
+				await _usersPreferenceService.Insert(insert);
 			}
-
 			var entity = await set.Include(g => g.UsersPreferences).ThenInclude(up => up.Preference).FirstOrDefaultAsync(g => g.GeneralUserId == id);
-
-			await _context.SaveChangesAsync();
-			return _mapper.Map<Model.Models.GeneralUser>(entity);
-		}
-
-		public async Task<Model.Models.GeneralUser> RemovePreferences(int id, int[] preferenceIds)
-		{
-			var set = _context.Set<GeneralUser>();
-			foreach (var preference in preferenceIds)
-			{
-				await _usersPreferenceService.Remove(preference);
-			}
-
-			var entity = await set.Include(g => g.UsersPreferences).ThenInclude(up => up.Preference).FirstOrDefaultAsync(g => g.GeneralUserId == id);
-
 			await _context.SaveChangesAsync();
 			return _mapper.Map<Model.Models.GeneralUser>(entity);
 		}

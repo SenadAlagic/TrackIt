@@ -19,6 +19,36 @@ namespace TrackIt.Services.Services
 			return base.BeforeInsert(entity, insert);
 		}
 
+		public void UpdateOnLogging(int userId, Meal meal, int servings)
+		{
+			var set = _context.Set<DailyIntake>();
+
+			var existingEntry = set.FirstOrDefault(di => di.UserId == userId && di.Day.Value.Date == DateTime.Now.Date);
+			if (existingEntry != null)
+			{
+				existingEntry.Protein += meal.Protein * servings;
+				existingEntry.Fat += meal.Fat * servings;
+				existingEntry.Carbs += meal.Carbs * servings;
+				existingEntry.Calories += meal.Calories * servings;
+				//existingEntry.Fiber+= meal.Fiber * servings; TODO
+			}
+			else
+			{
+				var newEntry = new DailyIntake()
+				{
+					UserId = userId,
+					Calories = meal.Calories * servings,
+					Carbs = meal.Carbs * servings,
+					Fat = meal.Fat * servings,
+					Protein = meal.Protein * servings,
+					Day = DateTime.Now
+				};
+				set.Add(newEntry);
+			}
+			_context.SaveChanges();
+			return;
+		}
+
 		public override async Task<Model.Models.DailyIntake> Update(int id, DailyIntakeUpdateRequest update)
 		{
 			var set = _context.Set<DailyIntake>();

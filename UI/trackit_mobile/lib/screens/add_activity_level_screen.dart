@@ -3,14 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:trackit_mobile/models/ActivityLevel/activity_level.dart';
 import 'package:trackit_mobile/models/search_result.dart';
 import 'package:trackit_mobile/providers/activity_level_provider.dart';
+import 'package:trackit_mobile/providers/general_user_provider.dart';
 import 'package:trackit_mobile/screens/add_preferences_screen.dart';
 import 'package:trackit_mobile/utils/form_helpers.dart';
+import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../models/UserData/user_data.dart';
 import '../utils/image_helpers.dart';
 
 class AddActivityLevelScreen extends StatefulWidget {
-  const AddActivityLevelScreen({super.key});
+  final bool? isEdit;
+  const AddActivityLevelScreen({super.key, this.isEdit});
 
   @override
   State<AddActivityLevelScreen> createState() => _AddActivityLevelScreenState();
@@ -18,6 +21,7 @@ class AddActivityLevelScreen extends StatefulWidget {
 
 class _AddActivityLevelScreenState extends State<AddActivityLevelScreen> {
   late ActivityLevelProvider _activityLevelProvider;
+  late GeneralUserProvider _generalUserProvider;
   SearchResult<ActivityLevel>? activityLevels;
   bool isLoading = true;
 
@@ -25,6 +29,7 @@ class _AddActivityLevelScreenState extends State<AddActivityLevelScreen> {
   void initState() {
     super.initState();
     _activityLevelProvider = context.read<ActivityLevelProvider>();
+    _generalUserProvider = context.read<GeneralUserProvider>();
     initScreen();
   }
 
@@ -78,13 +83,20 @@ class _AddActivityLevelScreenState extends State<AddActivityLevelScreen> {
         child: ElevatedButton(
           style: const ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.white)),
-          onPressed: () {
-            var userData =
-                ModalRoute.of(context)?.settings.arguments as UserData;
-            userData.activityLevelId = activityLevel.activityLevelId;
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: ((context) => const AddPreferencesScreen()),
-                settings: RouteSettings(arguments: userData)));
+          onPressed: () async {
+            if (widget.isEdit ?? false) {
+              await _generalUserProvider.selectActivityLevel(
+                  UserInfo.user!.generalUserId!,
+                  activityLevel.activityLevelId!);
+              Navigator.of(context).pop();
+            } else {
+              var userData =
+                  ModalRoute.of(context)?.settings.arguments as UserData;
+              userData.activityLevelId = activityLevel.activityLevelId;
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: ((context) => const AddPreferencesScreen()),
+                  settings: RouteSettings(arguments: userData)));
+            }
           },
           child: Row(children: [
             const SizedBox(

@@ -1,26 +1,27 @@
 import 'dart:convert';
 
+import 'package:trackit_mobile/models/requests/update_request.dart';
 import 'package:trackit_mobile/utils/string_helpers.dart';
 
-import '../models/User/user.dart';
+import '../models/GeneralUser/general_user.dart';
 import 'base_provider.dart';
 
-class GeneralUserProvider extends BaseProvider<User> {
+class GeneralUserProvider extends BaseProvider<GeneralUser> {
   GeneralUserProvider() : super("GeneralUser");
 
   @override
-  User fromJson(data) {
-    return User.fromJson(data);
+  GeneralUser fromJson(data) {
+    return GeneralUser.fromJson(data);
   }
 
-  Future<User> selectActivityLevel(int id, int activityLevelId) async {
+  Future<GeneralUser> selectActivityLevel(int id, int activityLevelId) async {
     var url = "${getBaseUrl()}selectActivityLevel/$id";
-    var uri = Uri.parse(url);
     var headers = await createHeaders();
 
     var queryString =
         StringHelpers.getQueryString({"activityLevelId": activityLevelId});
     url = "$url?$queryString";
+    var uri = Uri.parse(url);
 
     var response = await http!.put(uri, headers: headers);
     if (isValidResponse(response)) {
@@ -31,13 +32,13 @@ class GeneralUserProvider extends BaseProvider<User> {
     }
   }
 
-  Future<User> selectGoal(int id, int goalId) async {
+  Future<GeneralUser> selectGoal(int id, int goalId) async {
     var url = "${getBaseUrl()}selectGoal/$id";
-    var uri = Uri.parse(url);
     var headers = await createHeaders();
 
     var queryString = StringHelpers.getQueryString({"goalId": goalId});
     url = "$url?$queryString";
+    var uri = Uri.parse(url);
 
     var response = await http!.put(uri, headers: headers);
     if (isValidResponse(response)) {
@@ -48,16 +49,52 @@ class GeneralUserProvider extends BaseProvider<User> {
     }
   }
 
-  Future<User?> addPreferences(int id, List<int> preferenceIds) async {
-    var url = "${getBaseUrl()}addPreferences/$id";
+  Future<GeneralUser?> addPreferences(int id, List<int> preferenceIds) async {
+    var url = "${getBaseUrl()}selectPreferences/$id";
+    var headers = await createHeaders();
+
     var queryString =
         StringHelpers.getQueryString({"preferenceIds": preferenceIds});
     url = "$url?$queryString";
+    var uri = Uri.parse(url);
 
+    var response = await http!.put(uri, headers: headers);
+    if (isValidResponse(response)) {
+      if (response.body != "") {
+        var data = jsonDecode(response.body);
+        return fromJson(data);
+      }
+      return null;
+    } else {
+      throw Exception("Unknown error in a PUT request");
+    }
+  }
+
+  Future<GeneralUser?> getFullInfo(int generalUserId) async {
+    var url = "${getBaseUrl()}getFullInfo/$generalUserId";
     var uri = Uri.parse(url);
     var headers = await createHeaders();
 
-    var response = await http!.put(uri, headers: headers);
+    var response = await http!.get(uri, headers: headers);
+    if (isValidResponse(response)) {
+      if (response.body != "") {
+        var data = jsonDecode(response.body);
+        return fromJson(data);
+      }
+      return null;
+    } else {
+      throw Exception("Unknown error in a PUT request");
+    }
+  }
+
+  Future<GeneralUser?> updateUser(
+      int generalUserId, UserUpdateRequest request) async {
+    var url = "${getBaseUrl()}updateUser/$generalUserId";
+    var uri = Uri.parse(url);
+    var headers = await createHeaders();
+
+    var jsonRequest = jsonEncode(request);
+    var response = await http!.put(uri, headers: headers, body: jsonRequest);
     if (isValidResponse(response)) {
       if (response.body != "") {
         var data = jsonDecode(response.body);

@@ -6,5 +6,7 @@ namespace TrackIt.Services.Interfaces
 {
 	public interface IDailyIntakeService : ICRUDService<DailyIntake, DailyIntakeSearchObject, DailyIntakeInsertRequest, DailyIntakeUpdateRequest>
 	{
+		void UpdateOnLogging(int userId, Database.Meal meal, int servings);
+
 	}
 }

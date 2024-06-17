@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using TrackIt.Model.Helper;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Database;
@@ -10,8 +9,10 @@ namespace TrackIt.Services.Services
 {
 	public class UsersMealsService : BaseCRUDService<Model.Models.UsersMeal, Database.UsersMeal, UsersMealsSearchObject, UsersMealsInsertRequest, UsersMealsUpdateRequest>, IUsersMealsService
 	{
-		public UsersMealsService(TrackItContext context, IMapper mapper) : base(context, mapper)
+		IDailyIntakeService _dailyIntakeService;
+		public UsersMealsService(TrackItContext context, IMapper mapper, IDailyIntakeService dailyIntakeService) : base(context, mapper)
 		{
+			_dailyIntakeService = dailyIntakeService;
 		}
 
 		public override IQueryable<UsersMeal> AddFilter(IQueryable<UsersMeal> query, UsersMealsSearchObject? search = null)
@@ -41,15 +42,13 @@ namespace TrackIt.Services.Services
 			return base.AddInclude(query, search);
 		}
 
-		public async Task<PagedResult<Model.Models.Meal>> GetTodaysMeals(int userId)
+		public override Task<Model.Models.UsersMeal> Insert(UsersMealsInsertRequest insert)
 		{
-			var todaysMeals = await _context.UsersMeals.Where(um => um.UserId == userId && um.DateConsumed.Value.Date == DateTime.Today).Select(um => um.Meal).ToListAsync();
+			// before inserting a record of UsersMeals the users DailyIntake for today should be created/updated
+			var meal = _context.Meals.FirstOrDefault(m => m.MealId == insert.MealId);
+			_dailyIntakeService.UpdateOnLogging(insert.UserId, meal, insert.Servings);
 
-			var pagedResult = new PagedResult<Model.Models.Meal>();
-			var tmp = _mapper.Map<List<Model.Models.Meal>>(todaysMeals);
-			pagedResult.Result = tmp;
-
-			return pagedResult;
+			return base.Insert(insert);
 		}
 	}
 }

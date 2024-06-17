@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackit_mobile/models/UserMeal/user_meal.dart';
+import 'package:trackit_mobile/providers/daily_intake_provider.dart';
 import 'package:trackit_mobile/utils/authorization.dart';
 import 'package:trackit_mobile/utils/form_helpers.dart';
 import 'package:trackit_mobile/utils/image_helpers.dart';
+import 'package:trackit_mobile/utils/user_info.dart';
 
+import '../models/DailyIntake/daily_intake.dart';
 import '../models/search_result.dart';
 import '../providers/user_meals_provider.dart';
 import 'master_screen.dart';
@@ -18,13 +21,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late UserMealsProvider _userMealsProvider;
+  late DailyIntakeProvider _dailyIntakeProvider;
   SearchResult<UserMeal>? usersMeals;
+  DailyIntake? dailyCalorieIntake;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _userMealsProvider = context.read<UserMealsProvider>();
+    _dailyIntakeProvider = context.read<DailyIntakeProvider>();
     initScreen();
   }
 
@@ -34,9 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
       "Date": DateTime.now().toIso8601String(),
       "isMealIncluded": true
     });
+    var dailyIntakeResult = await _dailyIntakeProvider
+        .get(filter: {"UserId": Authorization.generalUserId});
 
     setState(() {
       usersMeals = result;
+      dailyCalorieIntake = dailyIntakeResult.result[0];
       isLoading = false;
     });
   }
@@ -50,27 +59,65 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _drawScreen() {
-    if (usersMeals?.result.isNotEmpty ?? false) {
-      return Container(
-          decoration:
-              const BoxDecoration(color: Color.fromRGBO(255, 235, 59, 1)),
-          child: Center(
-            child: Column(
-              children: [
-                const Text(
+    return Container(
+        decoration: const BoxDecoration(color: Color.fromRGBO(255, 235, 59, 1)),
+        child: Center(
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 12),
+                child: Text(
                   "Welcome",
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
-                _drawMealCards(usersMeals!.result)
-              ],
-            ),
-          ));
-    } else {
-      return FormHelpers.drawProgressIndicator();
-    }
+              ),
+              _drawCalorieProgressIndicator(),
+              _drawMealCards(usersMeals?.result)
+            ],
+          ),
+        ));
   }
 
-  Widget _drawMealCards(List<UserMeal> meals) {
+  Widget _drawCalorieProgressIndicator() {
+    var dailyCaloriesNeeded =
+        UserInfo.bmr! * UserInfo.user!.activityLevel!.multiplier!;
+    double percentageCompleted = 0;
+    if (dailyCalorieIntake?.calories != null) {
+      percentageCompleted = dailyCalorieIntake!.calories! / dailyCaloriesNeeded;
+    }
+    return Padding(
+        padding: const EdgeInsets.all(8),
+        child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(20)),
+            child: Column(
+              children: [
+                const Padding(
+                    padding: EdgeInsets.only(top: 4, bottom: 4),
+                    child: Text("Calories")),
+                Padding(
+                    padding:
+                        const EdgeInsets.only(left: 16, right: 16, bottom: 4),
+                    child: LinearProgressIndicator(
+                      color: Colors.black,
+                      value: percentageCompleted,
+                      minHeight: 10,
+                      borderRadius: BorderRadius.circular(20),
+                    )),
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                        padding: const EdgeInsets.only(right: 16, bottom: 8),
+                        child: Text(
+                            "${dailyCalorieIntake?.calories}/$dailyCaloriesNeeded kcal")))
+              ],
+            )));
+  }
+
+  Widget _drawMealCards(List<UserMeal>? meals) {
+    if (meals == null) {
+      return FormHelpers.drawProgressIndicator();
+    }
     if (meals.isEmpty) {
       return const Text(
         "No meals logged today",
@@ -78,9 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     return Column(children: [
-      const Text(
-        "Today you ate",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      const Padding(
+        padding: EdgeInsets.only(top: 32, bottom: 8),
+        child: Text(
+          "Today you ate",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
       ...meals
           .map((UserMeal userMeal) => Card(

@@ -9,7 +9,8 @@ namespace TrackIt.Services.Interfaces
 		Task<GeneralUser> UpdateBaseUser(int id, UserUpdateRequest update);
 		Task<GeneralUser> SelectActivityLevel(int id, int activityLevelId);
 		Task<GeneralUser> SelectGoal(int id, int goalId);
-		Task<GeneralUser> AddPreferences(int id, int[] preferenceIds);
-		Task<GeneralUser> RemovePreferences(int id, int[] preferenceIds);
+		Task<GeneralUser> SelectPreferences(int id, int[] preferenceIds);
+		Task<GeneralUser> GetFullUserData(int userId);
+
 	}
 }

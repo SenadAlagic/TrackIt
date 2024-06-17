@@ -1,43 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/models/UserData/user_data.dart';
-import 'package:trackit_mobile/providers/general_user_provider.dart';
-import 'package:trackit_mobile/screens/login_screen.dart';
-import 'package:trackit_mobile/utils/form_helpers.dart';
+import 'package:trackit_mobile/models/UserPreferences/user_preferences.dart';
+import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../models/Preference/preference.dart';
 import '../models/search_result.dart';
+import '../providers/general_user_provider.dart';
 import '../providers/preference_provider.dart';
+import '../utils/authorization.dart';
+import '../utils/form_helpers.dart';
 
-class AddPreferencesScreen extends StatefulWidget {
-  const AddPreferencesScreen({super.key});
+class EditPreferencesScreen extends StatefulWidget {
+  const EditPreferencesScreen({super.key});
 
   @override
-  State<AddPreferencesScreen> createState() => _AddPreferencesScreenState();
+  State<EditPreferencesScreen> createState() => _EditPreferencesScreenState();
 }
 
-class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
+class _EditPreferencesScreenState extends State<EditPreferencesScreen> {
   late PreferenceProvider _preferenceProvider;
   late GeneralUserProvider _generalUserProvider;
-
   SearchResult<Preference>? preferences;
+  List<int> selectedPreferences = List.empty(growable: true);
   bool isLoading = true;
-  late UserData userData;
 
   @override
   void initState() {
     super.initState();
     _preferenceProvider = context.read<PreferenceProvider>();
     _generalUserProvider = context.read<GeneralUserProvider>();
-
     initScreen();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    userData = ModalRoute.of(context)?.settings.arguments as UserData;
   }
 
   Future initScreen() async {
@@ -83,15 +76,17 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
   }
 
   dynamic _drawPreferenceCheckBoxGroup(List<Preference> preferences) {
+    var initialValue = UserInfo.user!.usersPreferences!
+        .map((UserPreferences userPreference) => userPreference.preferenceId!)
+        .toList();
     return FormBuilderCheckboxGroup(
       name: "preferences",
-      onChanged: (value) => {
-        userData.preferenceIds =
-            value!.map((String value) => int.parse(value)).toList()
-      },
+      initialValue: initialValue,
+      onChanged: (value) =>
+          {selectedPreferences = value!.map((value) => value).toList()},
       options: preferences
-          .map((Preference preference) => FormBuilderFieldOption<String>(
-                value: preference.preferenceId.toString(),
+          .map((Preference preference) => FormBuilderFieldOption<int>(
+                value: preference.preferenceId!,
                 child: Text(preference.name ?? ""),
               ))
           .toList(),
@@ -107,27 +102,11 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
         style: const ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(Colors.white)),
         onPressed: () async {
-          var user = userData.user!;
-          var requestObject = {
-            "firstName": user.firstName,
-            "lastName": user.lastName,
-            "email": user.email,
-            "username": user.username,
-            "password": user.password,
-            "gender": user.gender,
-            "dateOfBirth": user.dateOfBirth?.toString(),
-            "height": user.height,
-            "weight": user.weight,
-            "targetWeight": user.targetWeight,
-            "activityLevelId": userData.activityLevelId,
-            "goalId": userData.goalId
-          };
-
-          await _generalUserProvider.insert(requestObject);
-
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-              ModalRoute.withName('LoginScreen'));
+          var user = await _generalUserProvider.addPreferences(
+              Authorization.generalUserId!, selectedPreferences);
+          user = await _generalUserProvider.getFullInfo(user!.generalUserId!);
+          UserInfo.user = user;
+          Navigator.of(context).pop();
         },
         child: const Text("Finish registration"));
   }

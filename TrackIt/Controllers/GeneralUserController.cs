@@ -34,22 +34,22 @@ namespace TrackIt.Controllers
 			return await _service.SelectGoal(id, goalId);
 		}
 
-		[HttpPut("/addPreferences/{id}")]
-		public virtual async Task<GeneralUser> AddPreferences(int id, [FromQuery] int[] preferenceIds)
+		[HttpPut("/selectPreferences/{id}")]
+		public virtual async Task<GeneralUser> SelectPreferences(int id, [FromQuery] int[] preferenceIds)
 		{
-			return await _service.AddPreferences(id, preferenceIds);
-		}
-
-		[HttpPut("/removePreferences/{id}")]
-		public virtual async Task<GeneralUser> RemovePreferences(int id, [FromQuery] int[] preferenceIds)
-		{
-			return await _service.RemovePreferences(id, preferenceIds);
+			return await _service.SelectPreferences(id, preferenceIds);
 		}
 
 		[AllowAnonymous]
 		public override Task<GeneralUser> Insert([FromBody] GeneralUserInsertRequest insert)
 		{
 			return base.Insert(insert);
+		}
+
+		[HttpGet("/getFullInfo/{id}")]
+		public async Task<GeneralUser> GetFullUserData(int id)
+		{
+			return await _service.GetFullUserData(id);
 		}
 	}
 }

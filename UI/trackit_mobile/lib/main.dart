@@ -3,10 +3,12 @@ import 'package:provider/provider.dart';
 
 import 'providers/activity_level_provider.dart';
 import 'providers/auth_provider.dart';
+import 'providers/daily_intake_provider.dart';
 import 'providers/general_user_provider.dart';
 import 'providers/goal_provider.dart';
 import 'providers/preference_provider.dart';
 import 'providers/user_meals_provider.dart';
+import 'providers/user_provider.dart';
 import 'screens/login_screen.dart';
 
 void main() {
@@ -17,6 +19,8 @@ void main() {
     ChangeNotifierProvider(create: (_) => PreferenceProvider()),
     ChangeNotifierProvider(create: (_) => GeneralUserProvider()),
     ChangeNotifierProvider(create: (_) => UserMealsProvider()),
+    ChangeNotifierProvider(create: (_) => UserProvider()),
+    ChangeNotifierProvider(create: (_) => DailyIntakeProvider()),
   ], child: const HomePage()));
 }
 
