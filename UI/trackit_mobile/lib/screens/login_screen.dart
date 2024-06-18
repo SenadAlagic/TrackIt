@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/providers/general_user_provider.dart';
-import 'package:trackit_mobile/screens/register_screen.dart';
-import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../providers/auth_provider.dart';
+import '../providers/general_user_provider.dart';
 import '../utils/authorization.dart';
+import '../utils/user_info.dart';
 import 'home_screen.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

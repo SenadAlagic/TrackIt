@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trackit_admin/providers/base_provider.dart';
 
 import '../../models/search_result.dart';
+import '../../providers/base_provider.dart';
 
 class PaginationWidget<T> extends StatefulWidget {
   final SearchResult<T> result;

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/models/requests/update_request.dart';
-import 'package:trackit_mobile/providers/general_user_provider.dart';
-import 'package:trackit_mobile/utils/form_helpers.dart';
 
+import '../models/requests/update_request.dart';
+import '../providers/general_user_provider.dart';
+import '../utils/form_helpers.dart';
 import '../utils/user_info.dart';
+import 'master_screen.dart';
 
 class EditUserScreen extends StatefulWidget {
   const EditUserScreen({super.key});
@@ -36,10 +37,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(child: SingleChildScrollView(child: _drawScreen())),
-    );
+    return MasterScreen(child: _drawScreen());
   }
 
   Widget _drawScreen() {

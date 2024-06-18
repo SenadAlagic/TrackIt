@@ -1,4 +1,4 @@
-import 'package:trackit_mobile/models/requests/register_request.dart';
+import '../requests/register_request.dart';
 
 class UserData {
   RegisterRequest? user;

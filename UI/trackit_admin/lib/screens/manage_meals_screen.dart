@@ -1,14 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/providers/meal_provider.dart';
-import 'package:trackit_admin/screens/meal_details_screen.dart';
 
 import '../models/Meal/meal.dart';
 import '../models/search_result.dart';
+import '../providers/meal_provider.dart';
+import '../utils/image_helpers.dart';
 import '../widgets/PaginationWidget/pagination_widget.dart';
 import 'master_screen.dart';
+import 'meal_details_screen.dart';
 
 class ManageMealsScreen extends StatefulWidget {
   const ManageMealsScreen({super.key});
@@ -101,14 +100,7 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
         ),
         Padding(
             padding: const EdgeInsets.only(left: 16, right: 16.0),
-            child: meal.image?.isNotEmpty ?? true
-                ? Image.memory(
-                    base64Decode(meal.image!),
-                    height: 40,
-                    width: 40,
-                  )
-                : Image.asset("assets/images/NoImageFound.jpg",
-                    height: 40, width: 40)),
+            child: ImageHelpers.getImage(meal.image)),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

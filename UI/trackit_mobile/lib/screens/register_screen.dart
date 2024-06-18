@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:trackit_mobile/models/UserData/user_data.dart';
-import 'package:trackit_mobile/models/requests/register_request.dart';
-import 'package:trackit_mobile/screens/add_goal_screen.dart';
-import 'package:trackit_mobile/utils/form_helpers.dart';
+
+import '../models/UserData/user_data.dart';
+import '../models/requests/register_request.dart';
+import '../utils/form_helpers.dart';
+import 'add_goal_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

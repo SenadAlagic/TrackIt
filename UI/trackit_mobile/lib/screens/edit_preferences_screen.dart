@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/models/UserPreferences/user_preferences.dart';
-import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../models/Preference/preference.dart';
+import '../models/UserPreferences/user_preferences.dart';
 import '../models/search_result.dart';
 import '../providers/general_user_provider.dart';
 import '../providers/preference_provider.dart';
 import '../utils/authorization.dart';
 import '../utils/form_helpers.dart';
+import '../utils/user_info.dart';
+import 'master_screen.dart';
 
 class EditPreferencesScreen extends StatefulWidget {
   const EditPreferencesScreen({super.key});
@@ -43,10 +44,7 @@ class _EditPreferencesScreenState extends State<EditPreferencesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(child: SingleChildScrollView(child: _drawScreen())),
-    );
+    return MasterScreen(child: _drawScreen());
   }
 
   Widget _drawScreen() {

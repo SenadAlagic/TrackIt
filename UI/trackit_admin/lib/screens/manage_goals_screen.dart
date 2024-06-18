@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/screens/goal_details_screen.dart';
-import 'package:trackit_admin/widgets/PaginationWidget/pagination_widget.dart';
 
 import '../models/Goal/goal.dart';
 import '../models/search_result.dart';
 import '../providers/goal_provider.dart';
+import '../utils/image_helpers.dart';
+import '../widgets/PaginationWidget/pagination_widget.dart';
+import 'goal_details_screen.dart';
 import 'master_screen.dart';
 
 class ManageGoalsScreen extends StatefulWidget {
@@ -95,14 +94,7 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
         ),
         Padding(
             padding: const EdgeInsets.only(left: 16, right: 16.0),
-            child: goal.image?.isNotEmpty ?? true
-                ? Image.memory(
-                    base64Decode(goal.image!),
-                    height: 40,
-                    width: 40,
-                  )
-                : Image.asset("assets/images/NoImageFound.jpg",
-                    height: 40, width: 40)),
+            child: ImageHelpers.getImage(goal.image)),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

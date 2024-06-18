@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:trackit_mobile/models/requests/update_request.dart';
-import 'package:trackit_mobile/utils/string_helpers.dart';
-
 import '../models/GeneralUser/general_user.dart';
+import '../models/requests/update_request.dart';
+import '../utils/string_helpers.dart';
 import 'base_provider.dart';
 
 class GeneralUserProvider extends BaseProvider<GeneralUser> {

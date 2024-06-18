@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/models/UserData/user_data.dart';
-import 'package:trackit_mobile/providers/general_user_provider.dart';
-import 'package:trackit_mobile/screens/add_activity_level_screen.dart';
-import 'package:trackit_mobile/utils/form_helpers.dart';
-import 'package:trackit_mobile/utils/image_helpers.dart';
-import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../models/Goal/goal.dart';
+import '../models/UserData/user_data.dart';
 import '../models/search_result.dart';
+import '../providers/general_user_provider.dart';
 import '../providers/goal_provider.dart';
+import '../utils/form_helpers.dart';
+import '../utils/image_helpers.dart';
+import '../utils/user_info.dart';
+import 'add_activity_level_screen.dart';
+import 'master_screen.dart';
 
 class AddGoalScreen extends StatefulWidget {
   final bool? isEdit;
@@ -44,13 +45,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-          child: SingleChildScrollView(
-        child: _drawScreen(),
-      )),
-    );
+    return MasterScreen(child: _drawScreen());
   }
 
   Widget _drawScreen() {

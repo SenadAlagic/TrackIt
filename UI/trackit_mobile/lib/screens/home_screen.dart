@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/models/UserMeal/user_meal.dart';
-import 'package:trackit_mobile/providers/daily_intake_provider.dart';
-import 'package:trackit_mobile/utils/authorization.dart';
-import 'package:trackit_mobile/utils/form_helpers.dart';
-import 'package:trackit_mobile/utils/image_helpers.dart';
-import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../models/DailyIntake/daily_intake.dart';
+import '../models/UserMeal/user_meal.dart';
 import '../models/search_result.dart';
+import '../providers/daily_intake_provider.dart';
 import '../providers/user_meals_provider.dart';
+import '../utils/authorization.dart';
+import '../utils/form_helpers.dart';
+import '../utils/image_helpers.dart';
+import '../utils/user_info.dart';
 import 'master_screen.dart';
 
 class HomeScreen extends StatefulWidget {

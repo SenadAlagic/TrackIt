@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/utils/alert_helpers.dart';
-import 'package:trackit_admin/utils/string_helpers.dart';
 
 import '../models/Tag/tag.dart';
 import '../models/search_result.dart';
 import '../providers/tag_provider.dart';
+import '../utils/alert_helpers.dart';
+import '../utils/form_helpers.dart';
+import '../utils/string_helpers.dart';
 import 'master_screen.dart';
 
 class ManageTagsScreen extends StatefulWidget {
@@ -161,29 +162,6 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
     );
   }
 
-  Widget _drawStringContainer(String hint, String propertyName,
-      {bool enabled = true}) {
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.centerLeft,
-      constraints: const BoxConstraints(maxHeight: 71, maxWidth: 300),
-      child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Column(children: [
-            FormBuilderTextField(
-              enabled: enabled,
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Field is required")
-              ]),
-              name: propertyName,
-              decoration: InputDecoration(
-                hintText: "$hint*",
-              ),
-            )
-          ])),
-    );
-  }
-
   Widget _buildForm() {
     return FormBuilder(
         key: _formKey,
@@ -191,8 +169,8 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
         child: SizedBox(
           height: 313,
           child: Column(children: [
-            _drawStringContainer("Tag name", "name"),
-            _drawStringContainer("Tag description", "description"),
+            FormHelpers.drawStringContainer("Tag name", "name"),
+            FormHelpers.drawStringContainer("Tag description", "description"),
             _drawDropdownMenu(),
           ]),
         ));
@@ -202,11 +180,6 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
     return DropdownButtonFormField<int>(
       value: _selectedColor,
       items: [
-        // DropdownMenuItem(value: 0xFF2196F3, child: _drawColorTile(0xFF2196F3)),
-        // DropdownMenuItem(value: 0xFFF44336, child: _drawColorTile(0xFFF44336)),
-        // DropdownMenuItem(value: 0xFFFFF176, child: _drawColorTile(0xFFFFF176)),
-        // DropdownMenuItem(value: 0xFF66BB6A, child: _drawColorTile(0xFF66BB6A)),
-        // DropdownMenuItem(value: 0xFFF48FB1, child: _drawColorTile(0xFFF48FB1)),
         DropdownMenuItem(value: 0xFF66CC99, child: _drawColorTile(0xFF66CC99)),
         DropdownMenuItem(value: 0xFF99CCFF, child: _drawColorTile(0xFF99CCFF)),
         DropdownMenuItem(value: 0xFFFFD700, child: _drawColorTile(0xFFFFD700)),

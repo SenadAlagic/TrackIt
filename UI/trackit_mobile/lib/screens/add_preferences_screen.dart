@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/models/UserData/user_data.dart';
-import 'package:trackit_mobile/providers/general_user_provider.dart';
-import 'package:trackit_mobile/screens/login_screen.dart';
-import 'package:trackit_mobile/utils/form_helpers.dart';
 
 import '../models/Preference/preference.dart';
+import '../models/UserData/user_data.dart';
 import '../models/search_result.dart';
+import '../providers/general_user_provider.dart';
 import '../providers/preference_provider.dart';
+import '../utils/form_helpers.dart';
+import 'login_screen.dart';
+import 'master_screen.dart';
 
 class AddPreferencesScreen extends StatefulWidget {
   const AddPreferencesScreen({super.key});
@@ -50,10 +51,7 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(child: SingleChildScrollView(child: _drawScreen())),
-    );
+    return MasterScreen(child: _drawScreen());
   }
 
   Widget _drawScreen() {

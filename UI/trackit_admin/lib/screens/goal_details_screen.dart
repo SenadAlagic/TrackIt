@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/providers/goal_provider.dart';
-import 'package:trackit_admin/utils/alert_helpers.dart';
 
 import '../models/Goal/goal.dart';
+import '../providers/goal_provider.dart';
+import '../utils/alert_helpers.dart';
+import '../utils/form_helpers.dart';
+import '../utils/image_helpers.dart';
 import 'master_screen.dart';
 
 class GoalDetailsScreen extends StatefulWidget {
@@ -62,9 +64,11 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              _drawStringContainer("Goal name", "name"),
-              _drawNumericContainer("Target protein", "targetProtein"),
-              _drawNumericContainer("Target calories", "targetCalories"),
+              FormHelpers.drawStringContainer("Goal name", "name"),
+              FormHelpers.drawNumericContainer(
+                  "Target protein", "targetProtein"),
+              FormHelpers.drawNumericContainer(
+                  "Target calories", "targetCalories"),
               const SizedBox(height: 10),
               _drawLargeContainer("Goal description")
             ]),
@@ -86,14 +90,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         ),
         Padding(
             padding: const EdgeInsets.only(left: 16, right: 16.0),
-            child: goal.image?.isNotEmpty ?? true
-                ? Image.memory(
-                    base64Decode(goal.image!),
-                    height: 40,
-                    width: 40,
-                  )
-                : Image.asset("assets/images/NoImageFound.jpg",
-                    height: 40, width: 40)),
+            child: ImageHelpers.getImage(goal.image)),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,51 +115,6 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
           width: 16,
         )
       ]),
-    );
-  }
-
-  Widget _drawStringContainer(String hint, String propertyName) {
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.centerLeft,
-      constraints: const BoxConstraints(maxHeight: 71, maxWidth: 300),
-      child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Column(children: [
-            FormBuilderTextField(
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Field is required")
-              ]),
-              name: propertyName,
-              decoration: InputDecoration(
-                hintText: "$hint*",
-              ),
-            )
-          ])),
-    );
-  }
-
-  Widget _drawNumericContainer(String hint, String propertyName) {
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.centerLeft,
-      constraints: const BoxConstraints(maxHeight: 71, maxWidth: 300),
-      child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Column(children: [
-            FormBuilderTextField(
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Field is required"),
-                FormBuilderValidators.numeric(
-                    errorText: "Field must be numeric")
-              ]),
-              keyboardType: TextInputType.number,
-              name: propertyName,
-              decoration: InputDecoration(
-                hintText: "$hint*",
-              ),
-            )
-          ])),
     );
   }
 
@@ -202,17 +154,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
               Text(hint),
               FormBuilderField(
                   builder: ((field) {
-                    return _base64Image != ""
-                        ? Image.memory(
-                            base64Decode(_base64Image),
-                            height: 200,
-                            width: 200,
-                          )
-                        : Image.asset(
-                            "assets/images/NoImageFound.jpg",
-                            height: 200,
-                            width: 200,
-                          );
+                    return ImageHelpers.getImage(_base64Image);
                   }),
                   name: 'image'),
               ListTile(

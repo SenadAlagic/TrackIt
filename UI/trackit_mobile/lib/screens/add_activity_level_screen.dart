@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/models/ActivityLevel/activity_level.dart';
-import 'package:trackit_mobile/models/search_result.dart';
-import 'package:trackit_mobile/providers/activity_level_provider.dart';
-import 'package:trackit_mobile/providers/general_user_provider.dart';
-import 'package:trackit_mobile/screens/add_preferences_screen.dart';
-import 'package:trackit_mobile/utils/form_helpers.dart';
-import 'package:trackit_mobile/utils/user_info.dart';
 
+import '../models/ActivityLevel/activity_level.dart';
 import '../models/UserData/user_data.dart';
+import '../models/search_result.dart';
+import '../providers/activity_level_provider.dart';
+import '../providers/general_user_provider.dart';
+import '../utils/form_helpers.dart';
 import '../utils/image_helpers.dart';
+import '../utils/user_info.dart';
+import 'add_preferences_screen.dart';
+import 'master_screen.dart';
 
 class AddActivityLevelScreen extends StatefulWidget {
   final bool? isEdit;
@@ -43,10 +44,7 @@ class _AddActivityLevelScreenState extends State<AddActivityLevelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(child: SingleChildScrollView(child: _drawScreen())),
-    );
+    return MasterScreen(child: _drawScreen());
   }
 
   Widget _drawScreen() {

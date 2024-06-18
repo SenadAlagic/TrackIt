@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:trackit_mobile/models/Preference/preference.dart';
+
+import '../Preference/preference.dart';
 part 'user_preferences.g.dart';
 
 @JsonSerializable()

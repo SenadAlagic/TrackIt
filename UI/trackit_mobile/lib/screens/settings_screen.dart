@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/providers/auth_provider.dart';
-import 'package:trackit_mobile/providers/user_provider.dart';
-import 'package:trackit_mobile/screens/add_activity_level_screen.dart';
-import 'package:trackit_mobile/screens/add_goal_screen.dart';
-import 'package:trackit_mobile/screens/edit_preferences_screen.dart';
-import 'package:trackit_mobile/screens/edit_user_screen.dart';
-import 'package:trackit_mobile/screens/login_screen.dart';
-import 'package:trackit_mobile/screens/master_screen.dart';
-import 'package:trackit_mobile/utils/user_info.dart';
+
+import '../providers/auth_provider.dart';
+import '../providers/user_provider.dart';
+import '../utils/user_info.dart';
+import 'add_activity_level_screen.dart';
+import 'add_goal_screen.dart';
+import 'edit_preferences_screen.dart';
+import 'edit_user_screen.dart';
+import 'login_screen.dart';
+import 'master_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

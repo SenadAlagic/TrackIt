@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/screens/master_screen.dart';
-import 'package:trackit_mobile/utils/form_helpers.dart';
-import 'package:trackit_mobile/utils/image_helpers.dart';
 
 import '../models/Meal/meal.dart';
 import '../models/search_result.dart';
 import '../providers/meal_provider.dart';
+import '../utils/form_helpers.dart';
+import '../utils/image_helpers.dart';
 import '../widgets/pagination_widget.dart';
+import 'master_screen.dart';
 import 'meal_details_screen.dart';
 
 class MealsListScren extends StatefulWidget {

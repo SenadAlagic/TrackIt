@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/models/search_result.dart';
-import 'package:trackit_admin/providers/ingredient_provider.dart';
-import 'package:trackit_admin/screens/ingredient_details_screen.dart';
 
 import '../models/Ingredient/ingredient.dart';
+import '../models/search_result.dart';
+import '../providers/ingredient_provider.dart';
+import '../utils/image_helpers.dart';
 import '../widgets/PaginationWidget/pagination_widget.dart';
+import 'ingredient_details_screen.dart';
 import 'master_screen.dart';
 
 class ManageIngredientsScreen extends StatefulWidget {
@@ -99,14 +98,7 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
         ),
         Padding(
             padding: const EdgeInsets.only(left: 16, right: 16.0),
-            child: ingredient.image?.isNotEmpty ?? true
-                ? Image.memory(
-                    base64Decode(ingredient.image!),
-                    height: 40,
-                    width: 40,
-                  )
-                : Image.asset("assets/images/NoImageFound.jpg",
-                    height: 40, width: 40)),
+            child: ImageHelpers.getImage(ingredient.image)),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

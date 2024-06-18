@@ -7,15 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/models/MealIngredient/meal_ingredient.dart';
-import 'package:trackit_admin/models/search_result.dart';
-import 'package:trackit_admin/providers/meal_provider.dart';
-import 'package:trackit_admin/screens/master_screen.dart';
 
 import '../models/Ingredient/ingredient.dart';
 import '../models/Meal/meal.dart';
+import '../models/MealIngredient/meal_ingredient.dart';
+import '../models/search_result.dart';
 import '../providers/ingredient_provider.dart';
+import '../providers/meal_provider.dart';
 import '../utils/alert_helpers.dart';
+import '../utils/form_helpers.dart';
+import '../utils/image_helpers.dart';
+import 'master_screen.dart';
 
 class MealDetailsScreen extends StatefulWidget {
   final Meal? meal;
@@ -97,7 +99,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              _drawStringContainer("Meal name", "name"),
+              FormHelpers.drawStringContainer("Meal name", "name"),
               const SizedBox(height: 10),
               _drawLargeContainer("Meal description"),
               const SizedBox(height: 10),
@@ -317,17 +319,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
               Text(hint),
               FormBuilderField(
                   builder: ((field) {
-                    return _base64Image != ""
-                        ? Image.memory(
-                            base64Decode(_base64Image),
-                            height: 200,
-                            width: 200,
-                          )
-                        : Image.asset(
-                            "assets/images/NoImageFound.jpg",
-                            height: 200,
-                            width: 200,
-                          );
+                    return ImageHelpers.getImage(_base64Image);
                   }),
                   name: 'image'),
               ListTile(
@@ -336,27 +328,6 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                   trailing: const Icon(Icons.file_upload),
                   onTap: getImage)
             ])));
-  }
-
-  Widget _drawStringContainer(String hint, String propertyName) {
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.centerLeft,
-      constraints: const BoxConstraints(maxHeight: 71, maxWidth: 300),
-      child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Column(children: [
-            FormBuilderTextField(
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Field is required")
-              ]),
-              name: propertyName,
-              decoration: InputDecoration(
-                hintText: "$hint*",
-              ),
-            )
-          ])),
-    );
   }
 
   Widget _drawLargeContainer(String hint) {

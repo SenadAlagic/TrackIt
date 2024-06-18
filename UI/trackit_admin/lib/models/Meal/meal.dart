@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:trackit_admin/models/MealIngredient/meal_ingredient.dart';
+
+import '../MealIngredient/meal_ingredient.dart';
 part 'meal.g.dart';
 
 @JsonSerializable()

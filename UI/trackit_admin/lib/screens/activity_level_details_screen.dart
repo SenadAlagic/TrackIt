@@ -4,13 +4,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/providers/activity_level_provider.dart';
-import 'package:trackit_admin/screens/master_screen.dart';
 
 import '../models/ActivityLevel/activity_level.dart';
+import '../providers/activity_level_provider.dart';
 import '../utils/alert_helpers.dart';
+import '../utils/form_helpers.dart';
+import '../utils/image_helpers.dart';
+import 'master_screen.dart';
 
 class ActivityLevelDetailsScreen extends StatefulWidget {
   final ActivityLevel? activityLevel;
@@ -62,8 +63,9 @@ class _ActivityLevelDetailsScreenState
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              _drawStringContainer("Activity level name", "name"),
-              _drawNumericContainer("Activity level multiplier", "multiplier"),
+              FormHelpers.drawStringContainer("Activity level name", "name"),
+              FormHelpers.drawNumericContainer(
+                  "Activity level multiplier", "multiplier"),
             ]),
             const SizedBox(width: 10),
             Column(
@@ -73,51 +75,6 @@ class _ActivityLevelDetailsScreenState
           const SizedBox(height: 30),
           _drawSubmitButton()
         ]));
-  }
-
-  Widget _drawStringContainer(String hint, String propertyName) {
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.centerLeft,
-      constraints: const BoxConstraints(maxHeight: 71, maxWidth: 300),
-      child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Column(children: [
-            FormBuilderTextField(
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Field is required")
-              ]),
-              name: propertyName,
-              decoration: InputDecoration(
-                hintText: "$hint*",
-              ),
-            )
-          ])),
-    );
-  }
-
-  Widget _drawNumericContainer(String hint, String propertyName) {
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.centerLeft,
-      constraints: const BoxConstraints(maxHeight: 71, maxWidth: 300),
-      child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Column(children: [
-            FormBuilderTextField(
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Field is required"),
-                FormBuilderValidators.numeric(
-                    errorText: "Field must be numeric")
-              ]),
-              keyboardType: TextInputType.number,
-              name: propertyName,
-              decoration: InputDecoration(
-                hintText: "$hint*",
-              ),
-            )
-          ])),
-    );
   }
 
   Widget _drawImagePreview(String hint) {
@@ -131,17 +88,7 @@ class _ActivityLevelDetailsScreenState
               Text(hint),
               FormBuilderField(
                   builder: ((field) {
-                    return _base64Image != ""
-                        ? Image.memory(
-                            base64Decode(_base64Image),
-                            height: 200,
-                            width: 200,
-                          )
-                        : Image.asset(
-                            "assets/images/NoImageFound.jpg",
-                            height: 200,
-                            width: 200,
-                          );
+                    return ImageHelpers.getImage(_base64Image);
                   }),
                   name: 'image'),
               ListTile(
@@ -193,14 +140,7 @@ class _ActivityLevelDetailsScreenState
         ),
         Padding(
             padding: const EdgeInsets.only(left: 16, right: 16.0),
-            child: activityLevel.image?.isNotEmpty ?? true
-                ? Image.memory(
-                    base64Decode(activityLevel.image!),
-                    height: 40,
-                    width: 40,
-                  )
-                : Image.asset("assets/images/NoImageFound.jpg",
-                    height: 40, width: 40)),
+            child: ImageHelpers.getImage(activityLevel.image)),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +155,7 @@ class _ActivityLevelDetailsScreenState
         InkWell(
             onTap: () => {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ActivityLevelDetailsScreen()))
+                      builder: (context) => const ActivityLevelDetailsScreen()))
                 },
             child: const Icon(Icons.create_outlined)),
         InkWell(

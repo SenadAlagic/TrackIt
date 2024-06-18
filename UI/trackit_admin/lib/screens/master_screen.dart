@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/screens/login_screen.dart';
 
 import '../providers/auth_provider.dart';
+import 'login_screen.dart';
 
-// ignore: must_be_immutable
 class MasterScreen extends StatefulWidget {
-  Widget? child;
-  String? title;
-  MasterScreen({this.child, this.title, super.key});
+  final Widget? child;
+  final String? title;
+  const MasterScreen({this.child, this.title, super.key});
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();

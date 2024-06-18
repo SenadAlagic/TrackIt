@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:trackit_admin/screens/manage_activity_levels_screen.dart';
-import 'package:trackit_admin/screens/reports_screen.dart';
 
+import 'manage_activity_levels_screen.dart';
 import 'manage_goals_screen.dart';
 import 'manage_ingredients_screen.dart';
 import 'manage_meals_screen.dart';
 import 'manage_tags_screen.dart';
 import 'master_screen.dart';
+import 'reports_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

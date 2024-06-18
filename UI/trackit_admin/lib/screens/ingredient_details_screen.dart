@@ -4,12 +4,13 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/providers/ingredient_provider.dart';
 
 import '../models/Ingredient/ingredient.dart';
+import '../providers/ingredient_provider.dart';
 import '../utils/alert_helpers.dart';
+import '../utils/form_helpers.dart';
+import '../utils/image_helpers.dart';
 import 'master_screen.dart';
 
 class IngredientDetailsScreen extends StatefulWidget {
@@ -64,11 +65,11 @@ class _IngredientDetailsScreenState extends State<IngredientDetailsScreen> {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              _drawStringContainer("Ingredient name", "name"),
-              _drawNumericContainer("Protein", "protein"),
-              _drawNumericContainer("Calories", "calories"),
-              _drawNumericContainer("Fat", "fat"),
-              _drawNumericContainer("Carbs", "carbs"),
+              FormHelpers.drawStringContainer("Ingredient name", "name"),
+              FormHelpers.drawNumericContainer("Protein", "protein"),
+              FormHelpers.drawNumericContainer("Calories", "calories"),
+              FormHelpers.drawNumericContainer("Fat", "fat"),
+              FormHelpers.drawNumericContainer("Carbs", "carbs"),
             ]),
             const SizedBox(width: 10),
             Column(
@@ -88,14 +89,7 @@ class _IngredientDetailsScreenState extends State<IngredientDetailsScreen> {
         ),
         Padding(
             padding: const EdgeInsets.only(left: 16, right: 16.0),
-            child: ingredient.image?.isNotEmpty ?? true
-                ? Image.memory(
-                    base64Decode(ingredient.image!),
-                    height: 40,
-                    width: 40,
-                  )
-                : Image.asset("assets/images/NoImageFound.jpg",
-                    height: 40, width: 40)),
+            child: ImageHelpers.getImage(ingredient.image)),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,51 +121,6 @@ class _IngredientDetailsScreenState extends State<IngredientDetailsScreen> {
   String getNutritionalInformation(Ingredient ingredient) =>
       "Fat (per 100g) ${ingredient.fat}, Protein (per 100g) ${ingredient.protein}, Calories (per 100g) ${ingredient.calories}, Carbs (per 100g) ${ingredient.carbs}";
 
-  Widget _drawStringContainer(String hint, String propertyName) {
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.centerLeft,
-      constraints: const BoxConstraints(maxHeight: 71, maxWidth: 300),
-      child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Column(children: [
-            FormBuilderTextField(
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Field is required")
-              ]),
-              name: propertyName,
-              decoration: InputDecoration(
-                hintText: "$hint*",
-              ),
-            )
-          ])),
-    );
-  }
-
-  Widget _drawNumericContainer(String hint, String propertyName) {
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.centerLeft,
-      constraints: const BoxConstraints(maxHeight: 71, maxWidth: 300),
-      child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Column(children: [
-            FormBuilderTextField(
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Field is required"),
-                FormBuilderValidators.numeric(
-                    errorText: "Field must be numeric")
-              ]),
-              keyboardType: TextInputType.number,
-              name: propertyName,
-              decoration: InputDecoration(
-                hintText: "$hint*",
-              ),
-            )
-          ])),
-    );
-  }
-
   Widget _drawImagePreview(String hint) {
     return Container(
         color: Colors.white,
@@ -183,17 +132,7 @@ class _IngredientDetailsScreenState extends State<IngredientDetailsScreen> {
               Text(hint),
               FormBuilderField(
                   builder: ((field) {
-                    return _base64Image != ""
-                        ? Image.memory(
-                            base64Decode(_base64Image),
-                            height: 200,
-                            width: 200,
-                          )
-                        : Image.asset(
-                            "assets/images/NoImageFound.jpg",
-                            height: 200,
-                            width: 200,
-                          );
+                    return ImageHelpers.getImage(_base64Image);
                   }),
                   name: 'image'),
               ListTile(

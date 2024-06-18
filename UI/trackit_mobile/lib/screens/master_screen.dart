@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/screens/home_screen.dart';
-import 'package:trackit_mobile/screens/meals_list_screen.dart';
-import 'package:trackit_mobile/screens/settings_screen.dart';
 
 import '../providers/auth_provider.dart';
+import 'home_screen.dart';
+import 'meals_list_screen.dart';
+import 'settings_screen.dart';
 
 class MasterScreen extends StatefulWidget {
   final Widget? child;
@@ -29,6 +29,13 @@ class _MasterScreenState extends State<MasterScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title ?? ""),
+          leading: Navigator.canPop(context)
+              ? IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(Icons.arrow_back))
+              : null,
           actions: [
             Padding(
                 padding: const EdgeInsets.only(right: 12.0),

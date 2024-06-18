@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trackit_mobile/models/MealIngredient/meal_ingredient.dart';
-import 'package:trackit_mobile/screens/master_screen.dart';
-import 'package:trackit_mobile/utils/image_helpers.dart';
 
 import '../models/Meal/meal.dart';
+import '../models/MealIngredient/meal_ingredient.dart';
+import '../utils/image_helpers.dart';
+import 'master_screen.dart';
 
 class MealDetailsScreen extends StatefulWidget {
   final Meal? meal;
