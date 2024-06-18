@@ -31,10 +31,10 @@ namespace TrackIt.Services.Services
 			var ingredient = await ingredientSet.Where(i => i.IngredientId == insert.IngredientId).FirstOrDefaultAsync();
 			if (meal != null && ingredient != null)
 			{
-				meal.Protein += ingredient.Protein * insert.IngredientQuantity;
-				meal.Fat += ingredient.Fat * insert.IngredientQuantity;
-				meal.Carbs += ingredient.Carbs * insert.IngredientQuantity;
-				meal.Calories += ingredient.Calories * insert.IngredientQuantity;
+				meal.Protein += ingredient.Protein * (insert.IngredientQuantity / 100.0);
+				meal.Fat += ingredient.Fat * (insert.IngredientQuantity / 100.0);
+				meal.Carbs += ingredient.Carbs * (insert.IngredientQuantity / 100.0);
+				meal.Calories += ingredient.Calories * (insert.IngredientQuantity / 100.0);
 				mealSet.Update(meal);
 			}
 			await _context.SaveChangesAsync();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackit_mobile/screens/home_screen.dart';
+import 'package:trackit_mobile/screens/meals_list_screen.dart';
 import 'package:trackit_mobile/screens/settings_screen.dart';
 
 import '../providers/auth_provider.dart';
@@ -38,10 +39,20 @@ class _MasterScreenState extends State<MasterScreen> {
           child: ListView(children: [
             ListTile(
               leading: const Icon(Icons.home),
-              title: const Text("Home screen"),
+              title: const Text("Home"),
               onTap: () => {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    ModalRoute.withName("HomeScreen"))
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.restaurant),
+              title: const Text("Meals list"),
+              onTap: () => {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => const MealsListScren()),
                     ModalRoute.withName("HomeScreen"))
               },
             ),
@@ -52,7 +63,7 @@ class _MasterScreenState extends State<MasterScreen> {
             )
           ]),
         ),
-        body: SafeArea(child: widget.child!));
+        body: SafeArea(child: SingleChildScrollView(child: widget.child!)));
   }
 
   Widget _drawProfileIcon() {

@@ -45,7 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       usersMeals = result;
-      dailyCalorieIntake = dailyIntakeResult.result[0];
+      if (dailyIntakeResult.result.isNotEmpty) {
+        dailyCalorieIntake = dailyIntakeResult.result[0];
+      }
       isLoading = false;
     });
   }
@@ -109,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Padding(
                         padding: const EdgeInsets.only(right: 16, bottom: 8),
                         child: Text(
-                            "${dailyCalorieIntake?.calories}/$dailyCaloriesNeeded kcal")))
+                            "${dailyCalorieIntake?.calories ?? 0}/$dailyCaloriesNeeded kcal")))
               ],
             )));
   }

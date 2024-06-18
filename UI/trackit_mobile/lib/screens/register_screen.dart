@@ -39,10 +39,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        body: SafeArea(child: SingleChildScrollView(child: _buildScreen())));
+        body: SafeArea(child: SingleChildScrollView(child: _drawScreen())));
   }
 
-  Widget _buildScreen() {
+  Widget _drawScreen() {
     return Container(
         decoration: const BoxDecoration(color: Colors.yellow),
         child: FormBuilder(

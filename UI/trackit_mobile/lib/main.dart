@@ -6,6 +6,7 @@ import 'providers/auth_provider.dart';
 import 'providers/daily_intake_provider.dart';
 import 'providers/general_user_provider.dart';
 import 'providers/goal_provider.dart';
+import 'providers/meal_provider.dart';
 import 'providers/preference_provider.dart';
 import 'providers/user_meals_provider.dart';
 import 'providers/user_provider.dart';
@@ -21,6 +22,7 @@ void main() {
     ChangeNotifierProvider(create: (_) => UserMealsProvider()),
     ChangeNotifierProvider(create: (_) => UserProvider()),
     ChangeNotifierProvider(create: (_) => DailyIntakeProvider()),
+    ChangeNotifierProvider(create: (_) => MealProvider()),
   ], child: const HomePage()));
 }
 
@@ -32,12 +34,13 @@ class HomePage extends StatelessWidget {
     return MaterialApp(
         title: "TrackIt",
         theme: ThemeData(
-          scaffoldBackgroundColor: Colors.yellow,
-          colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.yellow, brightness: Brightness.light),
-          fontFamily: "Calibri",
-          useMaterial3: false,
-        ),
+            scaffoldBackgroundColor: Colors.yellow,
+            colorScheme: ColorScheme.fromSwatch(
+                primarySwatch: Colors.yellow, brightness: Brightness.light),
+            fontFamily: "Calibri",
+            useMaterial3: false,
+            scrollbarTheme: ScrollbarThemeData(
+                thumbVisibility: MaterialStateProperty.all<bool>(true))),
         home: const LoginScreen());
   }
 }
