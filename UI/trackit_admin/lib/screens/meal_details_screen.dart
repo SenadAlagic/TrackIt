@@ -298,14 +298,20 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
       });
       return;
     }
-
-    var apiIngredients = await _ingredientProvider.get(filter: {'name': text});
-    cachedIngredients.addAll(apiIngredients.result.where((ingredient) =>
-        !cachedIngredients.any(
-            (cachedIngredient) => cachedIngredient.name == ingredient.name)));
-    setState(() {
-      ingredients = apiIngredients;
-    });
+    try {
+      var apiIngredients =
+          await _ingredientProvider.get(filter: {'name': text});
+      cachedIngredients.addAll(apiIngredients.result.where((ingredient) =>
+          !cachedIngredients.any(
+              (cachedIngredient) => cachedIngredient.name == ingredient.name)));
+      setState(() {
+        ingredients = apiIngredients;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
+      }
+    }
   }
 
   Widget _drawImagePreview(String hint) {

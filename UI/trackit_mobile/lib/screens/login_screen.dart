@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
 import '../providers/general_user_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/authorization.dart';
 import '../utils/user_info.dart';
 import 'home_screen.dart';
@@ -99,15 +100,37 @@ class _LoginScreenState extends State<LoginScreen> {
               // Authorization.password = _passwordController.text;
               Authorization.email = "senad@gmail.com";
               Authorization.password = "senad123";
-              var loginResponse = await _authProvider.login();
-              if (loginResponse.result == 0) {
-                Authorization.generalUserId = loginResponse.roleId;
-                var user = await _generalUserProvider
-                    .getFullInfo(loginResponse.roleId!);
-                UserInfo.user = user;
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    ModalRoute.withName("HomeScreen"));
+              try {
+                var loginResponse = await _authProvider.login();
+                if (loginResponse.result == 0) {
+                  Authorization.generalUserId = loginResponse.roleId;
+                  var user = await _generalUserProvider
+                      .getFullInfo(loginResponse.roleId!);
+                  UserInfo.user = user;
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => const HomeScreen()),
+                      ModalRoute.withName("HomeScreen"));
+                } else if (loginResponse.result == 1) {
+                  if (context.mounted) {
+                    showDialog(
+                        context: context,
+                        builder: ((context) => AlertDialog(
+                              title: const Text("Login failed"),
+                              content: const Text("Incorrect credentials"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("OK",
+                                        style: TextStyle(color: Colors.black))),
+                              ],
+                            )));
+                  }
+                }
+              } on Exception catch (e) {
+                if (context.mounted) {
+                  AlertHelpers.showAlert(context, "Error", e.toString());
+                }
               }
             },
             child: const Text("Login"))

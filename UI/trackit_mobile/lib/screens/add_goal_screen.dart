@@ -6,6 +6,7 @@ import '../models/UserData/user_data.dart';
 import '../models/search_result.dart';
 import '../providers/general_user_provider.dart';
 import '../providers/goal_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/form_helpers.dart';
 import '../utils/image_helpers.dart';
 import '../utils/user_info.dart';
@@ -35,12 +36,18 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   }
 
   Future initScreen() async {
-    var result = await _goalProvider.get();
+    try {
+      var result = await _goalProvider.get();
 
-    setState(() {
-      goals = result;
-      isLoading = false;
-    });
+      setState(() {
+        goals = result;
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
+      }
+    }
   }
 
   @override

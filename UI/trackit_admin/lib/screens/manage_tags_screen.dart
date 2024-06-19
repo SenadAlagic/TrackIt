@@ -36,12 +36,18 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
   }
 
   Future initScreen() async {
-    var result = await _tagProvider.get();
+    try {
+      var result = await _tagProvider.get();
 
-    setState(() {
-      tags = result;
-      isLoading = false;
-    });
+      setState(() {
+        tags = result;
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
+      }
+    }
   }
 
   @override

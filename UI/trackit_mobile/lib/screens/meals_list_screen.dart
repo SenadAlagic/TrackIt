@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/Meal/meal.dart';
 import '../models/search_result.dart';
 import '../providers/meal_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/form_helpers.dart';
 import '../utils/image_helpers.dart';
 import '../widgets/pagination_widget.dart';
@@ -30,12 +31,18 @@ class _MealsListScrenState extends State<MealsListScren> {
   }
 
   Future initScreen() async {
-    var result = await _mealProvider
-        .get(filter: {'IsIngredientsIncluded': true, "Page": 0, "PageSize": 5});
-    setState(() {
-      meals = result;
-      isLoading = false;
-    });
+    try {
+      var result = await _mealProvider.get(
+          filter: {'IsIngredientsIncluded': true, "Page": 0, "PageSize": 5});
+      setState(() {
+        meals = result;
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
+      }
+    }
   }
 
   void onResultFetched(SearchResult<dynamic> result) {

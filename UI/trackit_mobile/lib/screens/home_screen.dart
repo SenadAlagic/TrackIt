@@ -6,6 +6,7 @@ import '../models/UserMeal/user_meal.dart';
 import '../models/search_result.dart';
 import '../providers/daily_intake_provider.dart';
 import '../providers/user_meals_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/authorization.dart';
 import '../utils/form_helpers.dart';
 import '../utils/image_helpers.dart';
@@ -35,21 +36,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future initScreen() async {
-    var result = await _userMealsProvider.get(filter: {
-      "userId": Authorization.generalUserId,
-      "Date": DateTime.now().toIso8601String(),
-      "isMealIncluded": true
-    });
-    var dailyIntakeResult = await _dailyIntakeProvider
-        .get(filter: {"UserId": Authorization.generalUserId});
+    try {
+      var result = await _userMealsProvider.get(filter: {
+        "userId": Authorization.generalUserId,
+        "Date": DateTime.now().toIso8601String(),
+        "isMealIncluded": true
+      });
+      var dailyIntakeResult = await _dailyIntakeProvider
+          .get(filter: {"UserId": Authorization.generalUserId});
 
-    setState(() {
-      usersMeals = result;
-      if (dailyIntakeResult.result.isNotEmpty) {
-        dailyCalorieIntake = dailyIntakeResult.result[0];
+      setState(() {
+        usersMeals = result;
+        if (dailyIntakeResult.result.isNotEmpty) {
+          dailyCalorieIntake = dailyIntakeResult.result[0];
+        }
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
       }
-      isLoading = false;
-    });
+    }
   }
 
   @override

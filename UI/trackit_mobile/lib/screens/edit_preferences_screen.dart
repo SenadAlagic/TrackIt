@@ -7,6 +7,7 @@ import '../models/UserPreferences/user_preferences.dart';
 import '../models/search_result.dart';
 import '../providers/general_user_provider.dart';
 import '../providers/preference_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/authorization.dart';
 import '../utils/form_helpers.dart';
 import '../utils/user_info.dart';
@@ -35,11 +36,17 @@ class _EditPreferencesScreenState extends State<EditPreferencesScreen> {
   }
 
   Future initScreen() async {
-    var result = await _preferenceProvider.get();
-    setState(() {
-      preferences = result;
-      isLoading = false;
-    });
+    try {
+      var result = await _preferenceProvider.get();
+      setState(() {
+        preferences = result;
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
+      }
+    }
   }
 
   @override

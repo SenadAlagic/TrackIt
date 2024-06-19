@@ -7,6 +7,7 @@ import '../models/UserData/user_data.dart';
 import '../models/search_result.dart';
 import '../providers/general_user_provider.dart';
 import '../providers/preference_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/form_helpers.dart';
 import 'login_screen.dart';
 import 'master_screen.dart';
@@ -42,11 +43,17 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
   }
 
   Future initScreen() async {
-    var result = await _preferenceProvider.get();
-    setState(() {
-      preferences = result;
-      isLoading = false;
-    });
+    try {
+      var result = await _preferenceProvider.get();
+      setState(() {
+        preferences = result;
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
+      }
+    }
   }
 
   @override

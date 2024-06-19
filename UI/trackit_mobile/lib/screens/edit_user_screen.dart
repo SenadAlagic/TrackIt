@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../models/requests/update_request.dart';
 import '../providers/general_user_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/form_helpers.dart';
 import '../utils/user_info.dart';
 import 'master_screen.dart';
@@ -98,11 +99,17 @@ class _EditUserScreenState extends State<EditUserScreen> {
 
           UserUpdateRequest updateRequest =
               UserUpdateRequest.fromInitialValues(request);
-          var newUserInfo = await _generalUserProvider.updateUser(
-              UserInfo.user!.generalUserId!, updateRequest);
+          try {
+            var newUserInfo = await _generalUserProvider.updateUser(
+                UserInfo.user!.generalUserId!, updateRequest);
 
-          UserInfo.user = newUserInfo;
-          Navigator.of(context).pop();
+            UserInfo.user = newUserInfo;
+            Navigator.of(context).pop();
+          } on Exception catch (e) {
+            if (context.mounted) {
+              AlertHelpers.showAlert(context, "Error", e.toString());
+            }
+          }
         },
         child: const Text("Finish editing"));
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit_admin/screens/register_screen.dart';
 
 import '../providers/auth_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/authorization.dart';
 import 'home_screen.dart';
 import 'master_screen.dart';
@@ -56,36 +58,60 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 8,
               ),
-              ElevatedButton(
-                  onPressed: () async {
-                    // Authorization.email = _emailController.text;
-                    // Authorization.password = _passwordController.text;
-                    Authorization.email = "adminovic@admin.com";
-                    Authorization.password = "admin123";
-
-                    var loginResponse = await _authProvider.login();
-                    if (loginResponse.result == 0) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
-                    } else {
-                      if (context.mounted) {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  title: const Text("Invalid login"),
-                                  content:
-                                      const Text("Invalid login credentials."),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () =>
-                                            {Navigator.pop(context)},
-                                        child: const Text("OK"))
-                                  ],
-                                ));
-                      }
-                    }
-                  },
-                  child: const Text("Login"))
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      onPressed: () async {
+                        // Authorization.email = _emailController.text;
+                        // Authorization.password = _passwordController.text;
+                        Authorization.email = "adminovic@admin.com";
+                        Authorization.password = "admin123";
+                        try {
+                          var loginResponse = await _authProvider.login();
+                          if (loginResponse.result == 0) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const HomeScreen()));
+                          } else {
+                            if (context.mounted) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title: const Text("Invalid login"),
+                                        content: const Text(
+                                            "Invalid login credentials."),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () =>
+                                                  {Navigator.pop(context)},
+                                              child: const Text("OK"))
+                                        ],
+                                      ));
+                            }
+                          }
+                        } on Exception catch (e) {
+                          if (context.mounted) {
+                            AlertHelpers.showAlert(
+                                context, "Error", e.toString());
+                          }
+                        }
+                      },
+                      child: const Text("Login")),
+                  const SizedBox(width: 30),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.grey[850])),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (builder) => const RegisterScreen()));
+                      },
+                      child: const Text(
+                        "Register",
+                        style: TextStyle(color: Colors.yellow),
+                      )),
+                ],
+              )
             ],
           ),
         ),

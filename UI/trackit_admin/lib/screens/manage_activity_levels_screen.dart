@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/ActivityLevel/activity_level.dart';
 import '../models/search_result.dart';
 import '../providers/activity_level_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/image_helpers.dart';
 import '../widgets/PaginationWidget/pagination_widget.dart';
 import 'activity_level_details_screen.dart';
@@ -31,13 +32,18 @@ class _ManageActivityLevelsScreenState
   }
 
   Future initScreen() async {
-    var result =
-        await _activityLevelProvider.get(filter: {'Page': 0, 'PageSize': 5});
-
-    setState(() {
-      activityLevels = result;
-      isLoading = false;
-    });
+    try {
+      var result =
+          await _activityLevelProvider.get(filter: {'Page': 0, 'PageSize': 5});
+      setState(() {
+        activityLevels = result;
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
+      }
+    }
   }
 
   void onResultFetched(SearchResult<dynamic> result) {

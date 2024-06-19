@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/search_result.dart';
 import '../providers/base_provider.dart';
+import '../utils/alert_helpers.dart';
 
 class PaginationWidget<T> extends StatefulWidget {
   final SearchResult<T> result;
@@ -33,8 +34,14 @@ class PaginationWidgetState extends State<PaginationWidget> {
                   if (widget.filter != null) {
                     filter.addAll(widget.filter!);
                   }
-                  var results = await widget._provider.get(filter: filter);
-                  widget.onResultFetched(results);
+                  try {
+                    var results = await widget._provider.get(filter: filter);
+                    widget.onResultFetched(results);
+                  } on Exception catch (e) {
+                    if (context.mounted) {
+                      AlertHelpers.showAlert(context, "Error", e.toString());
+                    }
+                  }
                 }
               : null,
           child: const Icon(Icons.keyboard_arrow_left),
@@ -50,8 +57,14 @@ class PaginationWidgetState extends State<PaginationWidget> {
                   if (widget.filter != null) {
                     filter.addAll(widget.filter!);
                   }
-                  var results = await widget._provider.get(filter: filter);
-                  widget.onResultFetched(results);
+                  try {
+                    var results = await widget._provider.get(filter: filter);
+                    widget.onResultFetched(results);
+                  } on Exception catch (e) {
+                    if (context.mounted) {
+                      AlertHelpers.showAlert(context, "Error", e.toString());
+                    }
+                  }
                 }
               : null,
           child: const Icon(Icons.keyboard_arrow_right),
@@ -91,8 +104,14 @@ class PaginationWidgetState extends State<PaginationWidget> {
           if (widget.filter != null) {
             filter.addAll(widget.filter!);
           }
-          var results = await widget._provider.get(filter: filter);
-          widget.onResultFetched(results);
+          try {
+            var results = await widget._provider.get(filter: filter);
+            widget.onResultFetched(results);
+          } on Exception catch (e) {
+            if (context.mounted) {
+              AlertHelpers.showAlert(context, "Error", e.toString());
+            }
+          }
         },
         borderRadius: BorderRadius.circular(20),
         child: Padding(

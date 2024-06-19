@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/Ingredient/ingredient.dart';
 import '../models/search_result.dart';
 import '../providers/ingredient_provider.dart';
+import '../utils/alert_helpers.dart';
 import '../utils/image_helpers.dart';
 import '../widgets/PaginationWidget/pagination_widget.dart';
 import 'ingredient_details_screen.dart';
@@ -30,13 +31,19 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
   }
 
   Future initScreen() async {
-    var result =
-        await _ingredientProvider.get(filter: {"Page": 0, "PageSize": 5});
+    try {
+      var result =
+          await _ingredientProvider.get(filter: {"Page": 0, "PageSize": 5});
 
-    setState(() {
-      ingredients = result;
-      isLoading = false;
-    });
+      setState(() {
+        ingredients = result;
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
+      }
+    }
   }
 
   void onResultFetched(SearchResult<dynamic> result) {
