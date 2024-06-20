@@ -52,10 +52,10 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreen(child: _drawScreen());
+    return MasterScreen(child: _buildScreen());
   }
 
-  Widget _drawScreen() {
+  Widget _buildScreen() {
     if (goals?.result.isNotEmpty ?? false) {
       return Padding(
           padding: const EdgeInsets.all(16.0),

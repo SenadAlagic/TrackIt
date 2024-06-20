@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit_mobile/screens/meal_search.dart';
 
 import '../providers/auth_provider.dart';
 import 'home_screen.dart';
@@ -59,7 +60,17 @@ class _MasterScreenState extends State<MasterScreen> {
               onTap: () => {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                        builder: (context) => const MealsListScren()),
+                        builder: (context) => const MealsListScreen()),
+                    ModalRoute.withName("HomeScreen"))
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.search),
+              title: const Text("Search for a meal"),
+              onTap: () => {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => const MealSearchScreen()),
                     ModalRoute.withName("HomeScreen"))
               },
             ),

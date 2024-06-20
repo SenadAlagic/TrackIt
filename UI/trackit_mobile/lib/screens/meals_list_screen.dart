@@ -11,14 +11,15 @@ import '../widgets/pagination_widget.dart';
 import 'master_screen.dart';
 import 'meal_details_screen.dart';
 
-class MealsListScren extends StatefulWidget {
-  const MealsListScren({super.key});
+class MealsListScreen extends StatefulWidget {
+  final List<Meal>? meals;
+  const MealsListScreen({super.key, this.meals});
 
   @override
-  State<MealsListScren> createState() => _MealsListScrenState();
+  State<MealsListScreen> createState() => _MealsListScreenState();
 }
 
-class _MealsListScrenState extends State<MealsListScren> {
+class _MealsListScreenState extends State<MealsListScreen> {
   late MealProvider _mealProvider;
   SearchResult<Meal>? meals;
   bool isLoading = true;
@@ -27,7 +28,9 @@ class _MealsListScrenState extends State<MealsListScren> {
   void initState() {
     super.initState();
     _mealProvider = context.read<MealProvider>();
-    initScreen();
+    if (widget.meals == null) {
+      initScreen();
+    }
   }
 
   Future initScreen() async {
@@ -56,12 +59,12 @@ class _MealsListScrenState extends State<MealsListScren> {
   Widget build(BuildContext context) {
     return MasterScreen(
       title: "Meals list",
-      child: SingleChildScrollView(child: _drawScreen()),
+      child: SingleChildScrollView(child: _buildScreen()),
     );
   }
 
-  Widget _drawScreen() {
-    if (meals?.result.isNotEmpty ?? false) {
+  Widget _buildScreen() {
+    if (meals?.result.isNotEmpty ?? false || widget.meals != null) {
       return Padding(
           padding: const EdgeInsets.all(16.0),
           child:
@@ -69,16 +72,19 @@ class _MealsListScrenState extends State<MealsListScren> {
             SingleChildScrollView(
                 child: IntrinsicHeight(
                     child: Column(
-              children:
-                  meals!.result.map((meal) => _drawMealCard(meal)).toList(),
+              children: widget.meals != null
+                  ? widget.meals!.map((meal) => _drawMealCard(meal)).toList()
+                  : meals!.result.map((meal) => _drawMealCard(meal)).toList(),
             ))),
-            PaginationWidget(
-              meals!,
-              _mealProvider,
-              onResultFetched,
-              5,
-              filter: const {"IsIngredientsIncluded": true},
-            )
+            widget.meals == null
+                ? PaginationWidget(
+                    meals!,
+                    _mealProvider,
+                    onResultFetched,
+                    5,
+                    filter: const {"IsIngredientsIncluded": true},
+                  )
+                : const SizedBox(),
           ]));
     } else {
       return FormHelpers.drawProgressIndicator();

@@ -6,6 +6,7 @@ import 'providers/auth_provider.dart';
 import 'providers/daily_intake_provider.dart';
 import 'providers/general_user_provider.dart';
 import 'providers/goal_provider.dart';
+import 'providers/ingredient_provider.dart';
 import 'providers/meal_provider.dart';
 import 'providers/preference_provider.dart';
 import 'providers/user_meals_provider.dart';
@@ -23,6 +24,7 @@ void main() {
     ChangeNotifierProvider(create: (_) => UserProvider()),
     ChangeNotifierProvider(create: (_) => DailyIntakeProvider()),
     ChangeNotifierProvider(create: (_) => MealProvider()),
+    ChangeNotifierProvider(create: (_) => IngredientProvider()),
   ], child: const HomePage()));
 }
 

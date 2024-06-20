@@ -58,10 +58,10 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreen(child: _drawScreen());
+    return MasterScreen(child: _buildScreen());
   }
 
-  Widget _drawScreen() {
+  Widget _buildScreen() {
     if (preferences?.result.isNotEmpty ?? false) {
       return Padding(
           padding: const EdgeInsets.all(16.0),

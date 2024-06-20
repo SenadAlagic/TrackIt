@@ -61,13 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreen(
-        child: SingleChildScrollView(
-      child: _drawScreen(),
-    ));
+    return MasterScreen(child: SingleChildScrollView(child: _buildScreen()));
   }
 
-  Widget _drawScreen() {
+  Widget _buildScreen() {
     return Container(
         decoration: const BoxDecoration(color: Color.fromRGBO(255, 235, 59, 1)),
         child: Center(

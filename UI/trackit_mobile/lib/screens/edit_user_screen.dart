@@ -38,10 +38,10 @@ class _EditUserScreenState extends State<EditUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreen(child: _drawScreen());
+    return MasterScreen(child: _buildScreen());
   }
 
-  Widget _drawScreen() {
+  Widget _buildScreen() {
     return Container(
         decoration: const BoxDecoration(color: Colors.yellow),
         child: FormBuilder(

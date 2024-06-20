@@ -17,13 +17,11 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-      child: SingleChildScrollView(
-        child: _drawScreen(),
-      ),
+      child: SingleChildScrollView(child: _buildScreen()),
     );
   }
 
-  Widget _drawScreen() {
+  Widget _buildScreen() {
     Meal? meal = widget.meal;
     if (meal != null) {
       return Padding(
