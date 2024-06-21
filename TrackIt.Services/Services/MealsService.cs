@@ -47,6 +47,14 @@ namespace TrackIt.Services.Services
 				query = context.Meals
 					.Where(meal => mealsMatchingCondition.Contains(meal.MealId));
 			}
+			if (search.Preferences?.Length > 0)
+			{
+				var preferences = search.Preferences;
+				foreach (var preference in preferences)
+				{
+					query = query.Where(m => m.TagsMeals.Any(t => t.Tag.Name == preference));
+				}
+			}
 			if (search?.Name.IsNullOrEmpty() == false)
 			{
 				query = query.Where(meal => meal.Name.ToLower().Contains(search.Name.ToLower()));

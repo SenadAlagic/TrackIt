@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/screens/meal_search.dart';
+import 'package:trackit_mobile/screens/log_meal.dart';
 
 import '../providers/auth_provider.dart';
 import 'home_screen.dart';
+import 'meal_search.dart';
 import 'meals_list_screen.dart';
 import 'settings_screen.dart';
 
@@ -61,7 +62,17 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => const MealsListScreen()),
-                    ModalRoute.withName("HomeScreen"))
+                    ModalRoute.withName("MealsListScreen"))
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.add),
+              title: const Text("Log a meal"),
+              onTap: () => {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => const LogMealScreen()),
+                    ModalRoute.withName("LogMealScreen"))
               },
             ),
             ListTile(
@@ -71,7 +82,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => const MealSearchScreen()),
-                    ModalRoute.withName("HomeScreen"))
+                    ModalRoute.withName("MealSearchScreen"))
               },
             ),
             ListTile(

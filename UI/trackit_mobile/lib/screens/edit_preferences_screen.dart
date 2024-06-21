@@ -113,6 +113,6 @@ class _EditPreferencesScreenState extends State<EditPreferencesScreen> {
           UserInfo.user = user;
           Navigator.of(context).pop();
         },
-        child: const Text("Finish registration"));
+        child: const Text("Submit"));
   }
 }

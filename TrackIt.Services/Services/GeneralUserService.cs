@@ -76,7 +76,7 @@ namespace TrackIt.Services.Services
 
 		public async Task<Model.Models.GeneralUser> GetFullUserData(int generalUserId)
 		{
-			var fullUserInfo = await _context.GeneralUsers.Include(gu => gu.ActivityLevel).Include(gu => gu.User).Include(gu => gu.UsersPreferences).FirstOrDefaultAsync(x => x.GeneralUserId == generalUserId);
+			var fullUserInfo = await _context.GeneralUsers.Include(gu => gu.ActivityLevel).Include(gu => gu.User).Include(gu => gu.UsersPreferences).ThenInclude(up => up.Preference).FirstOrDefaultAsync(x => x.GeneralUserId == generalUserId);
 			return _mapper.Map<Model.Models.GeneralUser>(fullUserInfo);
 		}
 

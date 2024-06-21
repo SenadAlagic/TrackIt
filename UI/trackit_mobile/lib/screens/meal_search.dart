@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/screens/meals_list_screen.dart';
+import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../models/Ingredient/ingredient.dart';
 import '../models/MealIngredient/meal_ingredient.dart';
@@ -12,6 +12,7 @@ import '../providers/ingredient_provider.dart';
 import '../providers/meal_provider.dart';
 import '../utils/alert_helpers.dart';
 import 'master_screen.dart';
+import 'meals_list_screen.dart';
 
 class MealSearchScreen extends StatefulWidget {
   const MealSearchScreen({super.key});
@@ -72,7 +73,11 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
           ),
         ),
         _drawTable(),
-        _drawSubmitButton()
+        _drawSubmitButton(),
+        const Text(
+          "Keep in mind that your preferences affect search results",
+          style: TextStyle(fontSize: 12),
+        ),
       ],
     );
   }
@@ -331,8 +336,14 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
             .toList();
 
         try {
-          var resultingMeals =
-              await _mealProvider.get(filter: {"IngredientIds": ingredientIds});
+          var preferences = UserInfo.user!.usersPreferences!
+              .map((preference) => preference.preference!.name)
+              .toList();
+
+          var resultingMeals = await _mealProvider.get(filter: {
+            "IngredientIds": ingredientIds,
+            "Preferences": preferences
+          });
           Navigator.of(context).push(MaterialPageRoute(
               builder: (builder) =>
                   MealsListScreen(meals: resultingMeals.result)));
