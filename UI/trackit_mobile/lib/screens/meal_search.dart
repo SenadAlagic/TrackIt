@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/utils/user_info.dart';
 
 import '../models/Ingredient/ingredient.dart';
 import '../models/MealIngredient/meal_ingredient.dart';
@@ -11,6 +10,7 @@ import '../models/search_result.dart';
 import '../providers/ingredient_provider.dart';
 import '../providers/meal_provider.dart';
 import '../utils/alert_helpers.dart';
+import '../utils/user_info.dart';
 import 'master_screen.dart';
 import 'meals_list_screen.dart';
 

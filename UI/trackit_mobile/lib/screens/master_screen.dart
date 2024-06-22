@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/screens/log_meal.dart';
 
 import '../providers/auth_provider.dart';
+import 'daily_intake_screen.dart';
 import 'home_screen.dart';
+import 'log_meal.dart';
 import 'meal_search.dart';
 import 'meals_list_screen.dart';
+import 'profile_screen.dart';
 import 'settings_screen.dart';
 
 class MasterScreen extends StatefulWidget {
@@ -102,6 +104,26 @@ class _MasterScreenState extends State<MasterScreen> {
           size: 32,
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: ((context) => const ProfileScreen())));
+                },
+                child: const ListTile(
+                  title: Text("Profile"),
+                  leading: Icon(Icons.account_circle_outlined),
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: ((context) => const DailyIntakeScreen())));
+                },
+                child: const ListTile(
+                  title: Text("Daily intake"),
+                  leading: Icon(Icons.calendar_today),
+                ),
+              ),
               PopupMenuItem(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
