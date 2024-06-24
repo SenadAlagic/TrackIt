@@ -104,4 +104,21 @@ class GeneralUserProvider extends BaseProvider<GeneralUser> {
       throw Exception("Unknown error in a PUT request");
     }
   }
+
+  Future<GeneralUser?> upgradeToPremium(int generalUserId) async {
+    var url = "${getBaseUrl()}upgradeAccountToPremium/$generalUserId";
+    var uri = Uri.parse(url);
+    var headers = await createHeaders();
+
+    var response = await http!.get(uri, headers: headers);
+    if (isValidResponse(response)) {
+      if (response.body != "") {
+        var data = jsonDecode(response.body);
+        return fromJson(data);
+      }
+      return null;
+    } else {
+      throw Exception("Unknown error in GET request");
+    }
+  }
 }

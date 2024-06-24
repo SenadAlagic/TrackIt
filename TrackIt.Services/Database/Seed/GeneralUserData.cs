@@ -16,7 +16,8 @@ namespace TrackIt.Services.Database.Seed
 				Weight = 72,
 				TargetWeight = 74,
 				ActivityLevelId = 3,
-				GoalId = 2
+				GoalId = 2,
+				IsUserPremium = false
 			});
 		}
 	}

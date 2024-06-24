@@ -20,6 +20,8 @@ public partial class GeneralUser
 
 	public int? GoalId { get; set; }
 
+	public bool? IsUserPremium { get; set; } = false;
+
 	public virtual ActivityLevel? ActivityLevel { get; set; }
 
 	public virtual ICollection<DailyIntake> DailyIntakes { get; set; } = new List<DailyIntake>();

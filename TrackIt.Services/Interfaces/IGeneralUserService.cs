@@ -11,6 +11,7 @@ namespace TrackIt.Services.Interfaces
 		Task<GeneralUser> SelectGoal(int id, int goalId);
 		Task<GeneralUser> SelectPreferences(int id, int[] preferenceIds);
 		Task<GeneralUser> GetFullUserData(int userId);
+		Task<GeneralUser> UpgradeAccountToPremium(int generalUserId);
 
 	}
 }

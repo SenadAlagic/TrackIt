@@ -15,6 +15,12 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+## Credentials
+
+PayPal Personal:
+sb-czg3331335783@personal.example.com
+Qe47#WPv
+
 ## Running the JSON_Serializable class generation
 
 For running the JSON_Serializable class generation tool use:

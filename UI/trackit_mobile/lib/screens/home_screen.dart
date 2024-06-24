@@ -72,10 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const Padding(
                 padding: EdgeInsets.only(top: 12),
-                child: Text(
-                  "Welcome",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
+                child: Text("Welcome",
+                    style:
+                        TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
               ),
               _drawCalorieProgressIndicator(),
               _drawMealCards(usersMeals?.result)

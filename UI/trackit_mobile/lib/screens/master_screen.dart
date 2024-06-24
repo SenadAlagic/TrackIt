@@ -9,6 +9,7 @@ import 'meal_search.dart';
 import 'meals_list_screen.dart';
 import 'profile_screen.dart';
 import 'settings_screen.dart';
+import 'upgrade_account_screen.dart';
 
 class MasterScreen extends StatefulWidget {
   final Widget? child;
@@ -122,6 +123,16 @@ class _MasterScreenState extends State<MasterScreen> {
                 child: const ListTile(
                   title: Text("Daily intake"),
                   leading: Icon(Icons.calendar_today),
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: ((context) => const UpgradeAccountScreen())));
+                },
+                child: const ListTile(
+                  title: Text("Upgrade account"),
+                  leading: Icon(Icons.upgrade),
                 ),
               ),
               PopupMenuItem(

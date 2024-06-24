@@ -154,5 +154,13 @@ namespace TrackIt.Services.Services
 			await _context.SaveChangesAsync();
 			return _mapper.Map<Model.Models.GeneralUser>(entity);
 		}
+
+		public async Task<Model.Models.GeneralUser> UpgradeAccountToPremium(int id)
+		{
+			var userToUpgrade = await _context.GeneralUsers.Where(user => user.GeneralUserId == id).FirstOrDefaultAsync();
+			userToUpgrade.IsUserPremium = true;
+			await _context.SaveChangesAsync();
+			return _mapper.Map<Model.Models.GeneralUser>(userToUpgrade);
+		}
 	}
 }

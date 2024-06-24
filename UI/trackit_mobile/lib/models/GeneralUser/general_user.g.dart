@@ -30,6 +30,7 @@ GeneralUser _$GeneralUserFromJson(Map<String, dynamic> json) => GeneralUser(
       (json['usersPreferences'] as List<dynamic>?)
           ?.map((e) => UserPreferences.fromJson(e as Map<String, dynamic>))
           .toList(),
+      json['isUserPremium'] as bool?,
     );
 
 Map<String, dynamic> _$GeneralUserToJson(GeneralUser instance) =>
@@ -45,5 +46,6 @@ Map<String, dynamic> _$GeneralUserToJson(GeneralUser instance) =>
       'activityLevel': instance.activityLevel,
       'user': instance.user,
       'goal': instance.goal,
+      'isUserPremium': instance.isUserPremium,
       'usersPreferences': instance.usersPreferences,
     };

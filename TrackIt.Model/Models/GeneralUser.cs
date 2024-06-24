@@ -18,6 +18,8 @@
 
 		public int ActivityLevelId { get; set; }
 
+		public bool IsUserPremium { get; set; } = false;
+
 		public virtual ActivityLevel ActivityLevel { get; set; } = null!;
 
 		public virtual User User { get; set; } = null!;

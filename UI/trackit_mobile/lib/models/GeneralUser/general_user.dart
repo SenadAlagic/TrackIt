@@ -19,6 +19,7 @@ class GeneralUser {
   ActivityLevel? activityLevel;
   User? user;
   Goal? goal;
+  bool? isUserPremium;
   List<UserPreferences>? usersPreferences;
 
   GeneralUser(
@@ -33,7 +34,8 @@ class GeneralUser {
       this.activityLevelId,
       this.user,
       this.goal,
-      this.usersPreferences);
+      this.usersPreferences,
+      this.isUserPremium);
 
   factory GeneralUser.fromJson(Map<String, dynamic> json) =>
       _$GeneralUserFromJson(json);

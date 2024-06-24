@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../utils/user_info.dart';
 import 'master_screen.dart';
@@ -28,7 +29,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Text(
                 "${UserInfo.user!.user!.firstName} ${UserInfo.user!.user!.lastName}",
-                style: const TextStyle(fontSize: 25))
+                style: const TextStyle(fontSize: 25)),
+            UserInfo.user!.isUserPremium!
+                ? SvgPicture.asset("assets/svg/premium.svg")
+                : Container(),
           ]),
           const Divider(
             thickness: 1,

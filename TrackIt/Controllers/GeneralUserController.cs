@@ -51,5 +51,11 @@ namespace TrackIt.Controllers
 		{
 			return await _service.GetFullUserData(id);
 		}
+
+		[HttpGet("/upgradeAccountToPremium/{id}")]
+		public async Task<GeneralUser> UpgradeAccountToPremium(int id)
+		{
+			return await _service.UpgradeAccountToPremium(id);
+		}
 	}
 }
