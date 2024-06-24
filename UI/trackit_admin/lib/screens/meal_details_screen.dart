@@ -347,8 +347,8 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
             FormBuilderTextField(
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: "Field is required."),
-                FormBuilderValidators.maxLength(30,
-                    errorText: "Field must contain less than 30 characters")
+                FormBuilderValidators.maxLength(200,
+                    errorText: "Field must contain less than 200 characters")
               ]),
               name: 'description',
               keyboardType: TextInputType.multiline,

@@ -18,7 +18,7 @@ class FormHelpers {
             FormBuilderTextField(
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: "Field is required"),
-                FormBuilderValidators.maxLength(20),
+                FormBuilderValidators.maxLength(40),
                 ...customValidators
               ]),
               name: propertyName,
