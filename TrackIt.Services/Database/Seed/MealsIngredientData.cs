@@ -97,6 +97,62 @@ namespace TrackIt.Services.Database.Seed
 					MealId = 5,
 					IngredientId = 6,
 					IngredientQuantity = 50
+				},
+				new MealsIngredient()
+				{
+					MealIngredientsId = 14,
+					MealId = 6,
+					IngredientId = 13,
+					IngredientQuantity = 100
+				},
+				new MealsIngredient()
+				{
+					MealIngredientsId = 15,
+					MealId = 6,
+					IngredientId = 14,
+					IngredientQuantity = 100
+				},
+				new MealsIngredient()
+				{
+					MealIngredientsId = 16,
+					MealId = 7,
+					IngredientId = 15,
+					IngredientQuantity = 100
+				},
+				new MealsIngredient()
+				{
+					MealIngredientsId = 17,
+					MealId = 7,
+					IngredientId = 16,
+					IngredientQuantity = 100
+				},
+				new MealsIngredient()
+				{
+					MealIngredientsId = 18,
+					MealId = 8,
+					IngredientId = 11,
+					IngredientQuantity = 100
+				},
+				new MealsIngredient()
+				{
+					MealIngredientsId = 19,
+					MealId = 8,
+					IngredientId = 4,
+					IngredientQuantity = 100
+				},
+				new MealsIngredient()
+				{
+					MealIngredientsId = 20,
+					MealId = 9,
+					IngredientId = 3,
+					IngredientQuantity = 100
+				},
+				new MealsIngredient()
+				{
+					MealIngredientsId = 21,
+					MealId = 9,
+					IngredientId = 1,
+					IngredientQuantity = 100
 				}
 			);
 		}

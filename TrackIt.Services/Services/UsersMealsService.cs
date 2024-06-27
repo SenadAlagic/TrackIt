@@ -50,5 +50,24 @@ namespace TrackIt.Services.Services
 
 			return base.Insert(insert);
 		}
+
+		public async Task<List<Model.Models.Meal>> MostPopularMeals()
+		{
+			var topThreeMeals = _context.UsersMeals.GroupBy(um => um.MealId)
+				.Select(group => new { MealId = group.Key, Count = group.Count() })
+				.OrderByDescending(meal => meal.Count).Take(3).ToList();
+
+			var meals = new List<Meal>();
+			var mealSet = _context.Set<Meal>();
+			foreach (var topMeal in topThreeMeals)
+			{
+				var foundMeal = await mealSet.Where(meal => meal.MealId == topMeal.MealId).FirstOrDefaultAsync();
+				if (foundMeal != null)
+				{
+					meals.Add(foundMeal);
+				}
+			}
+			return _mapper.Map<List<Model.Models.Meal>>(meals);
+		}
 	}
 }

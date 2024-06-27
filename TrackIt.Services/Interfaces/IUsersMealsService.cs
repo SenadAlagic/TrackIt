@@ -6,5 +6,6 @@ namespace TrackIt.Services.Interfaces
 {
 	public interface IUsersMealsService : ICRUDService<UsersMeal, UsersMealsSearchObject, UsersMealsInsertRequest, UsersMealsUpdateRequest>
 	{
+		Task<List<Meal>> MostPopularMeals();
 	}
 }

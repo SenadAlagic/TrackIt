@@ -233,6 +233,8 @@ class _LogMealScreenState extends State<LogMealScreen> {
             "servings": request['servings'],
           };
 
+          UserInfo.lastLoggedMealId = selectedMeal!.mealId;
+
           try {
             await _userMealsProvider.insert(userLogRequest);
           } on Exception catch (e) {

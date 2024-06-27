@@ -47,6 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
       setState(() {
         usersMeals = result;
+        if (usersMeals?.result.isNotEmpty ?? false) {
+          UserInfo.lastLoggedMealId = usersMeals!.result.last.mealId;
+        }
         if (dailyIntakeResult.result.isNotEmpty) {
           dailyCalorieIntake = dailyIntakeResult.result[0];
         }

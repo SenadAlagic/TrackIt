@@ -35,7 +35,17 @@ namespace TrackIt.Services.Database.Seed
 				new TagsMeal() { TagMealId = 26, TagId = 4, MealId = 5 },
 				new TagsMeal() { TagMealId = 27, TagId = 6, MealId = 5 },
 				new TagsMeal() { TagMealId = 28, TagId = 7, MealId = 5 },
-				new TagsMeal() { TagMealId = 29, TagId = 10, MealId = 5 }
+				new TagsMeal() { TagMealId = 29, TagId = 10, MealId = 5 },
+				new TagsMeal() { TagMealId = 30, TagId = 3, MealId = 6 },
+				new TagsMeal() { TagMealId = 31, TagId = 4, MealId = 6 },
+				new TagsMeal() { TagMealId = 32, TagId = 6, MealId = 7 },
+				new TagsMeal() { TagMealId = 33, TagId = 7, MealId = 7 },
+				new TagsMeal() { TagMealId = 34, TagId = 10, MealId = 8 },
+				new TagsMeal() { TagMealId = 35, TagId = 3, MealId = 8 },
+				new TagsMeal() { TagMealId = 36, TagId = 4, MealId = 9 },
+				new TagsMeal() { TagMealId = 37, TagId = 6, MealId = 9 },
+				new TagsMeal() { TagMealId = 38, TagId = 7, MealId = 9 },
+				new TagsMeal() { TagMealId = 39, TagId = 10, MealId = 9 }
 			);
 		}
 	}

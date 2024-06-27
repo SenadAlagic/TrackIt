@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
@@ -8,6 +9,7 @@ import 'log_meal.dart';
 import 'meal_search.dart';
 import 'meals_list_screen.dart';
 import 'profile_screen.dart';
+import 'recommend_meal_screen.dart';
 import 'settings_screen.dart';
 import 'upgrade_account_screen.dart';
 
@@ -86,6 +88,17 @@ class _MasterScreenState extends State<MasterScreen> {
                     MaterialPageRoute(
                         builder: (context) => const MealSearchScreen()),
                     ModalRoute.withName("MealSearchScreen"))
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.recommend),
+              title: const Text("Recommend a meal"),
+              trailing: SvgPicture.asset("assets/svg/premium.svg"),
+              onTap: () => {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => const RecommendMealScreen()),
+                    ModalRoute.withName("RecommendMealScreen"))
               },
             ),
             ListTile(

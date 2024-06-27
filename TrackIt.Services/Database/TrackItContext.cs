@@ -32,6 +32,8 @@ public partial class TrackItContext : DbContext
 
 	public virtual DbSet<Preference> Preferences { get; set; }
 
+	public virtual DbSet<RecommendedResult> RecommendedResults { get; set; }
+
 	public virtual DbSet<Tag> Tags { get; set; }
 
 	public virtual DbSet<TagsMeal> TagsMeals { get; set; }
@@ -254,6 +256,7 @@ public partial class TrackItContext : DbContext
 		modelBuilder.Entity<Tag>().SeedData();
 		modelBuilder.Entity<MealsIngredient>().SeedData();
 		modelBuilder.Entity<TagsMeal>().SeedData();
+		modelBuilder.Entity<UsersMeal>().SeedData();
 
 		modelBuilder.Entity<User>().SeedData();
 		modelBuilder.Entity<Admin>().SeedData();

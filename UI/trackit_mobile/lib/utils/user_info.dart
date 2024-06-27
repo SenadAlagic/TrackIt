@@ -7,4 +7,5 @@ class UserInfo {
       5 * (DateTime.now().year - (user?.dateOfBirth?.year ?? 2000));
   static double height = user?.height ?? 0;
   static double weight = user?.weight ?? 0;
+  static int? lastLoggedMealId;
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit_admin/providers/recommendation_provider.dart';
+import 'package:trackit_admin/providers/users_meal_provider.dart';
 import '../screens/login_screen.dart';
 import 'providers/activity_level_provider.dart';
 import 'providers/admin_provider.dart';
@@ -19,6 +21,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => ActivityLevelProvider()),
       ChangeNotifierProvider(create: (_) => AuthProvider()),
       ChangeNotifierProvider(create: (_) => AdminProvider()),
+      ChangeNotifierProvider(create: (_) => RecommendationProvider()),
+      ChangeNotifierProvider(create: (_) => UsersMealsProvider()),
     ],
     child: const HomePage(),
   ));

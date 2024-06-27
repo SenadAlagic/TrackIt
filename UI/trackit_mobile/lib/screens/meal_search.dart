@@ -329,7 +329,6 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
         _formKey.currentState?.saveAndValidate();
         if (!_formKey.currentState!.isValid) return;
 
-        print(selectedIngredients);
         List<int> ingredientIds = selectedIngredients
             .map((MealIngredient selectedIngredient) =>
                 selectedIngredient.ingredientId!)

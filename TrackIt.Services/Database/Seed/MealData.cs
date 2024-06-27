@@ -44,7 +44,7 @@ namespace TrackIt.Services.Database.Seed
 				{
 					MealId = 4,
 					Fat = 114.7,
-					Calories = 1044,
+					Calories = 104,
 					Carbs = 8.5,
 					Protein = 2.0,
 					Name = "Tofu and Vegetable Skewers",
@@ -60,6 +60,50 @@ namespace TrackIt.Services.Database.Seed
 					Protein = 1.45,
 					Name = "Sweet Potato and Black Bean Burrito",
 					Description = "A satisfying burrito filled with flavorful mashed sweet potatoes and black beans, along with diced tomatoes, onions, and creamy avocado, all wrapped in a soft tortilla.",
+					Image = null
+				},
+				new Meal
+				{
+					MealId = 6,
+					Fat = 24.6,
+					Calories = 302,
+					Carbs = 10.85,
+					Protein = 13.15,
+					Name = "Peanut Butter Banana",
+					Description = "A delightful toast spread with creamy peanut butter and topped with slices of ripe banana, offering a delectable combination of flavors and textures.",
+					Image = null
+				},
+				new Meal
+				{
+					MealId = 7,
+					Fat = 49.5,
+					Calories = 636,
+					Carbs = 36.1,
+					Protein = 21.9,
+					Name = "Blueberry Almond Smoothie",
+					Description = "A refreshing smoothie blending juicy blueberries, protein-rich Greek yogurt, and crunchy almonds, sweetened with a touch of honey for a nutritious and energizing treat.",
+					Image = null
+				},
+				new Meal
+				{
+					MealId = 8,
+					Fat = 7.05,
+					Calories = 315,
+					Carbs = 9.9,
+					Protein = 58.2,
+					Name = "Beef and Broccoli Stir-fry",
+					Description = "A savory stir-fry featuring lean beef and broccoli florets, sautéed with garlic and ginger, and served over a bed of brown rice and lentils for a wholesome and satisfying meal.",
+					Image = null
+				},
+				new Meal
+				{
+					MealId = 9,
+					Fat = 4.2,
+					Calories = 425,
+					Carbs = 56,
+					Protein = 36.4,
+					Name = "Baked Chicken and Rice",
+					Description = "Tender baked chicken with a side of fluffy white rice, seasoned with garlic and served with a medley of sautéed bell peppers, onions, and zucchini.",
 					Image = null
 				})
 			;

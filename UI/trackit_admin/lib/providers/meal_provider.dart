@@ -23,4 +23,19 @@ class MealProvider extends BaseProvider<Meal> {
       throw Exception("Unknown error in a PUT request");
     }
   }
+
+  Future<int> getForReport({dynamic filter}) async {
+    var url = "${getBaseUrl()}Meal/getForReport";
+
+    var uri = Uri.parse(url);
+    var headers = await createHeaders();
+    var response = await http.get(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      var result = int.parse(response.body);
+      return result;
+    } else {
+      throw Exception("Unknown error in a GET request");
+    }
+  }
 }

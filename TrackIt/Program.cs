@@ -26,6 +26,7 @@ builder.Services.AddTransient<IUsersPreferenceService, UsersPreferencesService>(
 builder.Services.AddTransient<IPreferenceService, PreferenceService>();
 builder.Services.AddTransient<IMealsIngredientsService, MealsIngredientsService>();
 builder.Services.AddTransient<IWeightOverTimeService, WeightOverTimeService>();
+builder.Services.AddTransient<IRecommendedResultService, RecommendedResultService>();
 
 
 builder.Services.AddAuthentication(
@@ -98,8 +99,18 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
 	var dataContext = scope.ServiceProvider.GetRequiredService<TrackItContext>();
-	dataContext.Database.EnsureCreated();
+	//dataContext.Database.EnsureCreated();
 	dataContext.Database.Migrate();
+
+	var recommenderService = scope.ServiceProvider.GetRequiredService<IRecommendedResultService>();
+	try
+	{
+		recommenderService.TrainModel();
+	}
+	catch (Exception ex)
+	{
+
+	}
 }
 
 app.Run();

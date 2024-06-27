@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit_mobile/providers/recommendation_provider.dart';
 
 import 'providers/activity_level_provider.dart';
 import 'providers/auth_provider.dart';
@@ -25,6 +26,7 @@ void main() {
     ChangeNotifierProvider(create: (_) => DailyIntakeProvider()),
     ChangeNotifierProvider(create: (_) => MealProvider()),
     ChangeNotifierProvider(create: (_) => IngredientProvider()),
+    ChangeNotifierProvider(create: (_) => RecommendationProvider()),
   ], child: const HomePage()));
 }
 

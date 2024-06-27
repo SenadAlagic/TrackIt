@@ -36,6 +36,7 @@ namespace TrackIt.Controllers
 			return base.Get(search);
 		}
 
+		[Authorize(Roles = "admin")]
 		[HttpGet("getForReport")]
 		public async Task<int> GetNumberOfItems()
 		{
