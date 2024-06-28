@@ -103,13 +103,13 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                     .map((MealIngredient mealIngredient) => DataRow(cells: [
                           DataCell(Text(mealIngredient.ingredient!.name!)),
                           DataCell(Text(
-                              "${mealIngredient.ingredient!.fat! * (mealIngredient.ingredientQuantity! / 100)} g")),
+                              "${(mealIngredient.ingredient!.fat! * (mealIngredient.ingredientQuantity! / 100)).toStringAsFixed(1)} g")),
                           DataCell(Text(
-                              "${mealIngredient.ingredient!.carbs! * (mealIngredient.ingredientQuantity! / 100)} g")),
+                              "${(mealIngredient.ingredient!.carbs! * (mealIngredient.ingredientQuantity! / 100)).toStringAsFixed(1)} g")),
                           DataCell(Text(
-                              "${mealIngredient.ingredient!.protein! * (mealIngredient.ingredientQuantity! / 100)} g")),
+                              "${(mealIngredient.ingredient!.protein! * (mealIngredient.ingredientQuantity! / 100)).toStringAsFixed(1)} g")),
                           DataCell(Text(
-                              "${mealIngredient.ingredient!.calories! * (mealIngredient.ingredientQuantity! / 100)} kcal"))
+                              "${(mealIngredient.ingredient!.calories! * (mealIngredient.ingredientQuantity! / 100)).toStringAsFixed(1)} kcal"))
                         ])),
                 DataRow(cells: [
                   const DataCell(Text(

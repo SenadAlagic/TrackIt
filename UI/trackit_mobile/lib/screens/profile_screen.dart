@@ -50,23 +50,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _drawCalorieProgressIndicator() {
-    return const Column(children: [
-      Align(
+    var user = UserInfo.user!;
+    var weightDiff = user.weight! - user.targetWeight!;
+    var toDisplay = weightDiff > 0
+        ? "${weightDiff.abs()}kg gained"
+        : "${weightDiff.abs()}kg lost";
+
+    return Column(children: [
+      const Align(
           alignment: Alignment.centerLeft,
           child:
               Text("Progress", style: TextStyle(fontWeight: FontWeight.bold))),
-      Padding(
-        padding: EdgeInsets.all(18.0),
-        child: CircularProgressIndicator(
-          strokeAlign: 2,
-          strokeWidth: 10,
-          value: 0.5,
-          color: Colors.black,
-          backgroundColor: Colors.white,
-        ),
-      ),
-      Text("4.3 kg lost",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+      SvgPicture.asset("assets/svg/gaugeIcon.svg", height: 70, width: 100),
+      Text(toDisplay,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
     ]);
   }
 

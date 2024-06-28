@@ -69,11 +69,11 @@ namespace TrackIt.Services.Services
 			var alreadyPredictedResult = await _context.RecommendedResults.Where(rr => rr.MealId == mealId).FirstOrDefaultAsync();
 			if (alreadyPredictedResult != null)
 			{
-				var mealToReturn = await _context.Meals.FirstOrDefaultAsync(m => m.MealId == alreadyPredictedResult.MealId);
+				var mealToReturn = await _context.Meals.Include(m => m.MealsIngredients).ThenInclude(mi => mi.Ingredient).FirstOrDefaultAsync(m => m.MealId == alreadyPredictedResult.MealId);
 				return _mapper.Map<Model.Models.Meal>(mealToReturn);
 			}
 
-			var meals = _context.Meals.Where(m => m.MealId != mealId);
+			var meals = _context.Meals.Where(m => m.MealId != mealId).Include(m => m.MealsIngredients).ThenInclude(mi => mi.Ingredient);
 			var predictionResult = new List<Tuple<Meal, float>>();
 
 			foreach (var meal in meals)

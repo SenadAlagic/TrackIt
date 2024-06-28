@@ -37,8 +37,8 @@ namespace TrackIt.Services
 			CreateMap<Database.GeneralUser, GeneralUser>();
 			CreateMap<Model.Requests.GeneralUserInsertRequest, Database.User>();
 			CreateMap<Model.Requests.GeneralUserInsertRequest, Database.GeneralUser>();
-			CreateMap<Model.Requests.GeneralUserUpdateRequest, Database.User>();//.ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-			CreateMap<Model.Requests.GeneralUserUpdateRequest, Database.GeneralUser>();//.ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+			CreateMap<Model.Requests.GeneralUserUpdateRequest, Database.User>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+			CreateMap<Model.Requests.GeneralUserUpdateRequest, Database.GeneralUser>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
 			CreateMap<Database.Goal, Goal>();
 			CreateMap<Model.Requests.GoalInsertRequest, Database.Goal>();

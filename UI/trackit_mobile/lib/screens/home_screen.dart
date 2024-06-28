@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit_mobile/providers/general_user_provider.dart';
 
 import '../models/DailyIntake/daily_intake.dart';
 import '../models/UserMeal/user_meal.dart';
@@ -21,8 +25,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
+  Map<String, dynamic> _initialValue = {};
+
   late UserMealsProvider _userMealsProvider;
   late DailyIntakeProvider _dailyIntakeProvider;
+  late GeneralUserProvider _generalUserProvider;
+
   SearchResult<UserMeal>? usersMeals;
   DailyIntake? dailyCalorieIntake;
   bool isLoading = true;
@@ -32,6 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _userMealsProvider = context.read<UserMealsProvider>();
     _dailyIntakeProvider = context.read<DailyIntakeProvider>();
+    _generalUserProvider = context.read<GeneralUserProvider>();
+    _initialValue = {
+      "meal": "",
+    };
+
+    Future.delayed(const Duration(seconds: 2))
+        .then((_) => _drawWeightLogDialog(context));
+
     initScreen();
   }
 
@@ -181,5 +198,57 @@ class _HomeScreenState extends State<HomeScreen> {
               ))
           .toList()
     ]);
+  }
+
+  void _drawWeightLogDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: const Text("Log your weight for today"),
+              content: FormBuilder(
+                  key: _formKey,
+                  initialValue: _initialValue,
+                  child: SizedBox(
+                    height: 133,
+                    child: Column(children: [
+                      FormHelpers.drawNumericContainer(
+                          "Your current weight", "weight"),
+                      const Text(
+                        "Note: this would be something that sould appear once a week but for testing purposes is shown every time the user logs in",
+                        style: TextStyle(fontSize: 12),
+                      )
+                    ]),
+                  )),
+              actions: [
+                TextButton(
+                    onPressed: () async {
+                      _formKey.currentState?.saveAndValidate();
+                      if (!_formKey.currentState!.isValid) return;
+
+                      var request = {
+                        "currentWeight": _formKey.currentState!.value['weight'],
+                        "weightComment": ""
+                      };
+                      UserInfo.lastLoggedWeight = request['currentWeight'];
+
+                      try {
+                        _generalUserProvider.update(
+                            UserInfo.user!.generalUserId!, request);
+                        Navigator.pop(context);
+                      } on Exception catch (e) {
+                        if (context.mounted) {
+                          AlertHelpers.showAlert(
+                              context, "Error", e.toString());
+                        }
+                      }
+                    },
+                    child: const Text("OK",
+                        style: TextStyle(color: Colors.black))),
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Cancel",
+                        style: TextStyle(color: Colors.black))),
+              ],
+            ));
   }
 }

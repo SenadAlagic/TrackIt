@@ -8,4 +8,5 @@ class UserInfo {
   static double height = user?.height ?? 0;
   static double weight = user?.weight ?? 0;
   static int? lastLoggedMealId;
+  static int? lastLoggedWeight;
 }

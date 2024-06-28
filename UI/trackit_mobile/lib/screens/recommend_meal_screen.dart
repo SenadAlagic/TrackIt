@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit_mobile/utils/form_helpers.dart';
 
 import '../models/Meal/meal.dart';
 import '../providers/recommendation_provider.dart';
@@ -56,6 +57,9 @@ class _RecommendMealScreenState extends State<RecommendMealScreen> {
   }
 
   Widget _buildScreen() {
+    if (isLoading == true) {
+      return FormHelpers.drawProgressIndicator();
+    }
     if (UserInfo.lastLoggedMealId == null) {
       return const Padding(
         padding: EdgeInsets.all(12.0),
