@@ -69,6 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     FormHelpers.drawStringContainer("Last name", "lastName",
                         customValidators: [FormBuilderValidators.minLength(3)]),
                     FormHelpers.drawStringContainer("Email", "email",
+                        maxLength: 50,
                         customValidators: [
                           FormBuilderValidators.email(
                               errorText: "Field must be a valid email")

@@ -1,4 +1,5 @@
-﻿using TrackIt.Model.Models;
+﻿using TrackIt.Model.Helper;
+using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
 
@@ -11,7 +12,7 @@ namespace TrackIt.Services.Interfaces
 		Task<GeneralUser> SelectGoal(int id, int goalId);
 		Task<GeneralUser> SelectPreferences(int id, int[] preferenceIds);
 		Task<GeneralUser> GetFullUserData(int userId);
-		Task<GeneralUser> UpgradeAccountToPremium(int generalUserId);
+		Task<GeneralUser> UpgradeAccountToPremium(int generalUserId, EmailModel model);
 
 	}
 }

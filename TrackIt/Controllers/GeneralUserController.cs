@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrackIt.Model.Helper;
 using TrackIt.Model.Models;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
@@ -52,10 +53,10 @@ namespace TrackIt.Controllers
 			return await _service.GetFullUserData(id);
 		}
 
-		[HttpGet("/upgradeAccountToPremium/{id}")]
-		public async Task<GeneralUser> UpgradeAccountToPremium(int id)
+		[HttpPost("/upgradeAccountToPremium/{id}")]
+		public async Task<GeneralUser> UpgradeAccountToPremium(int id, EmailModel model)
 		{
-			return await _service.UpgradeAccountToPremium(id);
+			return await _service.UpgradeAccountToPremium(id, model);
 		}
 	}
 }

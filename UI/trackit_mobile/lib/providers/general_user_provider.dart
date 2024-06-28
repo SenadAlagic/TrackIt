@@ -105,12 +105,14 @@ class GeneralUserProvider extends BaseProvider<GeneralUser> {
     }
   }
 
-  Future<GeneralUser?> upgradeToPremium(int generalUserId) async {
+  Future<GeneralUser?> upgradeToPremium(
+      int generalUserId, dynamic requestBody) async {
     var url = "${getBaseUrl()}upgradeAccountToPremium/$generalUserId";
     var uri = Uri.parse(url);
     var headers = await createHeaders();
+    var jsonRequest = jsonEncode(requestBody);
 
-    var response = await http!.get(uri, headers: headers);
+    var response = await http!.post(uri, headers: headers, body: jsonRequest);
     if (isValidResponse(response)) {
       if (response.body != "") {
         var data = jsonDecode(response.body);

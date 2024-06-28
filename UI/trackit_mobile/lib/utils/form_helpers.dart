@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 class FormHelpers {
   static Widget drawStringContainer(String hint, String propertyName,
       {bool obscureText = false,
+      int maxLength = 20,
       List<String? Function(String?)> customValidators = const []}) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -18,7 +19,7 @@ class FormHelpers {
             FormBuilderTextField(
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: "Field is required"),
-                FormBuilderValidators.maxLength(20),
+                FormBuilderValidators.maxLength(maxLength),
                 ...customValidators
               ]),
               name: propertyName,

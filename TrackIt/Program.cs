@@ -27,6 +27,7 @@ builder.Services.AddTransient<IPreferenceService, PreferenceService>();
 builder.Services.AddTransient<IMealsIngredientsService, MealsIngredientsService>();
 builder.Services.AddTransient<IWeightOverTimeService, WeightOverTimeService>();
 builder.Services.AddTransient<IRecommendedResultService, RecommendedResultService>();
+builder.Services.AddTransient<IRabbitMQProducer, RabbitMQProducer>();
 
 
 builder.Services.AddAuthentication(

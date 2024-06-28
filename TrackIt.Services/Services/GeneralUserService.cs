@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using TrackIt.Model.Helper;
 using TrackIt.Model.Requests;
 using TrackIt.Model.SearchObjects;
 using TrackIt.Services.Database;
@@ -13,11 +14,13 @@ namespace TrackIt.Services.Services
 	{
 		private IUsersPreferenceService _usersPreferenceService;
 		private IWeightOverTimeService _weightOverTimeService;
+		private IRabbitMQProducer _rabbitMQProducer;
 
-		public GeneralUserService(TrackItContext context, IMapper mapper, IUsersPreferenceService usersPreferenceService, IWeightOverTimeService weightOverTimeService) : base(context, mapper)
+		public GeneralUserService(TrackItContext context, IMapper mapper, IUsersPreferenceService usersPreferenceService, IWeightOverTimeService weightOverTimeService, IRabbitMQProducer rabbitMQProducer) : base(context, mapper)
 		{
 			_usersPreferenceService = usersPreferenceService;
 			_weightOverTimeService = weightOverTimeService;
+			_rabbitMQProducer = rabbitMQProducer;
 		}
 
 		public override async Task BeforeInsert(GeneralUser entity, GeneralUserInsertRequest insert)
@@ -155,10 +158,13 @@ namespace TrackIt.Services.Services
 			return _mapper.Map<Model.Models.GeneralUser>(entity);
 		}
 
-		public async Task<Model.Models.GeneralUser> UpgradeAccountToPremium(int id)
+		public async Task<Model.Models.GeneralUser> UpgradeAccountToPremium(int id, EmailModel model)
 		{
 			var userToUpgrade = await _context.GeneralUsers.Where(user => user.GeneralUserId == id).FirstOrDefaultAsync();
 			userToUpgrade.IsUserPremium = true;
+
+			_rabbitMQProducer.SendMessage(model);
+
 			await _context.SaveChangesAsync();
 			return _mapper.Map<Model.Models.GeneralUser>(userToUpgrade);
 		}
