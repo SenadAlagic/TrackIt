@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/providers/general_user_provider.dart';
 
 import '../models/DailyIntake/daily_intake.dart';
 import '../models/UserMeal/user_meal.dart';
 import '../models/search_result.dart';
 import '../providers/daily_intake_provider.dart';
+import '../providers/general_user_provider.dart';
 import '../providers/user_meals_provider.dart';
 import '../utils/alert_helpers.dart';
 import '../utils/authorization.dart';

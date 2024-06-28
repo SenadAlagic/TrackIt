@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/screens/register_screen.dart';
 
 import '../providers/auth_provider.dart';
 import '../utils/alert_helpers.dart';
 import '../utils/authorization.dart';
 import 'home_screen.dart';
 import 'master_screen.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -63,10 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   ElevatedButton(
                       onPressed: () async {
-                        // Authorization.email = _emailController.text;
-                        // Authorization.password = _passwordController.text;
-                        Authorization.email = "adminovic@admin.com";
-                        Authorization.password = "admin123";
+                        Authorization.email = _emailController.text;
+                        Authorization.password = _passwordController.text;
                         try {
                           var loginResponse = await _authProvider.login();
                           if (loginResponse.result == 0) {

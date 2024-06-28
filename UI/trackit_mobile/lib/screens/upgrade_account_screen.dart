@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_paypal_checkout/flutter_paypal_checkout.dart';
-import 'package:trackit_mobile/models/requests/email_request.dart';
 
+import '../models/requests/email_request.dart';
 import '../providers/general_user_provider.dart';
 import '../utils/alert_helpers.dart';
 import '../utils/user_info.dart';
@@ -130,8 +130,10 @@ class _UpgradeAccountScreenState extends State<UpgradeAccountScreen> {
                                 isDisabled = true;
                               });
                             } on Exception catch (e) {
-                              AlertHelpers.showAlert(
-                                  context, "Error", e.toString());
+                              if (context.mounted) {
+                                AlertHelpers.showAlert(
+                                    context, "Error", e.toString());
+                              }
                             }
                           },
                           onError: (error) {

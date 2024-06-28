@@ -98,8 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () async {
               Authorization.email = _emailController.text;
               Authorization.password = _passwordController.text;
-              // Authorization.email = "senad@gmail.com";
-              // Authorization.password = "senad123";
               try {
                 var loginResponse = await _authProvider.login();
                 if (loginResponse.result == 0) {

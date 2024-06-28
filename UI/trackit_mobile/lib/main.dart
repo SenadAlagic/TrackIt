@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_mobile/providers/recommendation_provider.dart';
 
 import 'providers/activity_level_provider.dart';
 import 'providers/auth_provider.dart';
@@ -10,6 +9,7 @@ import 'providers/goal_provider.dart';
 import 'providers/ingredient_provider.dart';
 import 'providers/meal_provider.dart';
 import 'providers/preference_provider.dart';
+import 'providers/recommendation_provider.dart';
 import 'providers/user_meals_provider.dart';
 import 'providers/user_provider.dart';
 import 'screens/login_screen.dart';

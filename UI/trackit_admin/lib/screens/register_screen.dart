@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit_admin/screens/login_screen.dart';
 
 import '../models/Admin/admin.dart';
 import '../providers/admin_provider.dart';
 import '../utils/alert_helpers.dart';
 import '../utils/form_helpers.dart';
+import 'login_screen.dart';
 import 'master_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
