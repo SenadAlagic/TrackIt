@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +8,6 @@ import '../models/search_result.dart';
 import '../providers/ingredient_provider.dart';
 import '../utils/alert_helpers.dart';
 import '../utils/image_helpers.dart';
-import '../widgets/PaginationWidget/pagination_widget.dart';
 import 'ingredient_details_screen.dart';
 import 'master_screen.dart';
 
@@ -20,7 +21,12 @@ class ManageIngredientsScreen extends StatefulWidget {
 
 class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
   late IngredientProvider _ingredientProvider;
+  final _searchController = TextEditingController();
+
   SearchResult<Ingredient>? ingredients;
+  List<Ingredient> cachedIngredients = List.empty(growable: true);
+  Timer? _searchTimer;
+
   bool isLoading = true;
 
   @override
@@ -33,7 +39,11 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
   Future initScreen() async {
     try {
       var result =
-          await _ingredientProvider.get(filter: {"Page": 0, "PageSize": 5});
+          await _ingredientProvider.get(filter: {"Page": 0, "PageSize": 10});
+
+      cachedIngredients.addAll(result.result.where((ingredient) =>
+          !cachedIngredients.any(
+              (cachedIngredient) => cachedIngredient.name == ingredient.name)));
 
       setState(() {
         ingredients = result;
@@ -44,13 +54,6 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
         AlertHelpers.showAlert(context, "Error", e.toString());
       }
     }
-  }
-
-  void onResultFetched(SearchResult<dynamic> result) {
-    setState(() {
-      ingredients = result as SearchResult<Ingredient>;
-      isLoading = false;
-    });
   }
 
   @override
@@ -64,14 +67,16 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
   Widget _buildScreen() {
     if (ingredients?.result.isNotEmpty ?? false) {
       return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(left: 16.0, bottom: 16.0, right: 16.0),
           child: Column(children: [
             SingleChildScrollView(
                 child: IntrinsicHeight(
                     child: Column(
-              children: ingredients!.result
-                  .map((ingredient) => _drawIngredientCard(ingredient))
-                  .toList(),
+              children: [
+                _drawSearchField(),
+                ...ingredients!.result
+                    .map((ingredient) => _drawIngredientCard(ingredient))
+              ],
             ))),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -89,8 +94,6 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
                 )
               ],
             ),
-            PaginationWidget(
-                ingredients!, _ingredientProvider, onResultFetched, 5)
           ]));
     } else {
       return const CircularProgressIndicator();
@@ -138,6 +141,53 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
         )
       ]),
     );
+  }
+
+  Widget _drawSearchField() {
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20), color: Colors.white),
+        width: 200,
+        child: TextField(
+          onChanged: (value) => _handleChange(value),
+          decoration: const InputDecoration(
+              border: InputBorder.none,
+              labelText: "Search",
+              prefixIcon: Icon(Icons.search)),
+          controller: _searchController,
+        ));
+  }
+
+  void _handleChange(String searchText) {
+    _searchTimer?.cancel();
+    _searchTimer = Timer(const Duration(milliseconds: 250), () {
+      if (searchText.length >= 3) {
+        _performSearch(searchText);
+      } else {
+        setState(() {
+          ingredients?.result = cachedIngredients;
+          ingredients?.meta.count = cachedIngredients.length;
+        });
+      }
+    });
+  }
+
+  void _performSearch(String searchText) async {
+    try {
+      var apiIngredients =
+          await _ingredientProvider.get(filter: {'name': searchText});
+      cachedIngredients.addAll(apiIngredients.result.where((ingredient) =>
+          !cachedIngredients.any(
+              (cachedIngredient) => cachedIngredient.name == ingredient.name)));
+
+      setState(() {
+        ingredients = apiIngredients;
+      });
+    } on Exception catch (e) {
+      if (context.mounted) {
+        AlertHelpers.showAlert(context, "Error", e.toString());
+      }
+    }
   }
 
   String getNutritionalInformation(Ingredient ingredient) =>
