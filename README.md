@@ -34,7 +34,3 @@ Sort imports: ```SHIFT + ALT + O```
 <i>*Use relative import paths.</i>
 
 </br>
-
-## Licence
-
-Project is licensed under the [GNU General Public License v3.0](https://github.com/Smayke95/HRMS/blob/master/LICENSE)
