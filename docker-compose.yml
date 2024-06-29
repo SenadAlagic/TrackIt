@@ -1,6 +1,5 @@
-version: '3'
+version: "3"
 services:
-#mssql docker
   trackit-sql:
     image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
     restart: unless-stopped
@@ -13,7 +12,7 @@ services:
     expose:
       - 1433
     networks:
-      - trackit2023
+      - trackit2024
 
   trackit-api:
     restart: unless-stopped
@@ -21,16 +20,61 @@ services:
       context: .
     environment:
       - ConnectionStrings:DefaultConnection=Server=${SQL_HOST},1433;Database=${SQL_DB_COMMON};User=${SQL_USER};Password=${SQL_PASSWORD};ConnectRetryCount=0; TrustServerCertificate=True
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - SMTP_SERVER=${SMTP_SERVER}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - API_HOST=${API_HOST}
+      - API_PORT=${API_PORT}
     ports:
       - 7296:7296
     networks:
-      - trackit2023
+      - trackit2024
     links:
       - trackit-sql
     depends_on:
       - trackit-sql
-      
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    hostname: ${RABBITMQ_HOST}
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - 5672:5672
+      - 15672:15672
+    expose:
+      - 5672
+      - 15672
+    networks:
+      - trackit2024
+
+  rabbitmq-service:
+    restart: unless-stopped
+    build:
+      dockerfile: ./TrackIt.Subscriber/Dockerfile
+    environment:
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - SMTP_SERVER=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=trackitapprs2@gmail.com
+      - SMTP_PASSWORD=rzmk cavd xbbb taat
+    depends_on:
+      - rabbitmq
+      - trackit-api
+    networks:
+      - trackit2024
+
 networks:
-  trackit2023:
-    driver: bridge      
+  trackit2024:
+    driver: bridge

@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
+
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 
@@ -16,8 +18,7 @@ class RecommendationProvider with ChangeNotifier {
   IOClient? http;
 
   RecommendationProvider() {
-    _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://10.0.2.2:7296/");
+    _baseUrl = dotenv.dotenv.env["baseUrl"];
 
     if (_baseUrl!.endsWith("/") == false) {
       _baseUrl = "$_baseUrl/";

@@ -10,10 +10,16 @@ var factory = new ConnectionFactory
 	UserName = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest",
 	Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest",
 };
+
+Console.WriteLine($"HOST: {factory.HostName}");
+Console.WriteLine($"PORT: {factory.Port}");
+Console.WriteLine($"USERNAME: {factory.UserName}");
+Console.WriteLine($"PASSWORD: {factory.Password}");
+
 factory.ClientProvidedName = " [*] Rabbit Test Consumer";
 
-IConnection connection = factory.CreateConnection();
-IModel channel = connection.CreateModel();
+var connection = factory.CreateConnection();
+var channel = connection.CreateModel();
 
 string exchangeName = "EmailExchange";
 string routingKey = "email_queue";
@@ -40,7 +46,7 @@ consumer.Received += (sender, args) =>
 channel.BasicConsume(queueName, false, consumer);
 
 Console.WriteLine(" [*] Waiting for messages. Press [enter] to quit.");
-Console.ReadLine();
+//Console.ReadLine();
 
-channel.Close();
-connection.Close();
+//channel.Close();
+//connection.Close();

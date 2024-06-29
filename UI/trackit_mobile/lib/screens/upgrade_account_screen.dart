@@ -49,7 +49,7 @@ class _UpgradeAccountScreenState extends State<UpgradeAccountScreen> {
                   backgroundColor: MaterialStatePropertyAll(Colors.white)),
               onPressed: !isDisabled
                   ? () async {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => PaypalCheckout(
                           sandboxMode: true,
                           clientId:
@@ -84,36 +84,6 @@ class _UpgradeAccountScreenState extends State<UpgradeAccountScreen> {
                             }
                           ],
                           note: "Contact us for any questions on your order.",
-                          // Navigator.of(context).push(MaterialPageRoute(
-                          //   builder: (BuildContext context) => UsePaypal(
-                          //     sandboxMode: true,
-                          //     clientId:
-                          //         "AYWC9eKExMBEBU5QPEoehe33m-fUPWuKnYp1dWhSDLMfSWB7ErG0b97r7YxkvUfaqfU1T0rhBFZ4FEe4",
-                          //     secretKey:
-                          //         "ELTHySTRqTv8O94AMPVNaqy0LRa-LjiW-TIMTAzvdg2Bg2IMpdDahTDr-j2mkFI9Q3UVB9edCG3sPLnm",
-                          //     returnURL: "success.snippetcoder.com",
-                          //     cancelURL: "cancel.snippetcoder.com",
-                          //     transactions: const [
-                          //       {
-                          //         "amount": {
-                          //           "total": 4.99,
-                          //           "currency": "USD",
-                          //         },
-                          //         "description":
-                          //             "Purchase to upgrade an account to premium level.",
-                          //         "item_list": {
-                          //           "items": [
-                          //             {
-                          //               "name": "Account upgrade",
-                          //               "quantity": 1,
-                          //               "price": 4.99,
-                          //               "currency": "USD"
-                          //             },
-                          //           ],
-                          //         }
-                          //       }
-                          //     ],
-                          //     note: "Contact us for any questions on your order.",
                           onSuccess: (Map params) async {
                             try {
                               var emailRequestBody = EmailRequest(
