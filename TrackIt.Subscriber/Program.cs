@@ -3,21 +3,18 @@ using RabbitMQ.Client.Events;
 using System.Text;
 using TrackIt.Subscriber;
 
-var factory = new ConnectionFactory
+var factory = new ConnectionFactory()
 {
 	HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost",
 	Port = int.Parse(Environment.GetEnvironmentVariable("RABBITMQ_PORT") ?? "5672"),
 	UserName = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest",
 	Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest",
+
 };
 
-Console.WriteLine($"HOST: {factory.HostName}");
-Console.WriteLine($"PORT: {factory.Port}");
-Console.WriteLine($"USERNAME: {factory.UserName}");
-Console.WriteLine($"PASSWORD: {factory.Password}");
+//factory.Uri = new Uri($"amqp://guest:guest@rabbitmq:5672");
 
-factory.ClientProvidedName = " [*] Rabbit Test Consumer";
-
+factory.ClientProvidedName = "Rabbit Test Consumer";
 var connection = factory.CreateConnection();
 var channel = connection.CreateModel();
 
@@ -46,7 +43,7 @@ consumer.Received += (sender, args) =>
 channel.BasicConsume(queueName, false, consumer);
 
 Console.WriteLine(" [*] Waiting for messages. Press [enter] to quit.");
-//Console.ReadLine();
+Thread.Sleep(Timeout.Infinite);
 
-//channel.Close();
-//connection.Close();
+channel.Close();
+connection.Close();
