@@ -10,8 +10,10 @@ import 'providers/meal_provider.dart';
 import 'providers/recommendation_provider.dart';
 import 'providers/tag_provider.dart';
 import 'providers/users_meal_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => GoalProvider()),

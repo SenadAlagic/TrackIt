@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 
 import '../models/Meal/meal.dart';
 
@@ -12,8 +13,7 @@ class UsersMealsProvider with ChangeNotifier {
   final _storage = const FlutterSecureStorage();
 
   UsersMealsProvider() {
-    _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7296/");
+    _baseUrl = dotenv.dotenv.env["baseUrl"];
 
     if (_baseUrl!.endsWith("/") == false) {
       _baseUrl = "$_baseUrl/";
