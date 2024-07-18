@@ -18,6 +18,8 @@ class ManageGoalsScreen extends StatefulWidget {
 }
 
 class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
+  final GlobalKey<PaginationWidgetState> _paginationKey =
+      GlobalKey<PaginationWidgetState>();
   late GoalProvider _goalProvider;
   SearchResult<Goal>? goals;
   bool isLoading = true;
@@ -44,6 +46,23 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
     }
   }
 
+  void onGoalAdded(Goal goal) {
+    setState(() {
+      goals!.result.add(goal);
+      goals!.meta.count += 1;
+    });
+  }
+
+  void onGoalUpdated(Goal updatedGoal) {
+    var updatedGoals = goals;
+    var indexOf = updatedGoals!.result
+        .indexWhere((Goal goal) => goal.goalId == updatedGoal.goalId);
+    updatedGoals.result[indexOf] = updatedGoal;
+    setState(() {
+      goals = updatedGoals;
+    });
+  }
+
   void onResultFetched(SearchResult<dynamic> result) {
     setState(() {
       goals = result as SearchResult<Goal>;
@@ -60,37 +79,34 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
   }
 
   Widget _buildScreen() {
-    if (goals?.result.isNotEmpty ?? false) {
-      return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            SingleChildScrollView(
-                child: IntrinsicHeight(
-                    child: Column(
-              children:
-                  goals!.result.map((goal) => _drawGoalCard(goal)).toList(),
-            ))),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () => {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const GoalDetailsScreen()))
-                  },
-                  child: const Card(
-                    child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text("Add a new goal")),
-                  ),
-                )
-              ],
-            ),
-            PaginationWidget(goals!, _goalProvider, onResultFetched, 5)
-          ]));
-    } else {
-      return const CircularProgressIndicator();
-    }
+    return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(children: [
+          SingleChildScrollView(
+              child: IntrinsicHeight(
+                  child: Column(
+            children: goals!.result.map((goal) => _drawGoalCard(goal)).toList(),
+          ))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          GoalDetailsScreen(onItemAdded: onGoalAdded)))
+                },
+                child: const Card(
+                  child: Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Text("Add a new goal")),
+                ),
+              )
+            ],
+          ),
+          PaginationWidget(
+              key: _paginationKey, goals!, _goalProvider, onResultFetched, 5)
+        ]));
   }
 
   Widget _drawGoalCard(Goal goal) {
@@ -116,7 +132,8 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
         InkWell(
             onTap: () => {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => GoalDetailsScreen(goal: goal)))
+                      builder: (context) => GoalDetailsScreen(
+                          goal: goal, onItemUpdated: onGoalUpdated)))
                 },
             child: const Icon(Icons.create_outlined)),
         InkWell(
@@ -126,6 +143,9 @@ class _ManageGoalsScreenState extends State<ManageGoalsScreen> {
                 goals!.result.remove(goal);
                 goals!.meta.count -= 1;
               });
+              if (goals!.result.isEmpty) {
+                _paginationKey.currentState?.handleGoBack();
+              }
             },
             child: const Icon(Icons.delete_outline)),
         const SizedBox(

@@ -56,6 +56,24 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
     }
   }
 
+  void onIngredientAdded(Ingredient ingredient) {
+    setState(() {
+      ingredients!.result.add(ingredient);
+      ingredients!.meta.count += 1;
+    });
+  }
+
+  void onIngredientUpdated(Ingredient updatedIngredient) {
+    var updatedIngredients = ingredients;
+    var indexOf = updatedIngredients!.result.indexWhere(
+        (Ingredient ingredient) =>
+            ingredient.ingredientId == updatedIngredient.ingredientId);
+    updatedIngredients.result[indexOf] = updatedIngredient;
+    setState(() {
+      ingredients = updatedIngredients;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
@@ -65,39 +83,45 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
   }
 
   Widget _buildScreen() {
-    if (ingredients?.result.isNotEmpty ?? false) {
-      return Padding(
-          padding: const EdgeInsets.only(left: 16.0, bottom: 16.0, right: 16.0),
-          child: Column(children: [
-            SingleChildScrollView(
-                child: IntrinsicHeight(
-                    child: Column(
-              children: [
-                _drawSearchField(),
-                ...ingredients!.result
-                    .map((ingredient) => _drawIngredientCard(ingredient))
-              ],
-            ))),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () => {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const IngredientDetailsScreen()))
-                  },
-                  child: const Card(
-                    child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text("Add a new ingredient")),
-                  ),
-                )
-              ],
-            ),
-          ]));
-    } else {
-      return const CircularProgressIndicator();
-    }
+    return Padding(
+        padding: const EdgeInsets.only(left: 16.0, bottom: 16.0, right: 16.0),
+        child: Column(children: [
+          SingleChildScrollView(
+              child: IntrinsicHeight(
+                  child: Column(
+            children: [
+              _drawSearchField(),
+              ingredients!.meta.count == 0
+                  ? const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        "No items found",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    )
+                  : Container(),
+              ...ingredients!.result
+                  .map((ingredient) => _drawIngredientCard(ingredient))
+            ],
+          ))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => IngredientDetailsScreen(
+                          onItemAdded: onIngredientAdded)))
+                },
+                child: const Card(
+                  child: Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Text("Add a new ingredient")),
+                ),
+              )
+            ],
+          ),
+        ]));
   }
 
   Widget _drawIngredientCard(Ingredient ingredient) {
@@ -123,8 +147,10 @@ class _ManageIngredientsScreenState extends State<ManageIngredientsScreen> {
         InkWell(
             onTap: () => {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          IngredientDetailsScreen(ingredient: ingredient)))
+                      builder: (context) => IngredientDetailsScreen(
+                            ingredient: ingredient,
+                            onItemUpdated: onIngredientUpdated,
+                          )))
                 },
             child: const Icon(Icons.create_outlined)),
         InkWell(

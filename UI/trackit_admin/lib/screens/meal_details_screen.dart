@@ -21,8 +21,10 @@ import 'master_screen.dart';
 
 class MealDetailsScreen extends StatefulWidget {
   final Meal? meal;
-
-  const MealDetailsScreen({super.key, this.meal});
+  final Function(Meal meal)? onItemAdded;
+  final Function(Meal meal)? onItemUpdated;
+  const MealDetailsScreen(
+      {super.key, this.meal, this.onItemAdded, this.onItemUpdated});
 
   @override
   State<MealDetailsScreen> createState() => _MealDetailsScreenState();
@@ -99,7 +101,8 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              FormHelpers.drawStringContainer("Meal name", "name"),
+              FormHelpers.drawStringContainer("Meal name", "name",
+                  maxLength: 50),
               const SizedBox(height: 10),
               _drawLargeContainer("Meal description"),
               const SizedBox(height: 10),
@@ -378,7 +381,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
         };
 
         try {
-          dynamic response;
+          Meal response;
           if (widget.meal == null) {
             response = await _mealProvider.insert(mealRequest);
           } else {
@@ -391,8 +394,16 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                     "quantity": element.ingredientQuantity
                   })
               .toList();
-          await _mealProvider.setIngredients(
+
+          var meal = await _mealProvider.setIngredients(
               response.mealId, jsonEncode(ingredientsArray));
+
+          if (widget.onItemAdded != null) {
+            widget.onItemAdded!(meal);
+          }
+          if (widget.onItemUpdated != null) {
+            widget.onItemUpdated!(meal);
+          }
           Navigator.of(context).pop();
         } on Exception catch (e) {
           if (context.mounted) {
@@ -400,8 +411,9 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
           }
         }
       },
-      child: const Padding(
-          padding: EdgeInsets.all(4), child: Text("Add a new meal")),
+      child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Text(widget.meal != null ? "Edit meal" : "Add a new meal")),
     );
   }
 

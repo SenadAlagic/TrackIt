@@ -16,7 +16,10 @@ import 'master_screen.dart';
 
 class GoalDetailsScreen extends StatefulWidget {
   final Goal? goal;
-  const GoalDetailsScreen({super.key, this.goal});
+  final Function(Goal goal)? onItemAdded;
+  final Function(Goal goal)? onItemUpdated;
+  const GoalDetailsScreen(
+      {super.key, this.goal, this.onItemAdded, this.onItemUpdated});
 
   @override
   State<GoalDetailsScreen> createState() => _GoalDetailsScreenState();
@@ -64,7 +67,8 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              FormHelpers.drawStringContainer("Goal name", "name"),
+              FormHelpers.drawStringContainer("Goal name", "name",
+                  maxLength: 50),
               FormHelpers.drawNumericContainer(
                   "Target protein", "targetProtein"),
               FormHelpers.drawNumericContainer(
@@ -129,7 +133,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             FormBuilderTextField(
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: "Field is required."),
-                FormBuilderValidators.maxLength(30,
+                FormBuilderValidators.maxLength(100,
                     errorText: "Field must contain less than 30 characters")
               ]),
               name: 'description',
@@ -177,10 +181,17 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
 
         try {
           if (widget.goal == null) {
-            await _goalProvider.insert(request);
+            var addedGoal = await _goalProvider.insert(request);
+            if (widget.onItemAdded != null) {
+              widget.onItemAdded!(addedGoal);
+            }
             Navigator.of(context).pop();
           } else {
-            await _goalProvider.update(widget.goal!.goalId!, request);
+            var editedGoal =
+                await _goalProvider.update(widget.goal!.goalId!, request);
+            if (widget.onItemUpdated != null) {
+              widget.onItemUpdated!(editedGoal);
+            }
             Navigator.of(context).pop();
           }
         } on Exception catch (e) {

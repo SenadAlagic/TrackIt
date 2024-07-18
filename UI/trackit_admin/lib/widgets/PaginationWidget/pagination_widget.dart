@@ -24,40 +24,40 @@ class PaginationWidgetState extends State<PaginationWidget> {
     return Row(
       children: [
         ElevatedButton(
-          onPressed: widget.result.meta.hasPrevious
-              ? () async {
-                  Map<String, dynamic> filter = {
-                    "Page": widget.result.meta.currentPage - 1,
-                    "PageSize": widget.pageSize
-                  };
-                  if (widget.filter != null) {
-                    filter.addAll(widget.filter!);
-                  }
-                  var results = await widget._provider.get(filter: filter);
-                  widget.onResultFetched(results);
-                }
-              : null,
+          onPressed: widget.result.meta.hasPrevious ? handleGoBack : null,
           child: const Icon(Icons.keyboard_arrow_left),
         ),
         ..._drawPaginationNumbers(),
         ElevatedButton(
-          onPressed: widget.result.meta.hasNext
-              ? () async {
-                  Map<String, dynamic> filter = {
-                    "Page": widget.result.meta.currentPage + 1,
-                    "PageSize": widget.pageSize
-                  };
-                  if (widget.filter != null) {
-                    filter.addAll(widget.filter!);
-                  }
-                  var results = await widget._provider.get(filter: filter);
-                  widget.onResultFetched(results);
-                }
-              : null,
+          onPressed: widget.result.meta.hasNext ? handleGoForward : null,
           child: const Icon(Icons.keyboard_arrow_right),
         )
       ],
     );
+  }
+
+  void handleGoForward() async {
+    Map<String, dynamic> filter = {
+      "Page": widget.result.meta.currentPage + 1,
+      "PageSize": widget.pageSize
+    };
+    if (widget.filter != null) {
+      filter.addAll(widget.filter!);
+    }
+    var results = await widget._provider.get(filter: filter);
+    widget.onResultFetched(results);
+  }
+
+  void handleGoBack() async {
+    Map<String, dynamic> filter = {
+      "Page": widget.result.meta.currentPage - 1,
+      "PageSize": widget.pageSize
+    };
+    if (widget.filter != null) {
+      filter.addAll(widget.filter!);
+    }
+    var results = await widget._provider.get(filter: filter);
+    widget.onResultFetched(results);
   }
 
   List<Widget> _drawPaginationNumbers() {

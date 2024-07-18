@@ -37,7 +37,7 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
 
   Future initScreen() async {
     try {
-      var result = await _tagProvider.get();
+      var result = await _tagProvider.get(filter: {'Page': 0, "PageSize": 30});
 
       setState(() {
         tags = result;
@@ -54,32 +54,26 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
   Widget build(BuildContext context) {
     return MasterScreen(
       title: "Manage tags",
-      child: isLoading ? Container() : _buildScreen(),
+      child: isLoading ? FormHelpers.drawProgressIndicator() : _buildScreen(),
     );
   }
 
   Widget _buildScreen() {
-    if (tags?.result.isNotEmpty ?? false) {
-      return Center(
-          child: Column(
-        children: [
-          Card(
-              child: SizedBox(
-                  height: 400,
-                  width: 300,
-                  child: SingleChildScrollView(
-                      child: IntrinsicHeight(
-                          child: Column(
-                    children: [
-                      ...tags!.result.map((tag) => _drawListTile(tag))
-                    ],
-                  ))))),
-          _drawNewTagButton()
-        ],
-      ));
-    } else {
-      return const CircularProgressIndicator();
-    }
+    return Center(
+        child: Column(
+      children: [
+        Card(
+            child: SizedBox(
+                height: 400,
+                width: 300,
+                child: SingleChildScrollView(
+                    child: IntrinsicHeight(
+                        child: Column(
+                  children: [...tags!.result.map((tag) => _drawListTile(tag))],
+                ))))),
+        _drawNewTagButton()
+      ],
+    ));
   }
 
   Widget _drawListTile(Tag tag) {
@@ -136,10 +130,22 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
                   "#${_selectedColor?.toRadixString(16).substring(2).toUpperCase()}";
 
               try {
-                if (tag != null) {
-                  await _tagProvider.update(tag.tagId!, request);
+                if (tag == null) {
+                  var addedTag = await _tagProvider.insert(request);
+                  setState(() {
+                    tags!.result.add(addedTag);
+                    tags!.meta.count += 1;
+                  });
                 } else {
-                  await _tagProvider.insert(request);
+                  var updatedTag =
+                      await _tagProvider.update(tag.tagId!, request);
+                  var updatedTags = tags;
+                  var indexOf = updatedTags!.result
+                      .indexWhere((Tag tag) => tag.tagId == updatedTag.tagId);
+                  updatedTags.result[indexOf] = updatedTag;
+                  setState(() {
+                    tags = updatedTags;
+                  });
                 }
               } on Exception catch (e) {
                 if (context.mounted) {
@@ -175,8 +181,9 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
         child: SizedBox(
           height: 313,
           child: Column(children: [
-            FormHelpers.drawStringContainer("Tag name", "name"),
-            FormHelpers.drawStringContainer("Tag description", "description"),
+            FormHelpers.drawStringContainer("Tag name", "name", maxLength: 50),
+            FormHelpers.drawStringContainer("Tag description", "description",
+                maxLength: 60),
             _drawDropdownMenu(),
           ]),
         ));

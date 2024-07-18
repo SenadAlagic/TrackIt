@@ -15,7 +15,10 @@ import 'master_screen.dart';
 
 class ActivityLevelDetailsScreen extends StatefulWidget {
   final ActivityLevel? activityLevel;
-  const ActivityLevelDetailsScreen({super.key, this.activityLevel});
+  final Function(ActivityLevel activityLevel)? onItemAdded;
+  final Function(ActivityLevel activityLevel)? onItemUpdated;
+  const ActivityLevelDetailsScreen(
+      {super.key, this.activityLevel, this.onItemAdded, this.onItemUpdated});
 
   @override
   State<ActivityLevelDetailsScreen> createState() =>
@@ -63,7 +66,8 @@ class _ActivityLevelDetailsScreenState
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              FormHelpers.drawStringContainer("Activity level name", "name"),
+              FormHelpers.drawStringContainer("Activity level name", "name",
+                  maxLength: 50),
               FormHelpers.drawNumericContainer(
                   "Activity level multiplier", "multiplier"),
             ]),
@@ -111,11 +115,18 @@ class _ActivityLevelDetailsScreenState
 
         try {
           if (widget.activityLevel == null) {
-            await _activityLevelProvider.insert(request);
+            var addedActivityLevel =
+                await _activityLevelProvider.insert(request);
+            if (widget.onItemAdded != null) {
+              widget.onItemAdded!(addedActivityLevel);
+            }
             Navigator.of(context).pop();
           } else {
-            await _activityLevelProvider.update(
+            var updatedActivityLevel = await _activityLevelProvider.update(
                 widget.activityLevel!.activityLevelId!, request);
+            if (widget.onItemUpdated != null) {
+              widget.onItemUpdated!(updatedActivityLevel);
+            }
             Navigator.of(context).pop();
           }
         } on Exception catch (e) {

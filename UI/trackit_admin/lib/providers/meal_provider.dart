@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../models/Meal/meal.dart';
 import 'package:http/http.dart' as http;
 import 'base_provider.dart';
@@ -10,7 +12,7 @@ class MealProvider extends BaseProvider<Meal> {
     return Meal.fromJson(data);
   }
 
-  Future<void> setIngredients(mealId, ingredientsArray) async {
+  Future<Meal> setIngredients(mealId, ingredientsArray) async {
     var baseUrl = getBaseUrl();
     var url = "${baseUrl}setIngredients/$mealId";
 
@@ -19,7 +21,11 @@ class MealProvider extends BaseProvider<Meal> {
     var response =
         await http.put(uri, headers: headers, body: ingredientsArray);
 
-    if (!isValidResponse(response)) {
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      var result = Meal.fromJson(data);
+      return result;
+    } else {
       throw Exception("Unknown error in a PUT request");
     }
   }

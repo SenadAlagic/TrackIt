@@ -15,7 +15,10 @@ import 'master_screen.dart';
 
 class IngredientDetailsScreen extends StatefulWidget {
   final Ingredient? ingredient;
-  const IngredientDetailsScreen({super.key, this.ingredient});
+  final Function(Ingredient ingredient)? onItemAdded;
+  final Function(Ingredient ingredient)? onItemUpdated;
+  const IngredientDetailsScreen(
+      {super.key, this.ingredient, this.onItemAdded, this.onItemUpdated});
 
   @override
   State<IngredientDetailsScreen> createState() =>
@@ -65,7 +68,8 @@ class _IngredientDetailsScreenState extends State<IngredientDetailsScreen> {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              FormHelpers.drawStringContainer("Ingredient name", "name"),
+              FormHelpers.drawStringContainer("Ingredient name", "name",
+                  maxLength: 50),
               FormHelpers.drawNumericContainer("Protein", "protein"),
               FormHelpers.drawNumericContainer("Calories", "calories"),
               FormHelpers.drawNumericContainer("Fat", "fat"),
@@ -155,11 +159,17 @@ class _IngredientDetailsScreenState extends State<IngredientDetailsScreen> {
 
         try {
           if (widget.ingredient == null) {
-            await _ingredientProvider.insert(request);
+            var addedIngredient = await _ingredientProvider.insert(request);
+            if (widget.onItemAdded != null) {
+              widget.onItemAdded!(addedIngredient);
+            }
             Navigator.of(context).pop();
           } else {
-            await _ingredientProvider.update(
+            var updatedIngredient = await _ingredientProvider.update(
                 widget.ingredient!.ingredientId!, request);
+            if (widget.onItemUpdated != null) {
+              widget.onItemUpdated!(updatedIngredient);
+            }
             Navigator.of(context).pop();
           }
         } on Exception catch (e) {

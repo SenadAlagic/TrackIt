@@ -20,6 +20,8 @@ class ManageActivityLevelsScreen extends StatefulWidget {
 
 class _ManageActivityLevelsScreenState
     extends State<ManageActivityLevelsScreen> {
+  final GlobalKey<PaginationWidgetState> _paginationKey =
+      GlobalKey<PaginationWidgetState>();
   late ActivityLevelProvider _activityLevelProvider;
   SearchResult<ActivityLevel>? activityLevels;
   bool isLoading = true;
@@ -46,6 +48,25 @@ class _ManageActivityLevelsScreenState
     }
   }
 
+  void onActivityLevelAdded(ActivityLevel activityLevel) {
+    setState(() {
+      activityLevels!.result.add(activityLevel);
+      activityLevels!.meta.count += 1;
+    });
+  }
+
+  void onActivityLevelUpdated(ActivityLevel updatedActivityLevel) {
+    var updatedActivityLevels = activityLevels;
+    var indexOf = updatedActivityLevels!.result.indexWhere(
+        (ActivityLevel activityLevel) =>
+            activityLevel.activityLevelId ==
+            updatedActivityLevel.activityLevelId);
+    updatedActivityLevels.result[indexOf] = updatedActivityLevel;
+    setState(() {
+      activityLevels = updatedActivityLevels;
+    });
+  }
+
   void onResultFetched(SearchResult<dynamic> result) {
     setState(() {
       activityLevels = result as SearchResult<ActivityLevel>;
@@ -62,40 +83,41 @@ class _ManageActivityLevelsScreenState
   }
 
   Widget _buildScreen() {
-    if (activityLevels?.result.isNotEmpty ?? false) {
-      return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            SingleChildScrollView(
-                child: IntrinsicHeight(
-                    child: Column(
-              children: activityLevels!.result
-                  .map((goal) => _drawActivityLevelCard(goal))
-                  .toList(),
-            ))),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () => {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            const ActivityLevelDetailsScreen()))
-                  },
-                  child: const Card(
-                    child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text("Add a new activity level")),
-                  ),
-                )
-              ],
-            ),
-            PaginationWidget(
-                activityLevels!, _activityLevelProvider, onResultFetched, 5)
-          ]));
-    } else {
-      return const CircularProgressIndicator();
-    }
+    return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(children: [
+          SingleChildScrollView(
+              child: IntrinsicHeight(
+                  child: Column(
+            children: activityLevels!.result
+                .map((goal) => _drawActivityLevelCard(goal))
+                .toList(),
+          ))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ActivityLevelDetailsScreen(
+                            onItemAdded: onActivityLevelAdded,
+                          )))
+                },
+                child: const Card(
+                  child: Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Text("Add a new activity level")),
+                ),
+              )
+            ],
+          ),
+          PaginationWidget(
+              key: _paginationKey,
+              activityLevels!,
+              _activityLevelProvider,
+              onResultFetched,
+              5)
+        ]));
   }
 
   Widget _drawActivityLevelCard(ActivityLevel activityLevel) {
@@ -122,8 +144,8 @@ class _ManageActivityLevelsScreenState
             onTap: () => {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ActivityLevelDetailsScreen(
-                            activityLevel: activityLevel,
-                          )))
+                          activityLevel: activityLevel,
+                          onItemUpdated: onActivityLevelUpdated)))
                 },
             child: const Icon(Icons.create_outlined)),
         InkWell(
@@ -133,6 +155,9 @@ class _ManageActivityLevelsScreenState
                 activityLevels!.result.remove(activityLevel);
                 activityLevels!.meta.count -= 1;
               });
+              if (activityLevels!.result.isEmpty) {
+                _paginationKey.currentState?.handleGoBack();
+              }
             },
             child: const Icon(Icons.delete_outline)),
         const SizedBox(

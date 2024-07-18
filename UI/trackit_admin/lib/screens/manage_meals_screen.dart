@@ -18,6 +18,8 @@ class ManageMealsScreen extends StatefulWidget {
 }
 
 class _ManageMealsScreenState extends State<ManageMealsScreen> {
+  final GlobalKey<PaginationWidgetState> _paginationKey =
+      GlobalKey<PaginationWidgetState>();
   late MealProvider _mealProvider;
   SearchResult<Meal>? meals;
   bool isLoading = true;
@@ -44,6 +46,23 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
     }
   }
 
+  void onMealAdded(Meal meal) {
+    setState(() {
+      meals!.result.add(meal);
+      meals!.meta.count += 1;
+    });
+  }
+
+  void onMealUpdated(Meal updatedMeal) {
+    var updatedMeals = meals;
+    var indexOf = updatedMeals!.result
+        .indexWhere((Meal meal) => meal.mealId == updatedMeal.mealId);
+    updatedMeals.result[indexOf] = updatedMeal;
+    setState(() {
+      meals = updatedMeals;
+    });
+  }
+
   void onResultFetched(SearchResult<dynamic> result) {
     setState(() {
       meals = result as SearchResult<Meal>;
@@ -60,43 +79,40 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
   }
 
   Widget _buildScreen() {
-    if (meals?.result.isNotEmpty ?? false) {
-      return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            SingleChildScrollView(
-                child: IntrinsicHeight(
-                    child: Column(
-              children:
-                  meals!.result.map((meal) => _drawMealCard(meal)).toList(),
-            ))),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () => {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const MealDetailsScreen()))
-                  },
-                  child: const Card(
-                    child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text("Add a new meal")),
-                  ),
-                )
-              ],
-            ),
-            PaginationWidget(
-              meals!,
-              _mealProvider,
-              onResultFetched,
-              5,
-              filter: const {"IsIngredientsIncluded": true},
-            )
-          ]));
-    } else {
-      return const CircularProgressIndicator();
-    }
+    return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(children: [
+          SingleChildScrollView(
+              child: IntrinsicHeight(
+                  child: Column(
+            children: meals!.result.map((meal) => _drawMealCard(meal)).toList(),
+          ))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          MealDetailsScreen(onItemAdded: onMealAdded)))
+                },
+                child: const Card(
+                  child: Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Text("Add a new meal")),
+                ),
+              )
+            ],
+          ),
+          PaginationWidget(
+            key: _paginationKey,
+            meals!,
+            _mealProvider,
+            onResultFetched,
+            5,
+            filter: const {"IsIngredientsIncluded": true},
+          )
+        ]));
   }
 
   Widget _drawMealCard(Meal meal) {
@@ -128,7 +144,8 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
         InkWell(
             onTap: () => {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => MealDetailsScreen(meal: meal)))
+                      builder: (context) => MealDetailsScreen(
+                          meal: meal, onItemUpdated: onMealUpdated)))
                 },
             child: const Icon(Icons.create_outlined)),
         InkWell(
@@ -138,6 +155,9 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
                 meals!.result.remove(meal);
                 meals!.meta.count -= 1;
               });
+              if (meals!.result.isEmpty) {
+                _paginationKey.currentState?.handleGoBack();
+              }
             },
             child: const Icon(Icons.delete_outline)),
         const SizedBox(
