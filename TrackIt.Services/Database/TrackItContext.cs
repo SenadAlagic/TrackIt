@@ -34,6 +34,8 @@ public partial class TrackItContext : DbContext
 
 	public virtual DbSet<RecommendedResult> RecommendedResults { get; set; }
 
+	public virtual DbSet<Subscription> Subscriptions { get; set; }
+
 	public virtual DbSet<Tag> Tags { get; set; }
 
 	public virtual DbSet<TagsMeal> TagsMeals { get; set; }
@@ -157,6 +159,21 @@ public partial class TrackItContext : DbContext
 			entity.Property(e => e.Name).HasMaxLength(50);
 		});
 
+		modelBuilder.Entity<Subscription>(entity =>
+		{
+			entity.Property(e => e.SubscriptionId)
+				.ValueGeneratedNever()
+				.HasColumnName("SubscriptionID");
+			entity.Property(e => e.GeneralUserId).HasColumnName("GeneralUserID");
+			entity.Property(e => e.PurchaseDate).HasColumnType("date");
+
+			entity.HasOne(d => d.GeneralUser).WithMany(p => p.Subscriptions)
+				.HasForeignKey(d => d.GeneralUserId)
+				.OnDelete(DeleteBehavior.ClientSetNull)
+				.HasConstraintName("FK_Subscriptions_GeneralUsers");
+		});
+
+
 		modelBuilder.Entity<Tag>(entity =>
 		{
 			entity.HasKey(e => e.TagId).HasName("PK_Table_1");
@@ -257,6 +274,7 @@ public partial class TrackItContext : DbContext
 		modelBuilder.Entity<MealsIngredient>().SeedData();
 		modelBuilder.Entity<TagsMeal>().SeedData();
 		modelBuilder.Entity<UsersMeal>().SeedData();
+		modelBuilder.Entity<Subscription>().SeedData();
 
 		modelBuilder.Entity<User>().SeedData();
 		modelBuilder.Entity<Admin>().SeedData();

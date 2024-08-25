@@ -58,6 +58,10 @@ namespace TrackIt.Services
 
 			CreateMap<Database.Preference, Preference>();
 
+			CreateMap<Database.Subscription, Subscription>();
+			CreateMap<Model.Requests.SubscriptionInsertRequest, Database.Subscription>();
+			CreateMap<Model.Requests.SubscriptionUpdateRequest, Database.Subscription>();
+
 			CreateMap<Database.Tag, Tag>();
 			CreateMap<Model.Requests.TagInsertRequest, Database.Tag>();
 			CreateMap<Model.Requests.TagUpdateRequest, Database.Tag>();//.ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;

@@ -8,6 +8,7 @@ import 'providers/goal_provider.dart';
 import 'providers/ingredient_provider.dart';
 import 'providers/meal_provider.dart';
 import 'providers/recommendation_provider.dart';
+import 'providers/subscription_provider.dart';
 import 'providers/tag_provider.dart';
 import 'providers/users_meal_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,6 +26,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => AdminProvider()),
       ChangeNotifierProvider(create: (_) => RecommendationProvider()),
       ChangeNotifierProvider(create: (_) => UsersMealsProvider()),
+      ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
     ],
     child: const HomePage(),
   ));

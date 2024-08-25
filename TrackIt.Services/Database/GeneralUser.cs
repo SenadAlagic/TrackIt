@@ -28,6 +28,8 @@ public partial class GeneralUser
 
 	public virtual Goal? Goal { get; set; }
 
+	public virtual ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
+
 	public virtual User User { get; set; } = null!;
 
 	public virtual ICollection<UsersMeal> UsersMeals { get; set; } = new List<UsersMeal>();

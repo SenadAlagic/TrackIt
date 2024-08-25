@@ -26,6 +26,36 @@ namespace TrackIt.Services.Database.Seed
 					Username = "senad",
 					Password = "xLZ3Aq2uZqTwecvjM20Wo1Qkx6k=",
 					Salt = "bBJ2aGPhyzr+SUEggHwwEA=="
+				},
+				new User
+				{
+					UserId = 3,
+					FirstName = "Dummy",
+					LastName = "Dummy",
+					Email = "dummy1@gmail.com",
+					Username = "dummy2",
+					Password = "xLZ3Aq2uZqTwecvjM20Wo1Qkx6k=",
+					Salt = "bBJ2aGPhyzr+SUEggHwwEA=="
+				},
+				new User
+				{
+					UserId = 4,
+					FirstName = "Dummy",
+					LastName = "Dummy",
+					Email = "dummy2@gmail.com",
+					Username = "dummy2",
+					Password = "xLZ3Aq2uZqTwecvjM20Wo1Qkx6k=",
+					Salt = "bBJ2aGPhyzr+SUEggHwwEA=="
+				},
+				new User
+				{
+					UserId = 5,
+					FirstName = "Dummy",
+					LastName = "Dummy",
+					Email = "dummy3@gmail.com",
+					Username = "dummy3",
+					Password = "xLZ3Aq2uZqTwecvjM20Wo1Qkx6k=",
+					Salt = "bBJ2aGPhyzr+SUEggHwwEA=="
 				}
 			);
 		}

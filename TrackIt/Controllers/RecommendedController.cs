@@ -14,7 +14,6 @@ namespace TrackIt.Controllers
 		public RecommendedResultController(ILogger<BaseController<RecommendedResult, RecommendedResultSearchObject>> logger, IRecommendedResultService service) : base(logger, service)
 		{
 			_service = service;
-
 		}
 
 		[Authorize(Roles = "admin")]

@@ -1,29 +1,28 @@
 import 'dart:convert';
 
-import '../models/Meal/meal.dart';
+import 'package:trackit_admin/models/Subscription/subscription.dart';
+
 import 'package:http/http.dart' as http;
 import 'base_provider.dart';
 
-class MealProvider extends BaseProvider<Meal> {
-  MealProvider() : super("Meal");
+class SubscriptionProvider extends BaseProvider<Subscription> {
+  SubscriptionProvider() : super("Subscription");
 
   @override
-  Meal fromJson(data) {
-    return Meal.fromJson(data);
+  Subscription fromJson(data) {
+    return Subscription.fromJson(data);
   }
 
-  Future<Meal> setIngredients(mealId, ingredientsArray) async {
-    var url = "${getBaseUrl()}setIngredients/$mealId";
+  Future<Map<String, int>> getGroupedByMonth() async {
+    var url = "${getBaseUrl()}Subscription/getGroupedByMonth";
 
     var uri = Uri.parse(url);
     var headers = await createHeaders();
-    var response =
-        await http.put(uri, headers: headers, body: ingredientsArray);
+    var response = await http.get(uri, headers: headers);
 
     if (isValidResponse(response)) {
-      var data = jsonDecode(response.body);
-      var result = Meal.fromJson(data);
-      return result;
+      Map<String, dynamic> data = jsonDecode(response.body);
+      return data.cast<String, int>();
     } else {
       throw Exception("Unknown error in a PUT request");
     }
