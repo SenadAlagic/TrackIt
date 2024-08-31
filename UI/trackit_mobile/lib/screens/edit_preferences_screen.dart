@@ -105,7 +105,7 @@ class _EditPreferencesScreenState extends State<EditPreferencesScreen> {
   Widget _drawSubmitButton() {
     return ElevatedButton(
         style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.white)),
+            backgroundColor: WidgetStatePropertyAll(Colors.white)),
         onPressed: () async {
           var user = await _generalUserProvider.addPreferences(
               Authorization.generalUserId!, selectedPreferences);

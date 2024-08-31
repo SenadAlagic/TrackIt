@@ -51,7 +51,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _drawCalorieProgressIndicator() {
     var user = UserInfo.user!;
-    var weightDiff = user.weight! - user.targetWeight!;
+    var lastLoggedWeight = UserInfo.lastLoggedWeight;
+    var weightDiff = lastLoggedWeight == null
+        ? user.weight! - user.targetWeight!
+        : lastLoggedWeight - user.targetWeight!;
+
     var toDisplay = weightDiff > 0
         ? "${weightDiff.abs()}kg gained"
         : "${weightDiff.abs()}kg lost";

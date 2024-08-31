@@ -96,7 +96,7 @@ class _MealsListScreenState extends State<MealsListScreen> {
         padding: const EdgeInsets.only(bottom: 8),
         child: ElevatedButton(
           style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.white)),
+              backgroundColor: WidgetStatePropertyAll(Colors.white)),
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
               builder: ((context) => MealDetailsScreen(meal: meal)))),
           child: Row(children: [

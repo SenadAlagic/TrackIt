@@ -94,12 +94,12 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
                 if (selectedIngredients.isEmpty) {
                   return "Ingredient list cannot be empty";
                 }
-                for (var element in selectedIngredients) {
-                  if (element.ingredientQuantity! <= 0) {
-                    return "Quantity must be larger than 0";
-                  }
-                  return null;
-                }
+                // for (var element in selectedIngredients) {
+                //   if (element.ingredientQuantity! <= 0) {
+                //     return "Quantity must be larger than 0";
+                //   }
+                //   return null;
+                // }
                 return null;
               },
               builder: (field) {
@@ -111,7 +111,7 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
                         controller: scrollController,
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
-                            width: 450,
+                            width: 350,
                             child: InputDecorator(
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
@@ -121,16 +121,16 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
                                         color: Colors.white),
                                     constraints: const BoxConstraints(
                                         maxHeight: 400,
-                                        minWidth: 450,
+                                        minWidth: 350,
                                         maxWidth: 450),
                                     child: SingleChildScrollView(
                                       child: DataTable(columns: [
-                                        DataColumn(
-                                            label: ConstrainedBox(
-                                                constraints:
-                                                    const BoxConstraints(
-                                                        maxWidth: 100),
-                                                child: const Text('Quantity'))),
+                                        // DataColumn(
+                                        //     label: ConstrainedBox(
+                                        //         constraints:
+                                        //             const BoxConstraints(
+                                        //                 maxWidth: 100),
+                                        //         child: const Text('Quantity'))),
                                         DataColumn(
                                             label: ConstrainedBox(
                                                 constraints:
@@ -147,27 +147,27 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
                                         ...selectedIngredients.map(
                                             (MealIngredient mealIngredient) =>
                                                 DataRow(cells: [
-                                                  DataCell(TextFormField(
-                                                    initialValue: mealIngredient
-                                                        .ingredientQuantity
-                                                        .toString(),
-                                                    onChanged: (value) {
-                                                      var index = selectedIngredients
-                                                          .indexWhere((element) =>
-                                                              element
-                                                                  .ingredientId ==
-                                                              mealIngredient
-                                                                  .ingredientId);
-                                                      if (index != -1) {
-                                                        selectedIngredients[
-                                                                    index]
-                                                                .ingredientQuantity =
-                                                            int.tryParse(
-                                                                    value) ??
-                                                                0;
-                                                      }
-                                                    },
-                                                  )),
+                                                  // DataCell(TextFormField(
+                                                  //   initialValue: mealIngredient
+                                                  //       .ingredientQuantity
+                                                  //       .toString(),
+                                                  //   onChanged: (value) {
+                                                  //     var index = selectedIngredients
+                                                  //         .indexWhere((element) =>
+                                                  //             element
+                                                  //                 .ingredientId ==
+                                                  //             mealIngredient
+                                                  //                 .ingredientId);
+                                                  //     if (index != -1) {
+                                                  //       selectedIngredients[
+                                                  //                   index]
+                                                  //               .ingredientQuantity =
+                                                  //           int.tryParse(
+                                                  //                   value) ??
+                                                  //               0;
+                                                  //     }
+                                                  //   },
+                                                  // )),
                                                   DataCell(Text(mealIngredient
                                                           .ingredient?.name ??
                                                       "")),
@@ -190,10 +190,10 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
                                                   ),
                                                 ])),
                                         DataRow(cells: [
-                                          const DataCell(TextField(
-                                            decoration: InputDecoration(
-                                                hintText: "Quantity"),
-                                          )),
+                                          // const DataCell(TextField(
+                                          //   decoration: InputDecoration(
+                                          //       hintText: "Quantity"),
+                                          // )),
                                           DataCell(Autocomplete<String>(
                                             optionsBuilder:
                                                 (textEditingValue) =>
@@ -324,7 +324,7 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
   Widget _drawSubmitButton() {
     return ElevatedButton(
       style: const ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(Colors.white)),
+          backgroundColor: WidgetStatePropertyAll(Colors.white)),
       onPressed: () async {
         _formKey.currentState?.saveAndValidate();
         if (!_formKey.currentState!.isValid) return;
@@ -341,8 +341,10 @@ class _MealSearchScreenState extends State<MealSearchScreen> {
 
           var resultingMeals = await _mealProvider.get(filter: {
             "IngredientIds": ingredientIds,
-            "Preferences": preferences
+            "Preferences": preferences,
+            "IsIngredientsIncluded": true,
           });
+
           Navigator.of(context).push(MaterialPageRoute(
               builder: (builder) =>
                   MealsListScreen(meals: resultingMeals.result)));

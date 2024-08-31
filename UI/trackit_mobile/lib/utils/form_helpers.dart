@@ -50,6 +50,8 @@ class FormHelpers {
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: "Field is required"),
                 FormBuilderValidators.numeric(),
+                FormBuilderValidators.notZeroNumber(),
+                FormBuilderValidators.positiveNumber(),
               ]),
               name: propertyName,
               decoration: InputDecoration(

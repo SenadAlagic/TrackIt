@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
             fontFamily: "Calibri",
             useMaterial3: false,
             scrollbarTheme: ScrollbarThemeData(
-                thumbVisibility: MaterialStateProperty.all<bool>(true))),
+                thumbVisibility: WidgetStateProperty.all<bool>(true))),
         home: const LoginScreen());
   }
 }

@@ -158,45 +158,41 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
-      ...meals
-          .map((UserMeal userMeal) => Card(
-                child: Row(children: [
-                  Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 16.0),
-                      child: ImageHelpers.getImage(userMeal.meal!.image,
-                          height: 100, width: 80)),
-                  Expanded(
-                      child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+      ...meals.map((UserMeal userMeal) => Card(
+            child: Row(children: [
+              Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16.0),
+                  child: ImageHelpers.getImage(userMeal.meal!.image,
+                      height: 100, width: 80)),
+              Expanded(
+                  child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            userMeal.meal!.name ?? "",
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Text("${userMeal.servings} serving(s)"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                userMeal.meal!.name ?? "",
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              Text("${userMeal.servings} serving(s)"),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                            "protein ${userMeal.meal!.protein}g"),
-                                        Text("fat ${userMeal.meal!.fat}g"),
-                                        Text("carbs ${userMeal.meal!.carbs}g"),
-                                      ])
-                                ],
-                              ),
-                              Text("${userMeal.meal!.calories} kcal"),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text("protein ${userMeal.meal!.protein}g"),
+                                    Text("fat ${userMeal.meal!.fat}g"),
+                                    Text("carbs ${userMeal.meal!.carbs}g"),
+                                  ])
                             ],
-                          ))),
-                ]),
-              ))
-          .toList()
+                          ),
+                          Text("${userMeal.meal!.calories} kcal"),
+                        ],
+                      ))),
+            ]),
+          ))
     ]);
   }
 
@@ -209,12 +205,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   key: _formKey,
                   initialValue: _initialValue,
                   child: SizedBox(
-                    height: 133,
+                    height: 147,
                     child: Column(children: [
                       FormHelpers.drawNumericContainer(
                           "Your current weight", "weight"),
                       const Text(
-                        "Note: this would be something that sould appear once a week but for testing purposes is shown every time the user logs in",
+                        "Note: this would be something that sould appear once a week but for testing purposes is shown on a much shorter timeframe. Feel free to \"cancel\" out",
                         style: TextStyle(fontSize: 12),
                       )
                     ]),
@@ -229,7 +225,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         "currentWeight": _formKey.currentState!.value['weight'],
                         "weightComment": ""
                       };
-                      UserInfo.lastLoggedWeight = request['currentWeight'];
+
+                      UserInfo.lastLoggedWeight =
+                          int.tryParse(request['currentWeight']);
 
                       try {
                         _generalUserProvider.update(

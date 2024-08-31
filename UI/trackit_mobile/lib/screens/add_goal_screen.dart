@@ -71,7 +71,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                ...goals!.result.map((goal) => _drawGoalCard(goal)).toList()
+                ...goals!.result.map((goal) => _drawGoalCard(goal))
               ],
             ))),
           ]));
@@ -85,7 +85,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         padding: const EdgeInsets.only(bottom: 10),
         child: ElevatedButton(
           style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.white)),
+              backgroundColor: WidgetStatePropertyAll(Colors.white)),
           onPressed: () async {
             if (widget.isEdit ?? false) {
               await _generalUserProvider.selectGoal(

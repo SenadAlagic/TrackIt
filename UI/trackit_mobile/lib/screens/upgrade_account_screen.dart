@@ -46,7 +46,7 @@ class _UpgradeAccountScreenState extends State<UpgradeAccountScreen> {
           ),
           ElevatedButton(
               style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.white)),
+                  backgroundColor: WidgetStatePropertyAll(Colors.white)),
               onPressed: !isDisabled
                   ? () async {
                       Navigator.of(context).push(MaterialPageRoute(

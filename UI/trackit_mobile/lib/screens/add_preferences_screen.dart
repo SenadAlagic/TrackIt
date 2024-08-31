@@ -110,7 +110,7 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
   Widget _drawSubmitButton() {
     return ElevatedButton(
         style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.white)),
+            backgroundColor: WidgetStatePropertyAll(Colors.white)),
         onPressed: () async {
           var user = userData.user!;
           var requestObject = {

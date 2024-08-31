@@ -32,14 +32,14 @@ class _RecommendMealScreenState extends State<RecommendMealScreen> {
 
   Future initScreen() async {
     try {
-      if (UserInfo.lastLoggedMealId == null ||
-          (UserInfo.user?.isUserPremium == false)) {
+      if (UserInfo.lastLoggedMealId == null) {
+        setState(() {
+          isLoading = false;
+        });
         return;
       }
-
       var result =
           await _recommendationProvider.get(UserInfo.lastLoggedMealId!);
-
       setState(() {
         recommendedMeal = result;
         isLoading = false;
@@ -111,7 +111,7 @@ class _RecommendMealScreenState extends State<RecommendMealScreen> {
         padding: const EdgeInsets.all(8),
         child: ElevatedButton(
           style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.white)),
+              backgroundColor: WidgetStatePropertyAll(Colors.white)),
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
               builder: ((context) => MealDetailsScreen(meal: meal)))),
           child: Row(children: [

@@ -70,10 +70,8 @@ class _AddActivityLevelScreenState extends State<AddActivityLevelScreen> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                ...activityLevels!.result
-                    .map((activityLevel) =>
-                        _drawActivityLevelCard(activityLevel))
-                    .toList()
+                ...activityLevels!.result.map(
+                    (activityLevel) => _drawActivityLevelCard(activityLevel))
               ],
             ))),
           ]));
@@ -87,7 +85,7 @@ class _AddActivityLevelScreenState extends State<AddActivityLevelScreen> {
         padding: const EdgeInsets.only(bottom: 10),
         child: ElevatedButton(
           style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.white)),
+              backgroundColor: WidgetStatePropertyAll(Colors.white)),
           onPressed: () async {
             if (widget.isEdit ?? false) {
               await _generalUserProvider.selectActivityLevel(
