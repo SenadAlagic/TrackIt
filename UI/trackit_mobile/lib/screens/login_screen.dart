@@ -96,10 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
             style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.white)),
             onPressed: () async {
-              // Authorization.email = _emailController.text;
-              // Authorization.password = _passwordController.text;
-              Authorization.email = "senad@gmail.com";
-              Authorization.password = "senad123";
+              Authorization.email = _emailController.text;
+              Authorization.password = _passwordController.text;
               try {
                 var loginResponse = await _authProvider.login();
                 if (loginResponse.result == 0) {
