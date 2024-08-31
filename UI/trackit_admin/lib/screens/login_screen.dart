@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor:
-                              MaterialStatePropertyAll(Colors.grey[850])),
+                              WidgetStatePropertyAll(Colors.grey[850])),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (builder) => const RegisterScreen()));

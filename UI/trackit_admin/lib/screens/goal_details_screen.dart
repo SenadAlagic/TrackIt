@@ -172,7 +172,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   Widget _drawSubmitButton() {
     return ElevatedButton(
       style: const ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(Colors.white)),
+          backgroundColor: WidgetStatePropertyAll(Colors.white)),
       onPressed: () async {
         _formKey.currentState?.saveAndValidate();
         if (!_formKey.currentState!.isValid) return;

@@ -162,7 +162,7 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
   Widget _drawNewTagButton() {
     return ElevatedButton(
       style: const ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(Colors.white)),
+          backgroundColor: WidgetStatePropertyAll(Colors.white)),
       onPressed: () async {
         _initialValue = {"name": "", "description": "", "color": ""};
         showDialog(

@@ -1,10 +1,9 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../models/Meal/meal.dart';
@@ -41,7 +40,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
   late RecommendationProvider _recommendationProvider;
   late UsersMealsProvider _usersMealsProvider;
   late SubscriptionProvider _subscriptionProvider;
-  final _chartKey = GlobalKey<SfCartesianChartState>();
 
   late List<Meal> mostPopularMeals;
   bool isLoading = true;
@@ -188,7 +186,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       padding: const EdgeInsets.only(top: 16.0),
       child: ElevatedButton(
           style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.white)),
+              backgroundColor: WidgetStatePropertyAll(Colors.white)),
           onPressed: () => exporToPdf(),
           child: const Text("Export to PDF")),
     );
@@ -215,7 +213,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       padding: const EdgeInsets.only(top: 16.0),
       child: ElevatedButton(
           style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.white)),
+              backgroundColor: WidgetStatePropertyAll(Colors.white)),
           onPressed: () async =>
               await _recommendationProvider.deleteAllRecommendation(),
           child: const Text("Delete recommender results")),
@@ -262,25 +260,88 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   Widget _drawSubscriptionGraph() {
     return Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: Column(children: [
-          const Text(
-            "Subscriptions per month",
-            style: TextStyle(fontSize: 22),
+      padding: const EdgeInsets.only(top: 20),
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 16.0),
+            child: Text(
+              "Subscriptions per month",
+              style: TextStyle(fontSize: 22),
+            ),
           ),
-          SfCartesianChart(
-            key: _chartKey,
-            backgroundColor: Colors.white,
-            primaryXAxis: CategoryAxis(),
-            primaryYAxis: NumericAxis(interval: 1),
-            series: <CartesianSeries>[
-              LineSeries<SubscriptionData, String>(
-                  dataSource: purchases,
-                  xValueMapper: (SubscriptionData sales, _) => sales.date,
-                  yValueMapper: (SubscriptionData sales, _) => sales.count)
-            ],
-          )
-        ]));
+          SizedBox(
+            height: 300,
+            width: 300,
+            child: LineChart(
+              LineChartData(
+                titlesData: titlesData1,
+                backgroundColor: Colors.white,
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: _getSubscriptionSpots(),
+                    color: Colors.blue,
+                    belowBarData: BarAreaData(
+                      show: true,
+                      color: Colors.blue.withOpacity(0.2),
+                    ),
+                  ),
+                ],
+                gridData: const FlGridData(
+                  show: true,
+                  horizontalInterval: 1,
+                ),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border.all(color: Colors.grey),
+                ),
+                minX: 0,
+                minY: 0,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  FlTitlesData get titlesData1 => FlTitlesData(
+        bottomTitles: AxisTitles(
+          sideTitles: bottomTitles,
+        ),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      );
+
+  SideTitles get bottomTitles => SideTitles(
+        showTitles: true,
+        reservedSize: 32,
+        interval: 1,
+        getTitlesWidget: bottomTitleWidgets,
+      );
+
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+    );
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 10,
+      child: Text(purchases[value.toInt()].date!, style: style),
+    );
+  }
+
+  List<FlSpot> _getSubscriptionSpots() {
+    List<FlSpot> spots = [];
+    for (int i = 0; i < purchases.length; i++) {
+      spots.add(FlSpot(i.toDouble(), purchases[i].count!.toDouble()));
+    }
+    return spots;
   }
 
   Widget _buildContainer(String hint, int number) {
