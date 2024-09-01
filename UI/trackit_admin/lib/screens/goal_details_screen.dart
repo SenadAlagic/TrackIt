@@ -41,7 +41,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       'description': widget.goal?.description,
       'image': widget.goal?.image,
       'targetProtein': widget.goal?.targetProtein.toString(),
-      'targetCalories': widget.goal?.targetCalories.toString()
+      'targetCalories': widget.goal?.targetCalories!.toInt().toString()
     };
     _base64Image = widget.goal?.image ?? "";
     _goalProvider = context.read<GoalProvider>();
@@ -70,9 +70,11 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
               FormHelpers.drawStringContainer("Goal name", "name",
                   maxLength: 50),
               FormHelpers.drawNumericContainer(
-                  "Target protein", "targetProtein"),
+                  "Target protein", "targetProtein",
+                  integer: true),
               FormHelpers.drawNumericContainer(
-                  "Target calories", "targetCalories"),
+                  "Target calories", "targetCalories",
+                  allowNegative: true),
               const SizedBox(height: 10),
               _drawLargeContainer("Goal description")
             ]),

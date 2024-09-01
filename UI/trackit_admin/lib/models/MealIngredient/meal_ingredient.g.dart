@@ -8,10 +8,10 @@ part of 'meal_ingredient.dart';
 
 MealIngredient _$MealIngredientFromJson(Map<String, dynamic> json) =>
     MealIngredient(
-      json['mealIngredientsId'] as int?,
-      json['mealId'] as int?,
-      json['ingredientId'] as int?,
-      json['ingredientQuantity'] as int?,
+      (json['mealIngredientsId'] as num?)?.toInt(),
+      (json['mealId'] as num?)?.toInt(),
+      (json['ingredientId'] as num?)?.toInt(),
+      (json['ingredientQuantity'] as num?)?.toInt(),
       json['ingredient'] == null
           ? null
           : Ingredient.fromJson(json['ingredient'] as Map<String, dynamic>),

@@ -121,6 +121,10 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
       content: _buildForm(),
       actions: [
         TextButton(
+            style: const ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.yellow),
+                textStyle: WidgetStatePropertyAll(TextStyle(
+                    color: Colors.black, backgroundColor: Colors.white))),
             onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               if (!_formKey.currentState!.isValid) return;

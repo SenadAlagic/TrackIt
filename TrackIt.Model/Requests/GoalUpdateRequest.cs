@@ -17,7 +17,7 @@ namespace TrackIt.Model.Requests
 		public double? TargetProtein { get; set; }
 
 		[Required]
-		[Range(0, 2000)]
+		[Range(-10000, 10000)]
 		public int? TargetCalories { get; set; }
 
 		public byte[]? Image { get; set; }

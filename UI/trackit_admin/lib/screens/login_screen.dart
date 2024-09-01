@@ -30,90 +30,92 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
+        hideAppBar: true,
         child: Center(
             child: Container(
-      constraints: const BoxConstraints(maxWidth: 400, maxHeight: 400),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Image.asset(
-                "assets/images/trackItLogo.png",
-                height: 200,
-                width: 200,
-              ),
-              TextField(
-                decoration: const InputDecoration(
-                    labelText: "E-mail", prefixIcon: Icon(Icons.email)),
-                controller: _emailController,
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                obscureText: true,
-                decoration: const InputDecoration(
-                    labelText: "Password", prefixIcon: Icon(Icons.password)),
-                controller: _passwordController,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+          constraints: const BoxConstraints(maxWidth: 400, maxHeight: 400),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 children: [
-                  ElevatedButton(
-                      onPressed: () async {
-                        Authorization.email = _emailController.text;
-                        Authorization.password = _passwordController.text;
-                        try {
-                          var loginResponse = await _authProvider.login();
-                          if (loginResponse.result == 0) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const HomeScreen()));
-                          } else {
-                            if (context.mounted) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                        title: const Text("Invalid login"),
-                                        content: const Text(
-                                            "Invalid login credentials."),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () =>
-                                                  {Navigator.pop(context)},
-                                              child: const Text("OK"))
-                                        ],
-                                      ));
+                  Image.asset(
+                    "assets/images/trackItLogo.png",
+                    height: 200,
+                    width: 200,
+                  ),
+                  TextField(
+                    decoration: const InputDecoration(
+                        labelText: "E-mail", prefixIcon: Icon(Icons.email)),
+                    controller: _emailController,
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                        labelText: "Password",
+                        prefixIcon: Icon(Icons.password)),
+                    controller: _passwordController,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () async {
+                            Authorization.email = _emailController.text;
+                            Authorization.password = _passwordController.text;
+                            try {
+                              var loginResponse = await _authProvider.login();
+                              if (loginResponse.result == 0) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const HomeScreen()));
+                              } else {
+                                if (context.mounted) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            title: const Text("Invalid login"),
+                                            content: const Text(
+                                                "Invalid login credentials."),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () =>
+                                                      {Navigator.pop(context)},
+                                                  child: const Text("OK"))
+                                            ],
+                                          ));
+                                }
+                              }
+                            } on Exception catch (e) {
+                              if (context.mounted) {
+                                AlertHelpers.showAlert(
+                                    context, "Error", e.toString());
+                              }
                             }
-                          }
-                        } on Exception catch (e) {
-                          if (context.mounted) {
-                            AlertHelpers.showAlert(
-                                context, "Error", e.toString());
-                          }
-                        }
-                      },
-                      child: const Text("Login")),
-                  const SizedBox(width: 30),
-                  ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStatePropertyAll(Colors.grey[850])),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (builder) => const RegisterScreen()));
-                      },
-                      child: const Text(
-                        "Register",
-                        style: TextStyle(color: Colors.yellow),
-                      )),
+                          },
+                          child: const Text("Login")),
+                      const SizedBox(width: 30),
+                      ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStatePropertyAll(Colors.grey[850])),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (builder) => const RegisterScreen()));
+                          },
+                          child: const Text(
+                            "Register",
+                            style: TextStyle(color: Colors.yellow),
+                          )),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
-        ),
-      ),
-    )));
+        )));
   }
 }

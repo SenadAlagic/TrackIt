@@ -102,6 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           if (request['password'] != request['passwordConfirm']) {
             _formKey.currentState!.fields['passwordConfirm']
                 ?.invalidate("Passwords must match");
+            return;
           }
 
           try {

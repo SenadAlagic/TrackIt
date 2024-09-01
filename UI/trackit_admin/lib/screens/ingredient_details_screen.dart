@@ -70,10 +70,14 @@ class _IngredientDetailsScreenState extends State<IngredientDetailsScreen> {
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               FormHelpers.drawStringContainer("Ingredient name", "name",
                   maxLength: 50),
-              FormHelpers.drawNumericContainer("Protein", "protein"),
-              FormHelpers.drawNumericContainer("Calories", "calories"),
-              FormHelpers.drawNumericContainer("Fat", "fat"),
-              FormHelpers.drawNumericContainer("Carbs", "carbs"),
+              FormHelpers.drawNumericContainer("Protein", "protein",
+                  allowNegative: true),
+              FormHelpers.drawNumericContainer("Calories", "calories",
+                  allowNegative: true),
+              FormHelpers.drawNumericContainer("Fat", "fat",
+                  allowNegative: true),
+              FormHelpers.drawNumericContainer("Carbs", "carbs",
+                  allowNegative: true),
             ]),
             const SizedBox(width: 10),
             Column(

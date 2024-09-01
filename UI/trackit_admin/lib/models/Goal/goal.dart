@@ -6,7 +6,7 @@ class Goal {
   int? goalId;
   String? name;
   String? description;
-  double? targetProtein;
+  int? targetProtein;
   double? targetCalories;
   String? image;
 

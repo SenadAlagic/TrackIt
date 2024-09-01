@@ -7,8 +7,8 @@ part of 'subscription.dart';
 // **************************************************************************
 
 Subscription _$SubscriptionFromJson(Map<String, dynamic> json) => Subscription(
-      json['subscriptionId'] as int?,
-      json['generalUserId'] as int?,
+      (json['subscriptionId'] as num?)?.toInt(),
+      (json['generalUserId'] as num?)?.toInt(),
       json['purchaseDate'] == null
           ? null
           : DateTime.parse(json['purchaseDate'] as String),

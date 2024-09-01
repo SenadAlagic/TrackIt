@@ -8,7 +8,7 @@ part of 'activity_level.dart';
 
 ActivityLevel _$ActivityLevelFromJson(Map<String, dynamic> json) =>
     ActivityLevel(
-      json['activityLevelId'] as int?,
+      (json['activityLevelId'] as num?)?.toInt(),
       json['name'] as String?,
       (json['multiplier'] as num?)?.toDouble(),
       json['image'] as String?,

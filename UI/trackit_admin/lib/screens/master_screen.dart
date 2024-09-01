@@ -7,7 +7,9 @@ import 'login_screen.dart';
 class MasterScreen extends StatefulWidget {
   final Widget? child;
   final String? title;
-  const MasterScreen({this.child, this.title, super.key});
+  final bool? hideAppBar;
+  const MasterScreen(
+      {this.child, this.title, super.key, this.hideAppBar = false});
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();
@@ -25,14 +27,16 @@ class _MasterScreenState extends State<MasterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title ?? ""),
-          actions: [
-            Padding(
-                padding: const EdgeInsets.only(right: 12.0),
-                child: _drawProfileIcon())
-          ],
-        ),
+        appBar: !widget.hideAppBar!
+            ? AppBar(
+                title: Text(widget.title ?? ""),
+                actions: [
+                  Padding(
+                      padding: const EdgeInsets.only(right: 12.0),
+                      child: _drawProfileIcon())
+                ],
+              )
+            : null,
         body: SingleChildScrollView(
             child: Column(children: [
           const SizedBox(height: 50),

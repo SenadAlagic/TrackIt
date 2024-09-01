@@ -37,7 +37,8 @@ class FormHelpers {
     );
   }
 
-  static Widget drawNumericContainer(String hint, String propertyName) {
+  static Widget drawNumericContainer(String hint, String propertyName,
+      {bool allowNegative = false, bool integer = false}) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       alignment: Alignment.centerLeft,
@@ -52,6 +53,13 @@ class FormHelpers {
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: "Field is required"),
                 FormBuilderValidators.numeric(),
+                integer
+                    ? FormBuilderValidators.integer()
+                    : FormBuilderValidators.numeric(),
+                !allowNegative
+                    ? FormBuilderValidators.positiveNumber()
+                    : FormBuilderValidators.numeric(),
+                FormBuilderValidators.min(0)
               ]),
               name: propertyName,
               decoration: InputDecoration(
