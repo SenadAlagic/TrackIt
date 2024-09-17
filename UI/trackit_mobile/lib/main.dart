@@ -13,10 +13,8 @@ import 'providers/recommendation_provider.dart';
 import 'providers/user_meals_provider.dart';
 import 'providers/user_provider.dart';
 import 'screens/login_screen.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  await dotenv.load();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AuthProvider()),
     ChangeNotifierProvider(create: (_) => GoalProvider()),
