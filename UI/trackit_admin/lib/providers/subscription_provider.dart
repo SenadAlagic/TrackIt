@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:trackit_admin/models/Subscription/subscription.dart';
-
 import 'package:http/http.dart' as http;
+import '../models/Subscription/subscription.dart';
 import 'base_provider.dart';
 
 class SubscriptionProvider extends BaseProvider<Subscription> {

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 
 class RecommendationProvider with ChangeNotifier {
   static String? _baseUrl;
   final _storage = const FlutterSecureStorage();
 
   RecommendationProvider() {
-    _baseUrl = dotenv.dotenv.env["baseUrl"];
+    _baseUrl = const String.fromEnvironment("baseUrl",
+        defaultValue: "http://localhost:7296/");
 
     if (_baseUrl!.endsWith("/") == false) {
       _baseUrl = "$_baseUrl/";
