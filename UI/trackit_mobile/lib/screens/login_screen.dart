@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
@@ -17,8 +19,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  Map<String, dynamic> _initialValue = {};
 
   late AuthProvider _authProvider;
   late GeneralUserProvider _generalUserProvider;
@@ -28,6 +32,12 @@ class _LoginScreenState extends State<LoginScreen> {
     super.didChangeDependencies();
     _authProvider = context.read<AuthProvider>();
     _generalUserProvider = context.read<GeneralUserProvider>();
+  }
+
+  @override
+  void initState() {
+    _initialValue = {"email": "", "password": ""};
+    super.initState();
   }
 
   @override
@@ -49,34 +59,46 @@ class _LoginScreenState extends State<LoginScreen> {
           padding:
               const EdgeInsets.only(top: 40, left: 40, right: 40, bottom: 10),
           child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Column(children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.grey))),
-                child: TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "E-mail",
-                      hintStyle: TextStyle(color: Colors.grey[400])),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: TextField(
-                  obscureText: true,
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Password",
-                      hintStyle: TextStyle(color: Colors.grey[400])),
-                ),
-              ),
-            ]),
-          ),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: FormBuilder(
+                key: _formKey,
+                initialValue: _initialValue,
+                child: Column(children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Colors.grey))),
+                    child: FormBuilderTextField(
+                      name: "email",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.email()
+                      ]),
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "E-mail",
+                          hintStyle: TextStyle(color: Colors.grey[400])),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: FormBuilderTextField(
+                      name: "password",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                      obscureText: true,
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Password",
+                          hintStyle: TextStyle(color: Colors.grey[400])),
+                    ),
+                  ),
+                ]),
+              )),
         ),
         Padding(
             padding: const EdgeInsets.only(bottom: 40, right: 40),
@@ -96,8 +118,12 @@ class _LoginScreenState extends State<LoginScreen> {
             style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.white)),
             onPressed: () async {
-              Authorization.email = _emailController.text;
-              Authorization.password = _passwordController.text;
+              _formKey.currentState?.saveAndValidate();
+              if (!_formKey.currentState!.isValid) return;
+              var formInfo = Map.from(_formKey.currentState!.value);
+
+              Authorization.email = formInfo["email"];
+              Authorization.password = formInfo["password"];
               try {
                 var loginResponse = await _authProvider.login();
                 if (loginResponse.result == 0) {
