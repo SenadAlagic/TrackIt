@@ -193,6 +193,32 @@ class _ManageTagsScreenState extends State<ManageTagsScreen> {
         ));
   }
 
+  // Widget _drawBaseDropdownMenu() {
+  //   final TextEditingController _dropdownController = TextEditingController();
+  //   const values = [
+  //     0xFF66CC99,
+  //     0xFF99CCFF,
+  //     0xFFFFD700,
+  //     0xFFFF99CC,
+  //     0xFFF9F900,
+  //     0xFFFF5733
+  //   ];
+  //   return DropdownMenu<int>(
+  //     dropdownMenuEntries: values.map<DropdownMenuEntry<int>>((int color) {
+  //       return DropdownMenuEntry<int>(
+  //         value: color,
+  //         label: "$color",
+  //         enabled: "$color" != 'Grey',
+  //         style: MenuItemButton.styleFrom(),
+  //       );
+  //     }).toList(),
+  //     controller: _dropdownController,
+  //     requestFocusOnTap: true,
+  //     label: const Text("Dropdown menu"),
+  //     onSelected: (value) => {},
+  //   );
+  // }
+
   Widget _drawDropdownMenu() {
     return DropdownButtonFormField<int>(
       value: _selectedColor,
