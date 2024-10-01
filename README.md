@@ -19,6 +19,10 @@
 
 </br>
 
+## Building the dockerfile
+
+Use ```docker build -t <name> <location> (.)```
+
 ## Code hygiene
 
 <h4>Visual Studio</h4>
@@ -34,3 +38,6 @@ Sort imports: ```SHIFT + ALT + O```
 <i>*Use relative import paths.</i>
 
 </br>
+
+## Running the code
+Use ```docker-compose up --build``` to start the Docker container.
