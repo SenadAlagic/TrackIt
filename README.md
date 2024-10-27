@@ -41,3 +41,6 @@ Sort imports: ```SHIFT + ALT + O```
 
 ## Running the code
 Use ```docker-compose up --build``` to start the Docker container.
+
+## Running the scaffold
+Use ```Scaffold-DbContext 'Name=ConnectionStrings:DefaultConnection' Microsoft.EntityFrameworkCore.SqlServer -OutputDir Database -force -Context TrackItContext``` to scaffold the db
